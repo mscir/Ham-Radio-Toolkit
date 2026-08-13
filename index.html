@@ -6118,6 +6118,128 @@ function initCqZoneMap() {
 })();
 
 </script>
+script>
+/* BEGIN SITE SEARCH */
+(() => {
+(() => {
+  const MAX_RESULTS = 8;
+  const clean = s => (s || '').replace(/\s+/g, ' ').trim();
+  const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+  function panelIdFromButton(button) {
+    const hit = (button.getAttribute('onclick') || '').match(/showPanel\(['"]([^'"]+)/);
+    return hit ? hit[1] : null;
+  }
+
+  function buildIndex() {
+    const buttons = [...document.querySelectorAll('#sb-nav-inner .nav-btn')];
+    return [...document.querySelectorAll('.panel')].map(panel => {
+      const id = panel.id.replace(/^panel-/, '');
+      const nav = buttons.find(b => panelIdFromButton(b) === id);
+      const title = clean(panel.querySelector('.panel-title')?.textContent) || clean(nav?.textContent) || id;
+      const description = clean(panel.querySelector('.panel-desc')?.textContent);
+      const labels = [...panel.querySelectorAll('.section-label, .rep-card-title, .calc-title')]
+        .map(el => clean(el.textContent)).filter(Boolean).join(' · ');
+      return { id, title, description, labels, searchable: `${title} ${description} ${labels} ${clean(panel.textContent)}`.toLowerCase(), nav };
+    });
+  }
+
+  function install() {
+    const sidebar = document.querySelector('#sidebar');
+    const nav = document.querySelector('#sb-nav-inner');
+    if (!sidebar || !nav || document.querySelector('#site-search')) return;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'site-search';
+    wrap.innerHTML = `
+      <label class="site-search-label" for="site-search-input">Search toolkit</label>
+      <div class="site-search-box">
+        <span aria-hidden="true">⌕</span>
+        <input id="site-search-input" type="search" autocomplete="off" spellcheck="false"
+          placeholder="Bands, modes, tools…" aria-label="Search the Ham Radio Toolkit">
+        <button type="button" class="site-search-clear" aria-label="Clear search" title="Clear search">×</button>
+      </div>
+      <div id="site-search-results" role="listbox" aria-label="Search results"></div>`;
+    nav.parentNode.insertBefore(wrap, nav);
+
+    const style = document.createElement('style');
+    style.textContent = `
+      #site-search{padding:12px 12px 4px;border-bottom:1px solid var(--border);position:relative;z-index:5}
+      .site-search-label{display:block;margin:0 0 6px 6px;font:700 10px "Barlow Condensed",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
+      .site-search-box{height:34px;display:flex;align-items:center;gap:7px;padding:0 9px;background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);transition:border-color .15s,box-shadow .15s}
+      .site-search-box:focus-within{border-color:rgba(0,212,255,.65);box-shadow:0 0 0 2px rgba(0,212,255,.08)}
+      .site-search-box span{font:22px/1 "Share Tech Mono",monospace;color:var(--accent);transform:rotate(-20deg);margin-top:-2px}
+      #site-search-input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:var(--heading);font:12px "Share Tech Mono",monospace}
+      #site-search-input::placeholder{color:var(--text-dim);opacity:.8}
+      .site-search-clear{border:0;background:transparent;color:var(--text-dim);font:22px/1 sans-serif;cursor:pointer;padding:0 1px;opacity:0;pointer-events:none}
+      #site-search.has-query .site-search-clear{opacity:1;pointer-events:auto}
+      #site-search-results{display:none;max-height:270px;overflow:auto;margin-top:6px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);box-shadow:0 8px 18px rgba(0,0,0,.28)}
+      #site-search-results.open{display:block}
+      .site-search-result{display:block;width:100%;padding:9px 10px;background:none;border:0;border-bottom:1px solid rgba(42,69,96,.55);text-align:left;cursor:pointer;color:var(--text)}
+      .site-search-result:last-child{border-bottom:0}.site-search-result:hover,.site-search-result:focus{outline:0;background:rgba(0,212,255,.08)}
+      .site-search-result-title{display:block;font:700 13px "Barlow Condensed",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+      .site-search-result-note{display:block;margin-top:2px;font-size:10px;line-height:1.35;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .site-search-empty{padding:10px;color:var(--text-dim);font-size:11px;line-height:1.5}
+      @media(max-width:768px){#site-search{padding:10px 12px 3px}#site-search-results{max-height:215px}}
+    `;
+    document.head.appendChild(style);
+
+    const input = wrap.querySelector('input');
+    const clear = wrap.querySelector('.site-search-clear');
+    const results = wrap.querySelector('#site-search-results');
+    let index = buildIndex();
+
+    function choose(item) {
+      results.classList.remove('open');
+      input.value = '';
+      wrap.classList.remove('has-query');
+      if (item.nav) item.nav.click();
+      else if (typeof window.showPanel === 'function') window.showPanel(item.id);
+      setTimeout(() => document.querySelector(`#panel-${CSS.escape(item.id)}`)?.scrollIntoView({behavior:'smooth',block:'start'}), 40);
+    }
+
+    function render() {
+      const q = clean(input.value).toLowerCase();
+      wrap.classList.toggle('has-query', Boolean(q));
+      if (!q) { results.classList.remove('open'); results.innerHTML = ''; return; }
+      const words = q.split(' ').filter(Boolean);
+      const matches = index.map(item => {
+        if (!words.every(word => item.searchable.includes(word))) return null;
+        let score = 0;
+        for (const word of words) {
+          if (item.title.toLowerCase().includes(word)) score += 12;
+          if (item.description.toLowerCase().includes(word)) score += 5;
+          if (item.labels.toLowerCase().includes(word)) score += 4;
+          if (item.searchable.includes(word)) score += 1;
+        }
+        return {...item, score};
+      }).filter(Boolean).sort((a,b) => b.score - a.score).slice(0, MAX_RESULTS);
+      results.classList.add('open');
+      if (!matches.length) { results.innerHTML = '<div class="site-search-empty">No matching tool or topic. Try “FT8,” “repeater,” “20m,” “power,” or “Bz.”</div>'; return; }
+      results.innerHTML = '';
+      matches.forEach(item => {
+        const note = item.description || item.labels || 'Open this toolkit panel';
+        const button = document.createElement('button');
+        button.type = 'button'; button.className = 'site-search-result'; button.setAttribute('role','option');
+        button.innerHTML = `<span class="site-search-result-title">${esc(item.title)}</span><span class="site-search-result-note">${esc(note)}</span>`;
+        button.addEventListener('click', () => choose(item));
+        results.appendChild(button);
+      });
+    }
+
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', e => { if (e.key === 'Escape') { input.value=''; render(); input.blur(); } });
+    clear.addEventListener('click', () => { input.value=''; render(); input.focus(); });
+    document.addEventListener('click', e => { if (!wrap.contains(e.target)) results.classList.remove('open'); });
+    window.addEventListener('ham-toolkit-nav-updated', () => { index = buildIndex(); });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install);
+  else install();
+})();
+
+})();
+/* END SITE SEARCH */
+</script>
 </body>
 </html>
