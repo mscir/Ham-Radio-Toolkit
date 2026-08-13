@@ -106,7 +106,34 @@ body{
   color:var(--text-dim);letter-spacing:.06em;line-height:1.7;
 }
 .sb-footer a{color:var(--accent);text-decoration:none}
-
+.footer-title {
+  color: var(--heading);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.footer-version {
+  margin: 2px 0 8px;
+  color: var(--accent);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+.footer-sources,
+.footer-links {
+  margin-top: 3px;
+}
+.footer-disclaimer {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
+  color: var(--amber);
+  font-size: 9px;
+  line-height: 1.45;
+}
+	
 /* ── MAIN CONTENT ── */
 .content{flex:1;min-width:0;overflow-y:auto}
 .panel{display:none;padding:32px 36px 64px;max-width:1100px}
@@ -655,14 +682,32 @@ body{
   <div style="padding:0 12px 12px">
     <button onclick="toggleTheme()" id="theme-toggle-btn" style="width:100%;padding:8px 12px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:var(--r);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s">🌙 Dark Mode</button>
   </div>
-  <div class="sb-footer">
-    Data: ARRL · NOAA SWPC<br>
-    <a href="https://www.arrl.org/" target="_blank">arrl.org</a> · <a href="https://www.fcc.gov/wireless/bureau-divisions/mobility-division/amateur-radio-service" target="_blank">fcc.gov</a><br>
-    Always verify current regs.<br>
-	BETA · v0.1.0 · Updated Aug 12, 2026
+<div class="sb-footer">
+  <div class="footer-title">Ham Radio Toolkit</div>
+  <div class="footer-version">
+    BETA · v0.2.0 · Updated 2026-08-12
   </div>
+  <div class="footer-sources">
+    Data:
+    <a href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener">NOAA SWPC</a>
+    ·
+    <a href="https://www.arrl.org/" target="_blank" rel="noopener">ARRL</a>
+    ·
+    <a href="https://www.fcc.gov/wireless/bureau-divisions/mobility-division/amateur-radio-service"
+       target="_blank" rel="noopener">FCC</a>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/mscir/Ham-Radio-Toolkit"
+       target="_blank" rel="noopener">GitHub</a>
+    ·
+    <a href="https://github.com/mscir/Ham-Radio-Toolkit/issues"
+       target="_blank" rel="noopener">Report an issue</a>
+  </div>
+  <div class="footer-disclaimer">
+    Verify current regulations before transmitting.
+  </div>
+</div>
 </nav>
-
 <!-- == CONTENT == -->
 <div class="content">
 
