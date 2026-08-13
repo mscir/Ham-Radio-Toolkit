@@ -6241,5 +6241,79 @@ function initCqZoneMap() {
 })();
 /* END SITE SEARCH */
 </script>
+
+<script>
+/* BEGIN LICENSE PROFILE ENHANCEMENT */
+/* Ham Radio Toolkit — License Profile enhancement */
+(() => {
+  const PROFILES = {
+    tech:    { label: 'TECHNICIAN', short: 'TECH', note: 'VHF/UHF + limited HF' },
+    general: { label: 'GENERAL', short: 'GEN', note: 'All bands; selected HF segments reserved for Extra' },
+    extra:   { label: 'AMATEUR EXTRA', short: 'EXTRA', note: 'Full U.S. amateur privileges' }
+  };
+
+  function currentClass() {
+    const active = document.querySelector('#license-class-btns .mode-btn.active');
+    return active?.id?.replace(/^lc-/, '') || 'extra';
+  }
+
+  function updateProfile(cls = currentClass()) {
+    const p = PROFILES[cls] || PROFILES.extra;
+    const chip = document.getElementById('sidebar-license-profile');
+    if (chip) {
+      chip.querySelector('.license-profile-value').textContent = `US · ${p.short}`;
+      chip.querySelector('.license-profile-note').textContent = p.note;
+      chip.title = `Selected operating profile: U.S. ${p.label}`;
+    }
+    const header = document.getElementById('sb-license-subtitle-hdr');
+    if (header) header.textContent = `U.S. Amateur Radio · ${p.label}`;
+  }
+
+  function openPrivileges() {
+    const button = document.querySelector('#sb-nav-inner [data-panel="privileges"]');
+    if (button) button.click();
+    else if (typeof window.showPanel === 'function') window.showPanel('privileges');
+  }
+
+  function install() {
+    if (document.getElementById('sidebar-license-profile')) return;
+    const footer = document.querySelector('#sidebar .sb-footer');
+    if (!footer) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .sidebar-license-profile{margin:0 12px 10px;padding:9px 10px;border:1px solid rgba(0,212,255,.30);border-radius:var(--r);background:rgba(0,212,255,.06);cursor:pointer;transition:background .15s,border-color .15s}
+      .sidebar-license-profile:hover,.sidebar-license-profile:focus-visible{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.60);outline:none}
+      .license-profile-label{display:block;color:var(--text-dim);font:700 9px "Barlow Condensed",sans-serif;letter-spacing:.18em;text-transform:uppercase}
+      .license-profile-value{display:block;margin-top:2px;color:var(--accent);font:700 12px "Share Tech Mono",monospace;letter-spacing:.08em}
+      .license-profile-note{display:block;margin-top:3px;color:var(--text-dim);font-size:10px;line-height:1.3}
+    `;
+    document.head.appendChild(style);
+
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.id = 'sidebar-license-profile';
+    chip.className = 'sidebar-license-profile';
+    chip.innerHTML = `<span class="license-profile-label">Operating profile · click to change</span><span class="license-profile-value"></span><span class="license-profile-note"></span>`;
+    chip.addEventListener('click', openPrivileges);
+    footer.parentNode.insertBefore(chip, footer);
+
+    const original = window.setLicenseClass;
+    if (typeof original === 'function') {
+      window.setLicenseClass = function(cls) {
+        const result = original.apply(this, arguments);
+        updateProfile(cls);
+        return result;
+      };
+    }
+    updateProfile();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install);
+  else install();
+})();
+/* END LICENSE PROFILE ENHANCEMENT */
+</script>
+	
 </body>
 </html>
