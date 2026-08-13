@@ -55,5 +55,18 @@ The dashboard features a **Customizable Menu Layout**. Operators can tailor the 
 
 ---
 
+## 🐛 Reporting Issues & Contributing
+
+Feedback, bug reports, and suggestions are highly encouraged to help keep this toolkit accurate and helpful for the ham community! 
+
+If you spot a calculation error, a broken tool feed, a typo, or have a feature idea:
+1. Navigate to the **[Issues](https://github.com)** tab at the top of this repository page.
+2. Click the green **New Issue** button.
+3. Provide a brief description of the issue or your suggestion, and submit it.
+
+*You will automatically be notified via email whenever there are updates or responses regarding your submission.*
+
+---
+
 ## 📝 Compliance Disclaimer
 *Data parsed across regulatory panels is synchronized against ARRL and FCC Part 97 rule structures. Operators must always verify explicit regional operating privileges against current regulatory guidelines before transmitting.*
