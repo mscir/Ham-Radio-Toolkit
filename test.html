@@ -2085,8 +2085,16 @@ take it with a grain of salt!</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;font-size:13px;color:var(--text);line-height:1.8">
       <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
         <strong style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.08em;text-transform:uppercase">What is APRS?</strong><br>
-        Automatic Packet Reporting System — a digital protocol for transmitting real-time data over amateur radio. Stations broadcast their GPS position, weather data, messages, and telemetry on <strong>144.390 MHz</strong> (North America) using 1200-baud AFSK packet radio.
-      </div>
+  APRS is an amateur-radio digital system for exchanging position reports,
+  messages, weather, telemetry, station status, and tactical objects. In North
+  America, terrestrial APRS normally operates on <strong>144.390 MHz</strong>
+  using 1200-baud Bell 202 AFSK packet.
+<p>
+  Packets may be heard directly by nearby stations, retransmitted over RF by
+  digipeaters, or forwarded to APRS-IS by iGates. Because 144.390 MHz is a
+  shared channel, use a suitable path and conservative beaconing interval.
+</p>
+  </div>
       <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
         <strong style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.08em;text-transform:uppercase">APRS Frequencies</strong><br>
         <strong>144.390 MHz</strong> — North America (primary)<br>
@@ -2097,9 +2105,201 @@ take it with a grain of salt!</div>
 		<strong>144.575 MHZ</strong> — New Zealand<br>
         <strong>144.660 MHz</strong> — Japan<br>
 		<strong>144.640 MHz</strong> — China, Taiwan<br>
+		<br><br>
 		<strong>145.825 MHz</strong> — International Space Station (ISS)<br>
-        Internet gateway (iGate) stations relay RF packets to <a href='https://aprs.fi' target='_blank'>aprs.fi</a> worldwide.
+		<strong>ISS / ARISS</strong> — 1200-baud APRS packet digipeater when enabled<br>
+		<strong>IO-86 / LAPAN-A2</strong> — APRS digipeater, callsign YB0X<br>
+		<strong>PSAT / NO-84</strong> — 1200-baud AX.25/APRS packet; shared with ISS, PCSAT, UO-11, and others<br>
+		<strong>PCSAT / PCSAT-1</strong> — Packet/APRS digipeater, commonly shown as W3ADO-1 or PCSAT-1<br>
+		<strong>UO-11</strong> — Legacy packet satellite associated with the shared channel<br>
+		<strong>MAYA-3 / MAYA-4</strong> — APRS digipeater capability using the ARISS alias<br>
+		<strong>Lilium-4</strong> — APRS digipeater on 145.825 MHz; currently listed as in testing<br>
+		<strong>PARUS-6U1</strong> — APRS on 145.825 MHz; separate 9.6 kbps GMSK channel on 437.195 MHz<br>
+		<strong>RIDU-Sat 1</strong> — IARU-coordinated for APRS on 145.825 MHz<br>
       </div>
+
+		```html
+<section class="aprs-resources" aria-labelledby="aprs-resources-heading">
+  <h2 id="aprs-resources-heading">Recommended Links</h2>
+
+  <section aria-labelledby="learn-aprs-heading">
+    <h3 id="learn-aprs-heading">Learn APRS</h3>
+    <ul>
+      <li>
+        <a href="https://www.aprs.org/" target="_blank" rel="noopener noreferrer">
+          What APRS Is (APRS.org)
+        </a>
+        <p>
+          An authoritative overview of APRS as a two-way, tactical, real-time
+          digital communications system—not merely vehicle tracking.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="https://blog.aprs.fi/2020/02/how-aprs-paths-work.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          How APRS Paths Work
+        </a>
+        <p>
+          Explains <code>WIDE1-1,WIDE2-1</code>, packet hops, and why
+          unnecessarily long paths create channel congestion.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="https://aprs.fi/doc/guide/guide.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          APRS.fi User Guide
+        </a>
+        <p>
+          Learn how to search for stations, read packet history and paths,
+          send messages, view weather data, and use APRS.fi map tools.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="use-aprs-heading">
+    <h3 id="use-aprs-heading">Use APRS</h3>
+    <ul>
+      <li>
+        <a href="https://aprs.fi/" target="_blank" rel="noopener noreferrer">
+          View Live APRS Activity on APRS.fi
+        </a>
+        <p>
+          Search by callsign, view a local map, inspect packet paths, or confirm
+          whether a beacon reached an iGate.
+        </p>
+      </li>
+
+      <li>
+        <a href="https://aprs.fi/" target="_blank" rel="noopener noreferrer">
+          Find Local APRS Digipeaters and iGates
+        </a>
+        <p>
+          Use the APRS.fi map to search your county, callsign, or nearby active
+          stations instead of relying on a static infrastructure list.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="http://aprsisce.wikidot.com/doc:frequencies"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          APRS Frequency Reference
+        </a>
+        <p>
+          A reference for APRS frequencies in other regions, on HF, and via
+          satellites.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="build-aprs-heading">
+    <h3 id="build-aprs-heading">Build or Experiment</h3>
+    <ul>
+      <li>
+        <a
+          href="https://github.com/wb2osz/direwolf"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Dire Wolf Software TNC
+        </a>
+        <p>
+          Use a computer, audio interface, SDR, or conventional FM radio as a
+          packet modem, APRS decoder, digipeater, or iGate.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="https://www.aprs.org/aprs-software.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          APRS Software and Application Directory
+        </a>
+        <p>
+          Find current APRS applications instead of relying on a fixed list
+          that may become outdated.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="https://www.aprs-is.net/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          APRS-IS Information
+        </a>
+        <p>
+          Learn about the Internet backbone behind APRS maps, iGates, and
+          Internet-connected APRS clients.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="satellite-aprs-heading">
+    <h3 id="satellite-aprs-heading">Satellite APRS</h3>
+    <ul>
+      <li>
+        <a
+          href="https://www.amsat.org/live-digipeater-satellites/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          AMSAT Live APRS Digipeater Satellites
+        </a>
+        <p>
+          Check active or known APRS satellites, operating frequencies, packet
+          aliases, and status references. This is the recommended link to check
+          before using 145.825 MHz or another satellite APRS frequency.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="https://www.ariss.org/current-status-of-iss-stations.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ARISS ISS Ham-Radio Status
+        </a>
+        <p>
+          Verify current ISS amateur-radio activity before transmitting. The ISS
+          packet system may be unavailable or reconfigured for operations.
+        </p>
+      </li>
+
+      <li>
+        <a
+          href="https://www.aprs.org/ariss.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ISS/APRS Packet FAQ
+        </a>
+        <p>
+          Background on ISS and satellite APRS packet operation, digipeater
+          aliases, and shared use of 145.825 MHz.
+        </p>
+      </li>
+    </ul>
+  </section>
+</section>
+```
     </div>
   </div>
 </div>
