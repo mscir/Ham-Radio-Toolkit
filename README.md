@@ -6,7 +6,7 @@ An all-in-one, responsive web dashboard designed for amateur radio operators. Th
 
 ---
 
-## 🪪 Start Here: Select Your License Class &amp Enter Your Location
+## 🪪 Start Here: Select Your License Class & Enter Your Location
 
 When you first open the toolkit, choose your current U.S. amateur-radio license class:
 
