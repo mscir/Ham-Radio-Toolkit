@@ -6,13 +6,16 @@ An all-in-one, responsive web dashboard designed for amateur radio operators. Th
 
 ---
 
-## 🪪 Start Here: Select Your License Class
+## 🪪 Start Here: Select Your License Class &amp Enter Your Location
 
 When you first open the toolkit, choose your current U.S. amateur-radio license class:
 
 1. Open **Frequency Privileges** from the bottom of the left menu.
 2. Select **Technician**, **General**, or **Amateur Extra**.
 3. Your selection is saved automatically in your browser for up to five years.
+4. Open **Grid Square Calc** using the menu.
+5. Enter your latitude and longitude, grid square, or if you don't know them, use the link to the page that will allow you to find your location on a map, and display your location data.
+6. Enter your location data into the Grid Square Calculator page and it will be stored for up to five years. 
 
 The toolkit uses your selected license class to personalize the Frequency Privileges reference, frequency checker, operating profile, and other license-aware guidance.
 
