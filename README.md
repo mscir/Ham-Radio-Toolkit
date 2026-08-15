@@ -17,7 +17,7 @@ When you first open the toolkit, choose your current U.S. amateur-radio license 
 5. Enter your latitude and longitude, grid square, or if you don't know them, use the link to the page that will allow you to find your location on a map, and display your location data.
 6. Enter your location data into the Grid Square Calculator page and it will be stored for up to five years. 
 
-The toolkit uses your selected license class to personalize the Frequency Privileges reference, frequency checker, operating profile, and other license-aware guidance.
+The toolkit uses your selected license class to personalize the Frequency Privileges reference, frequency checker, operating profile, and other license-aware guidance. Also your location will be used if you use the DXCC Prefix Lookup page or the Repeater Finder page. 
 
 **Important:** The toolkit is designed for U.S. amateur radio operators and uses FCC Part 97 / ARRL reference material. Always verify your current privileges, regional restrictions, band allocations, and local operating rules before transmitting.
 
