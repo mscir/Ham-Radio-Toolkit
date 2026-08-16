@@ -3348,7 +3348,8 @@ const BAND_ACTIVITY = {
     tags:['repeater'],
     notes:'ARRL voluntary FM repeater output segment. Check local coordination before use.'
   },
-]},
+]}, 
+/*
   '6m': { label:'6m — 50–54 MHz', rows:[
     {freq:'50.000–50.100',mode:'CW Only',tags:['cw'],notes:'CW only — no phone in this segment. Beacons 50.060–50.080.'},
     {freq:'50.060–50.080',mode:'CW Beacons',tags:['cw'],notes:'Propagation beacons — listen here to check if 6m is open before calling.'},
@@ -3360,6 +3361,135 @@ const BAND_ACTIVITY = {
     {freq:'52.525',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> Primary 6m FM simplex calling frequency.'},
     {freq:'52.000–54.000',mode:'FM Repeaters',tags:['phone'],notes:'6m FM repeater outputs and simplex. Local/regional use.'},
   ]},
+*/
+'6m': { label:'6m — 50–54 MHz', rows:[
+  {
+    freq:'50.000–50.100',
+    mode:'CW / Beacons',
+    tags:['cw'],
+    notes:'ARRL voluntary CW and beacon segment. Avoid phone operation; useful for checking propagation.'
+  },
+  {
+    freq:'50.060–50.080',
+    mode:'Propagation Beacons',
+    tags:['cw'],
+    notes:'ARRL beacon subband. Listen for beacons to check for 6 m openings; do not transmit over active beacons.'
+  },
+  {
+    freq:'50.100–50.125',
+    mode:'SSB / CW DX Window',
+    tags:['phone','cw'],
+    notes:'DX window. The international 6 m SSB DX calling frequency is 50.100 MHz.'
+  },
+  {
+    freq:'50.125',
+    mode:'SSB Calling',
+    tags:['phone'],
+    notes:'<span class="calling-badge">CALLING</span> North American 6 m SSB calling frequency. Make contact, then move if practical.'
+  },
+  {
+    freq:'50.260',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common North American 6 m FT8 USB dial frequency; frequently provides early evidence of an opening.'
+  },
+{
+  freq:'50.293',
+  mode:'WSPR',
+  tags:['data'],
+  notes:'Common 6 m WSPR USB dial frequency. Used for low-power propagation monitoring; use a conservative transmit percentage.'
+},
+  {
+    freq:'50.300–50.600',
+    mode:'All Modes',
+    tags:['cw','data','phone','image'],
+    notes:'ARRL voluntary all-mode simplex segment. Used for weak-signal, digital, and experimental activity.'
+  },
+  {
+    freq:'50.313',
+    mode:'FT8 DX',
+    tags:['data'],
+    notes:'Common DX-oriented FT8 USB dial frequency; 50.313 MHz is often used when 50.260 MHz is busy or for DX activity.'
+  },
+  {
+    freq:'50.318',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT4 USB dial frequency on 6 m; activity is typically lighter than FT8.'
+  },
+  {
+    freq:'50.400',
+    mode:'AM',
+    tags:['phone'],
+    notes:'Common 6 m AM activity/calling frequency. Listen carefully for existing AM, SSB, or weak-signal activity.'
+  },
+  {
+    freq:'50.600–50.800',
+    mode:'Non-Voice Digital',
+    tags:['data'],
+    notes:'ARRL voluntary non-voice communications segment; 50.620 MHz is a packet/digital calling frequency.'
+  },
+  {
+    freq:'50.800–51.000',
+    mode:'Radio Remote Control',
+    tags:['remote'],
+    notes:'ARRL voluntary radio-control segment. Avoid casual voice or digital operation here.'
+  },
+  {
+    freq:'51.000–51.100',
+    mode:'Pacific DX Window',
+    tags:['phone','cw'],
+    notes:'ARRL voluntary Pacific DX window; check regional activity and use before transmitting.'
+  },
+  {
+    freq:'51.120–51.480',
+    mode:'FM Repeater Inputs',
+    tags:['repeater'],
+    notes:'Typical 6 m FM repeater-input segment; exact channels and splits are locally coordinated.'
+  },
+  {
+    freq:'51.500–51.600',
+    mode:'FM Simplex',
+    tags:['phone'],
+    notes:'FM simplex channels: 51.500, 51.520, 51.540, 51.560, 51.580, and 51.600 MHz.'
+  },
+  {
+    freq:'51.620–51.980',
+    mode:'FM Repeater Outputs',
+    tags:['repeater'],
+    notes:'Typical 6 m FM repeater-output segment; check local coordination and repeater directory details.'
+  },
+  {
+    freq:'52.000–52.480',
+    mode:'FM Repeater Inputs',
+    tags:['repeater'],
+    notes:'Typical FM repeater-input segment; specific frequency pairs and splits are regionally coordinated.'
+  },
+  {
+    freq:'52.525',
+    mode:'FM Simplex',
+    tags:['phone'],
+    notes:'<span class="calling-badge">CALLING</span> Primary 6 m FM simplex calling frequency.'
+  },
+  {
+    freq:'52.540',
+    mode:'FM Simplex',
+    tags:['phone'],
+    notes:'Secondary 6 m FM simplex frequency.'
+  },
+  {
+    freq:'52.500–52.980',
+    mode:'FM Repeater Outputs',
+    tags:['repeater'],
+    notes:'Typical FM repeater-output segment, with exceptions for simplex and test-pair channels.'
+  },
+  {
+    freq:'53.000–54.000',
+    mode:'FM Repeater / Simplex',
+    tags:['repeater','phone'],
+    notes:'Additional regionally coordinated FM repeater input/output and simplex use; verify your local 6 m band plan before transmitting.'
+  },
+]},
   '2m': { label:'2m — 144–148 MHz', rows:[
     {freq:'144.000–144.100',mode:'CW Only',tags:['cw'],notes:'CW and weak signal. No phone. Meteor scatter and EME activity.'},
     {freq:'144.100',mode:'EME / MS Calling',tags:['cw'],notes:'Earth-Moon-Earth and Meteor Scatter CW calling.'},
