@@ -961,8 +961,14 @@ body{
     </div>
   </div>
 </div>
+
+<div class="section-label" style="margin-top:16px">▸ Band Opening Alerts — Right Now</div>
+  <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Based on live SFI and K-index. Green = likely open for DX, Yellow = marginal, Red = poor conditions.</div>
+  <div id="band-alerts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:14px">
+    <div style="color:var(--text-dim);font-size:12px;padding:8px">Waiting for solar data…</div>
+  </div>
 	  
-  <div class="section-label" style="margin-top:16px">▸ 7-Day SFI &amp; K-Index Trend</div>
+<div class="section-label" style="margin-top:16px">▸ 7-Day SFI &amp; K-Index Trend</div>
   <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:14px">
     <canvas id="solar-sparkline" width="600" height="110" style="width:100%;height:110px;display:block"></canvas>
     <div id="sparkline-legend" style="display:flex;gap:18px;margin-top:8px;font-size:12px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;color:var(--text-dim)">
@@ -971,12 +977,9 @@ body{
       <span style="color:var(--text-dim)" id="sparkline-note">Loading historical data…</span>
     </div>
   </div>
-  <div class="section-label" style="margin-top:16px">▸ Band Opening Alerts — Right Now</div>
-  <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Based on live SFI and K-index. Green = likely open for DX, Yellow = marginal, Red = poor conditions.</div>
-  <div id="band-alerts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:14px">
-    <div style="color:var(--text-dim);font-size:12px;padding:8px">Waiting for solar data…</div>
-  </div>
-  </div><!-- end #solar-live-data -->
+	  
+</div><!-- end #solar-live-data -->
+	
   <div class="divider"></div>
   <div class="section-label">▸ Understanding the Data — What Does It All Mean?</div>
   <div class="section-label" style="margin-top:4px">▸ NOAA Raw Data — Explained</div>
