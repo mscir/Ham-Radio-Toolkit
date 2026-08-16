@@ -2739,6 +2739,7 @@ const BAND_ACTIVITY = {
   {freq:'1.995–2.000',mode:'Experimental',tags:['all'],notes:'Experimental (ARRL).'},
   {freq:'1.999–2.000',mode:'Beacons',tags:['all'],notes:'Beacons (ARRL).'},
 ]},
+/*
   '80m': { label:'80m — 3.5–4.0 MHz', rows:[
     {freq:'3.500–3.525',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW DX sub-band. Keep traffic short, this is prime DX territory.'},
     {freq:'3.525–3.600',mode:'CW / Data',tags:['cw','data'],notes:'CW general, RTTY/PSK31 around 3.580–3.600.'},
@@ -2750,7 +2751,75 @@ const BAND_ACTIVITY = {
     {freq:'3.800–4.000',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Busiest phone segment on 80m. Lots of nets, rag-chewing, NVIS regional.'},
     {freq:'3.845',mode:'SSTV',tags:['image'],notes:'Secondary SSTV calling.'},
     {freq:'3.885',mode:'AM',tags:['phone'],notes:'AM phone. Active AM net frequency.'},
-  ]},
+  ]}, */
+	'80m': { label:'80m — 3.5–4.0 MHz', rows:[
+  {
+    freq:'3.500–3.525',
+    mode:'CW / Data (Extra only)',
+    tags:['cw','data'],
+    notes:'Extra-only segment. Common CW, DX, and narrowband digital activity; listen first and observe current band-plan practice.'
+  },
+  {
+    freq:'3.525–3.600',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'CW and narrowband digital activity. Novice/Technician privileges are CW only, limited to 200 W PEP.'
+  },
+  {
+    freq:'3.570–3.600',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data segment. PSK31 activity is commonly near 3.580 MHz.'
+  },
+  {
+    freq:'3.573',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 80 m.'
+  },
+  {
+    freq:'3.575',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT4 USB dial frequency on 80 m; activity is often lighter than FT8.'
+  },
+  {
+    freq:'3.590',
+    mode:'RTTY / Data DX',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data DX frequency.'
+  },
+  {
+    freq:'3.600–3.700',
+    mode:'Phone (Extra)',
+    tags:['phone'],
+    notes:'Extra-only phone/image segment. Common for phone, regional nets, and DX activity.'
+  },
+  {
+    freq:'3.700–3.800',
+    mode:'Phone (Advanced + Extra)',
+    tags:['phone'],
+    notes:'Advanced and Extra phone/image privileges. Includes the voluntary 3.790–3.800 MHz DX window.'
+  },
+  {
+    freq:'3.800–4.000',
+    mode:'Phone (General +)',
+    tags:['phone'],
+    notes:'General, Advanced, and Extra phone/image segment. Common for nets, rag-chewing, DX, and regional NVIS contacts.'
+  },
+  {
+    freq:'3.845',
+    mode:'SSTV',
+    tags:['image'],
+    notes:'ARRL voluntary SSTV frequency; confirm that the frequency is clear before use.'
+  },
+  {
+    freq:'3.885',
+    mode:'AM',
+    tags:['phone'],
+    notes:'ARRL voluntary AM calling frequency. AM activity and nets are commonly found here.'
+  },
+]},
   '40m': { label:'40m — 7.0–7.3 MHz', rows:[
     {freq:'7.000–7.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW sub-band. Prime DX CW territory.'},
     {freq:'7.025–7.125',mode:'CW / Data',tags:['cw','data'],notes:'CW general + digital. FT8 on 7.074, PSK31 around 7.070.'},
