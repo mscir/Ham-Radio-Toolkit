@@ -907,7 +907,11 @@ body{
     <div id="bandRecText" class="sw-banner"></div>
   </div>
 
-  <div class="section-label">▸ Estimated</div>
+<div class="collapse-hdr">
+  <span class="collapse-title">▸ Estimated</span>
+  <span class="collapse-arrow">▾</span>
+</div>
+<div class="collapse-body">
   <div class="sw-grid">
     <div class="sw-card" id="estAuroraCard"><div class="sw-label">Estimated Aurora Activity</div><div id="estAurora" class="sw-value">—</div><div id="estAuroraTime" class="sw-small"></div></div>
     <div class="sw-card" id="estLatCard"><div class="sw-label">Estimated Aurora Latitude</div><div id="estLat" class="sw-value">—</div><div id="estLatTime" class="sw-small"></div></div>
@@ -915,8 +919,13 @@ body{
     <div class="sw-card" id="estMufCard"><div class="sw-label">Estimated MUF</div><div id="estMUF" class="sw-value">—</div><div id="estMUFTime" class="sw-small"></div></div>
     <div class="sw-card" id="estElCard"><div class="sw-label">Estimated Electron Flux</div><div id="estEl" class="sw-value">—</div><div id="estElTime" class="sw-small"></div></div>
   </div>
+</div>
 
-  <div class="section-label">▸ NOAA Raw Data</div>
+<div class="collapse-hdr">
+  <span class="collapse-title">▸ NOAA Raw Data</span>
+  <span class="collapse-arrow">▾</span>
+</div>
+<div class="collapse-body">
   <div class="sw-grid">
     <div class="sw-card" id="solarFluxCard"><div class="sw-label">Solar Flux (F10.7)</div><div id="solarFlux" class="sw-value">—</div><div id="solarFluxTime" class="sw-small"></div></div>
     <div class="sw-card" id="sunspotsCard"><div class="sw-label">Sunspots</div><div id="sunspots" class="sw-value">—</div><div id="sunspotsTime" class="sw-small"></div></div>
@@ -925,7 +934,7 @@ body{
     <div class="sw-card" id="xrayCard">
       <div class="sw-label">X-ray Flux</div>
       <div id="xrayA" class="sw-value">—</div><div class="sw-small">XRS-A: 0.05–0.4 nm</div>
-      <div id="xrayB" class="sw-value" style="font-size:1.1rem;margin-top:6px">—</div><div class="sw-small">XRS-B: 0.1–0.8 nm</div>
+      <div id="xrayB" class="sw-value">—</div><div class="sw-small">XRS-B: 0.1–0.8 nm</div>
       <div id="xrayTime" class="sw-small"></div>
     </div>
     <div class="sw-card" id="windCard"><div class="sw-label">Solar Wind Speed</div><div id="wind" class="sw-value">—</div><div id="windTime" class="sw-small"></div></div>
@@ -934,13 +943,25 @@ body{
     <div class="sw-card" id="protonCard"><div class="sw-label">GOES Proton Flux (&gt;10 MeV)</div><div id="proton" class="sw-value">—</div><div class="sw-small">Energetic proton flux in pfu.</div><div id="protonTime" class="sw-small"></div></div>
     <div class="sw-card" id="electronCard"><div class="sw-label">Electron Flux</div><div id="electron" class="sw-value">—</div><div id="electronTime" class="sw-small"></div></div>
   </div>
+</div>
 
-  <div class="divider"></div>
-  <div class="section-label">▸ Calculated HF Band Conditions</div>
+<div class="collapse-hdr">
+  <span class="collapse-title">▸ Calculated HF Band Conditions</span>
+  <span class="collapse-arrow">▾</span>
+</div>
+<div class="collapse-body">
   <div class="bands-2col">
-    <div class="band-pane day-pane"><div class="bp-title">Daytime</div><div id="solar-bands-day"><div style="color:var(--text-dim);font-size:12px;padding:6px">Loading…</div></div></div>
-    <div class="band-pane night-pane"><div class="bp-title">Nighttime</div><div id="solar-bands-night"><div style="color:var(--text-dim);font-size:12px;padding:6px">Loading…</div></div></div>
+    <div class="band-pane day-pane">
+      <div class="bp-title">Daytime</div>
+      <div id="solar-bands-day"><div style="color:var(--text-dim);font-size:12px;padding:6px">Loading…</div></div>
+    </div>
+    <div class="band-pane night-pane">
+      <div class="bp-title">Nighttime</div>
+      <div id="solar-bands-night"><div style="color:var(--text-dim);font-size:12px;padding:6px">Loading…</div></div>
+    </div>
   </div>
+</div>
+	  
   <div class="section-label" style="margin-top:16px">▸ 7-Day SFI &amp; K-Index Trend</div>
   <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:14px">
     <canvas id="solar-sparkline" width="600" height="110" style="width:100%;height:110px;display:block"></canvas>
@@ -4693,8 +4714,10 @@ function initCollapsibles() {
     const body = hdr.nextElementSibling;
     if (!body || !body.classList.contains('collapse-body')) return;
     const arrow = hdr.querySelector('.collapse-arrow');
-    body.style.maxHeight = body.scrollHeight + 'px';
-    arrow.classList.add('open');
+    //body.style.maxHeight = body.scrollHeight + 'px';
+    //arrow.classList.add('open');
+	 body.style.maxHeight = '0';
+	body.classList.add('closed');
     hdr.addEventListener('click', () => {
       const isOpen = arrow.classList.contains('open');
       if (isOpen) {
