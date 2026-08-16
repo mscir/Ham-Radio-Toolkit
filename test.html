@@ -3640,14 +3640,112 @@ const BAND_ACTIVITY = {
     tags:['repeater'],
     notes:'Typical FM repeater-input segment, often paired with 147 MHz outputs using a +600 kHz offset.'
   },
-]},
+]}, /*
   '70cm': { label:'70cm — 420–450 MHz', rows:[
     {freq:'432.100',mode:'SSB Calling',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> Primary 70cm SSB/CW weak-signal calling.'},
     {freq:'432.070',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 70cm FT8 weak signal.'},
     {freq:'446.000',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> National 70cm FM simplex calling frequency.'},
     {freq:'440–450',mode:'FM Repeaters',tags:['phone'],notes:'Dense repeater activity. ±5 MHz offset. Most urban areas have many repeaters here.'},
     {freq:'420–450',mode:'All modes',tags:['all'],notes:'Full 70cm band. ATV, digital, linking systems, satellites, repeaters.'},
-  ]},
+  ]}, */
+'70cm': { label:'70cm — 420–450 MHz', rows:[
+  {
+    freq:'420.000–426.000',
+    mode:'ATV / Experimental',
+    tags:['atv','experimental'],
+    notes:'ARRL voluntary ATV repeater/simplex, control-link, and experimental segment. ATV video carrier convention: 421.250 MHz.'
+  },
+  {
+    freq:'426.000–432.000',
+    mode:'ATV Simplex',
+    tags:['atv'],
+    notes:'ARRL voluntary ATV simplex segment. Video carrier convention: 427.250 MHz.'
+  },
+  {
+    freq:'432.000–432.070',
+    mode:'EME',
+    tags:['cw','data'],
+    notes:'ARRL voluntary Earth-Moon-Earth weak-signal segment.'
+  },
+  {
+    freq:'432.065',
+    mode:'FT8 / FT4',
+    tags:['data'],
+    notes:'Commonly reported 70 cm weak-signal digital activity frequency. Check current regional practice; FT8/FT4 activity is often sparse.'
+  },
+  {
+    freq:'432.070–432.100',
+    mode:'Weak-Signal CW',
+    tags:['cw'],
+    notes:'ARRL voluntary weak-signal CW segment.'
+  },
+  {
+    freq:'432.100',
+    mode:'SSB / CW Calling',
+    tags:['phone','cw'],
+    notes:'<span class="calling-badge">CALLING</span> National 70 cm weak-signal calling frequency. Make contact, then move into the mixed-mode segment.'
+  },
+  {
+    freq:'432.100–432.300',
+    mode:'Mixed-Mode / Weak Signal',
+    tags:['cw','data','phone'],
+    notes:'ARRL voluntary mixed-mode and weak-signal segment for SSB, CW, and digital operation.'
+  },
+  {
+    freq:'432.300–432.400',
+    mode:'Propagation Beacons',
+    tags:['cw'],
+    notes:'ARRL voluntary propagation-beacon segment. Listen for openings; do not transmit over active beacons.'
+  },
+  {
+    freq:'432.400–433.000',
+    mode:'Mixed-Mode / Weak Signal',
+    tags:['cw','data','phone'],
+    notes:'ARRL voluntary mixed-mode and weak-signal operating segment.'
+  },
+  {
+    freq:'433.000–435.000',
+    mode:'Auxiliary / Repeater Links',
+    tags:['link','repeater'],
+    notes:'ARRL voluntary auxiliary and repeater-link segment. Do not use for general simplex operation.'
+  },
+  {
+    freq:'435.000–438.000',
+    mode:'Satellite',
+    tags:['satellite'],
+    notes:'International amateur-satellite subband. Verify each satellite’s current uplink/downlink plan and Doppler requirements before transmitting.'
+  },
+  {
+    freq:'438.000–444.000',
+    mode:'ATV / Repeater Links',
+    tags:['atv','link'],
+    notes:'ARRL voluntary ATV repeater-input and auxiliary/repeater-link segment. ATV video-carrier convention: 439.250 MHz.'
+  },
+  {
+    freq:'442.000–445.000',
+    mode:'Repeaters / Local Option',
+    tags:['repeater'],
+    notes:'Repeater input/output use is locally coordinated. Verify your regional band plan and the specific repeater pair.'
+  },
+  {
+    freq:'445.000–447.000',
+    mode:'Shared Local Option',
+    tags:['repeater','link','phone','data'],
+    notes:'Shared among auxiliary/control links, repeaters, and simplex by local option. Follow local coordination.'
+  },
+  {
+    freq:'446.000',
+    mode:'FM Simplex Calling',
+    tags:['phone'],
+    notes:'<span class="calling-badge">CALLING</span> National 70 cm FM simplex calling frequency. ARRL specifies simplex—no digital.'
+  },
+  {
+    freq:'447.000–450.000',
+    mode:'Repeaters / Local Option',
+    tags:['repeater'],
+    notes:'Repeater inputs and outputs by local option. Many systems use a ±5 MHz split, but this is not universal—verify local coordination and tone.'
+  },
+]},
 };
 
 function initBandActivity() {
