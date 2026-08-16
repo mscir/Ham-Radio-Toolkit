@@ -2820,6 +2820,7 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary AM calling frequency. AM activity and nets are commonly found here.'
   },
 ]},
+/*
   '40m': { label:'40m — 7.0–7.3 MHz', rows:[
     {freq:'7.000–7.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW sub-band. Prime DX CW territory.'},
     {freq:'7.025–7.125',mode:'CW / Data',tags:['cw','data'],notes:'CW general + digital. FT8 on 7.074, PSK31 around 7.070.'},
@@ -2829,7 +2830,75 @@ const BAND_ACTIVITY = {
     {freq:'7.200',mode:'AM',tags:['phone'],notes:'AM calling. Very active, especially evenings.'},
     {freq:'7.225–7.300',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> All-license phone. Busy with DX, nets, rag-chewing. Often crowded at night.'},
     {freq:'7.285',mode:'Phone Net',tags:['phone'],notes:'7290 kHz AM net (approx). Many regional phone nets 7.225–7.290.'},
-  ]},
+  ]}, */
+'40m': { label:'40m — 7.0–7.3 MHz', rows:[
+  {
+    freq:'7.000–7.025',
+    mode:'CW / Data (Extra only)',
+    tags:['cw','data'],
+    notes:'Extra-only CW, RTTY, and data segment. Common CW DX and narrowband digital activity.'
+  },
+  {
+    freq:'7.025–7.125',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'General, Advanced, and Extra CW, RTTY, and data segment.'
+  },
+  {
+    freq:'7.040',
+    mode:'RTTY / Data DX',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data DX activity frequency.'
+  },
+  {
+    freq:'7.070',
+    mode:'PSK31',
+    tags:['data'],
+    notes:'Common PSK31 activity frequency; verify that the frequency is clear.'
+  },
+  {
+    freq:'7.074',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency.'
+  },
+  {
+    freq:'7.080–7.125',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data activity segment.'
+  },
+  {
+    freq:'7.100',
+    mode:'CW',
+    tags:['cw'],
+    notes:'Upper limit of Novice/Technician CW privileges; 200 W PEP maximum.'
+  },
+  {
+    freq:'7.125–7.175',
+    mode:'Phone / Image (Advanced + Extra)',
+    tags:['phone','image'],
+    notes:'Advanced and Extra only. General phone/image privileges begin at 7.175 MHz.'
+  },
+  {
+    freq:'7.171',
+    mode:'SSTV',
+    tags:['image'],
+    notes:'ARRL voluntary SSTV activity frequency; available to Advanced and Extra licensees.'
+  },
+  {
+    freq:'7.175–7.300',
+    mode:'Phone / Image (General +)',
+    tags:['phone','image'],
+    notes:'General, Advanced, and Extra phone/image segment. Common for regional nets, DX, and rag-chewing.'
+  },
+  {
+    freq:'7.290',
+    mode:'AM',
+    tags:['phone'],
+    notes:'ARRL voluntary AM calling frequency.'
+  },
+]},
   '30m': { label:'30m — 10.1–10.15 MHz', rows:[
     {freq:'10.100–10.130',mode:'CW',tags:['cw'],notes:'CW only. Quiet and productive for DX. Often uncrowded. 200W max.'},
     {freq:'10.130–10.140',mode:'RTTY / Data',tags:['data'],notes:'Digital modes. WSPR on 10.1387. PSK31 active around 10.142.'},
