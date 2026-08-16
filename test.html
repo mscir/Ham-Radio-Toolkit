@@ -380,10 +380,32 @@ body{
 
 
 /* ── COLLAPSIBLE SECTIONS ── */
-.collapse-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:14px}
-.collapse-hdr:hover .collapse-arrow{color:var(--accent)}
-.collapse-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)}
-.collapse-arrow{font-size:12px;color:var(--text-dim);transition:transform .2s;display:inline-block}
+/* .collapse-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:14px} */
+.collapse-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px 4px;               /* a little more clickable area */
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+  border-radius: var(--r);
+  transition: background 0.15s;
+}
+.collapse-hdr:hover {
+  background: rgba(0, 212, 255, 0.05);
+}	
+.collapse-hdr:hover .collapse-arrow{color:var(--accent);opacity: 1}
+.collapse-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);  color: var(--accent)}
+.collapse-arrow{
+	font-size: 14px;     			/* font-size:12px; */
+	color: var(--accent);            /*color:var(--text-dim); */
+	transition: transform 0.2s ease, color 0.15s;	/* transition:transform .2s; */
+	display:inline-block
+	margin-left: 8px;
+ 	opacity: 0.85;
+}
 .collapse-arrow.open{transform:rotate(180deg)}
 .collapse-body{overflow:hidden;transition:max-height .3s ease,opacity .2s ease;opacity:1}
 .collapse-body.closed{max-height:0!important;opacity:0}
@@ -906,7 +928,7 @@ body{
     <div id="bandRec" class="sw-value">—</div>
     <div id="bandRecText" class="sw-banner"></div>
   </div>
-
+<!-- Estimated -->
 <div class="collapse-hdr">
   <span class="collapse-title">▸ Estimated</span>
   <span class="collapse-arrow">▾</span>
