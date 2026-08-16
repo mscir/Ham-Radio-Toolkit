@@ -3185,11 +3185,56 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary AM calling frequency.'
   },
 ]},
+/*
   '12m': { label:'12m — 24.89–24.99 MHz', rows:[
     {freq:'24.890–24.930',mode:'CW / Data',tags:['cw','data'],notes:'CW and digital. FT8 on 24.915. Quiet band — few users.'},
     {freq:'24.915',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 12m FT8. Opens dramatically near solar max.'},
     {freq:'24.930–24.990',mode:'SSB Phone',tags:['phone'],notes:'Phone only. Very open during high SFI. Less crowded than 10m/15m.'},
-  ]},
+  ]}, */
+'12m': { label:'12m — 24.890–24.990 MHz', rows:[
+  {
+    freq:'24.890–24.920',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'CW and digital activity. 12 m can be quiet when propagation is poor, but opens can support strong long-distance paths.'
+  },
+  {
+    freq:'24.915',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 12 m; activity rises rapidly during favorable propagation.'
+  },
+  {
+    freq:'24.919',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT4 USB dial frequency on 12 m; often lighter activity than FT8.'
+  },
+  {
+    freq:'24.920–24.925',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data activity segment.'
+  },
+  {
+    freq:'24.9246',
+    mode:'WSPR',
+    tags:['data'],
+    notes:'Common WSPR dial frequency. Use low power and a conservative transmit percentage.'
+  },
+  {
+    freq:'24.925–24.930',
+    mode:'Packet',
+    tags:['data'],
+    notes:'ARRL voluntary packet segment.'
+  },
+  {
+    freq:'24.930–24.990',
+    mode:'Phone / Image',
+    tags:['phone','image'],
+    notes:'Phone and image segment. Common for SSB DX contacts when 12 m is open.'
+  },
+]},
   '10m': { label:'10m — 28.0–29.7 MHz', rows:[
     {freq:'28.000–28.070',mode:'CW',tags:['cw'],notes:'CW segment. DX beacons 28.190–28.225 MHz.'},
     {freq:'28.074',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 10m FT8. Explosive activity when band opens.'},
