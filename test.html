@@ -2950,6 +2950,7 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary packet segment. Avoid treating it as a general FT8, PSK31, or CW activity area.'
   },
 ]},
+/*
   '20m': { label:'20m — 14.0–14.35 MHz', rows:[
     {freq:'14.000–14.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW sub-band. Premier DX CW territory worldwide.'},
     {freq:'14.025–14.150',mode:'CW / Data',tags:['cw','data'],notes:'CW general. FT8 on 14.074. PSK31/RTTY around 14.080–14.099.'},
@@ -2961,7 +2962,87 @@ const BAND_ACTIVITY = {
     {freq:'14.225–14.350',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> The busiest HF phone segment on Earth. DX, nets, rag-chews. 14.313 Maritime Mobile Net.'},
     {freq:'14.286',mode:'AM',tags:['phone'],notes:'AM calling on 20m.'},
     {freq:'14.300',mode:'Maritime Net',tags:['phone'],notes:'Intercontinental Traffic Net / MarMobile.'},
-  ]},
+  ]}, */
+'20m': { label:'20m — 14.0–14.350 MHz', rows:[
+  {
+    freq:'14.000–14.025',
+    mode:'CW / Data (Extra only)',
+    tags:['cw','data'],
+    notes:'Extra-only CW, RTTY, and data segment. Common CW DX and narrowband digital activity.'
+  },
+  {
+    freq:'14.025–14.150',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'General, Advanced, and Extra CW, RTTY, and data segment.'
+  },
+  {
+    freq:'14.070–14.095',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data activity segment.'
+  },
+  {
+    freq:'14.074',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 20 m; frequently very active.'
+  },
+  {
+    freq:'14.080',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT4 USB dial frequency on 20 m, especially during FT4 contests.'
+  },
+  {
+    freq:'14.095–14.0995',
+    mode:'Packet',
+    tags:['data'],
+    notes:'ARRL voluntary packet segment.'
+  },
+  {
+    freq:'14.100',
+    mode:'NCDXF Beacons',
+    tags:['cw'],
+    notes:'International Beacon Project propagation beacons. Stations transmit in a repeating three-minute sequence; do not transmit on the beacon frequency.'
+  },
+  {
+    freq:'14.1005–14.112',
+    mode:'Packet',
+    tags:['data'],
+    notes:'ARRL voluntary packet segment.'
+  },
+  {
+    freq:'14.150–14.225',
+    mode:'Phone / Image (Extra only)',
+    tags:['phone','image'],
+    notes:'Extra-only phone/image segment. Common for DX and general phone operation.'
+  },
+  {
+    freq:'14.225–14.350',
+    mode:'Phone / Image (General +)',
+    tags:['phone','image'],
+    notes:'General, Advanced, and Extra phone/image segment. Common for DX, nets, rag-chewing, and contest activity.'
+  },
+  {
+    freq:'14.230',
+    mode:'SSTV',
+    tags:['image'],
+    notes:'ARRL voluntary SSTV activity frequency.'
+  },
+  {
+    freq:'14.286',
+    mode:'AM',
+    tags:['phone'],
+    notes:'ARRL voluntary AM calling frequency.'
+  },
+  {
+    freq:'14.300',
+    mode:'Maritime Mobile',
+    tags:['phone'],
+    notes:'Maritime Mobile Service Net activity frequency. Keep clear for maritime-mobile, emergency, and traffic traffic.'
+  },
+]},
   '17m': { label:'17m — 18.068–18.168 MHz', rows:[
     {freq:'18.068–18.110',mode:'CW / Data',tags:['cw','data'],notes:'CW lower segment. FT8 on 18.100. Relatively uncrowded — great for DX.'},
     {freq:'18.100',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 17m FT8. Active, especially on good solar days.'},
