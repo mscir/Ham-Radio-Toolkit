@@ -3101,6 +3101,7 @@ const BAND_ACTIVITY = {
     notes:'Global HF Net activity frequency. Verify the current schedule and frequency before calling.'
   },
 ]},
+/*
   '15m': { label:'15m — 21.0–21.45 MHz', rows:[
     {freq:'21.000–21.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW. DX-only sub-band on 15m.'},
     {freq:'21.025–21.200',mode:'CW / Data',tags:['cw','data'],notes:'CW general. FT8 on 21.074.'},
@@ -3109,7 +3110,81 @@ const BAND_ACTIVITY = {
     {freq:'21.340',mode:'SSTV',tags:['image'],notes:'15m SSTV calling.'},
     {freq:'21.225–21.450',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Very busy in good solar conditions. Lots of DX and US-to-Europe paths.'},
     {freq:'21.390',mode:'AM',tags:['phone'],notes:'15m AM calling.'},
-  ]},
+  ]}, */
+'15m': { label:'15m — 21.000–21.450 MHz', rows:[
+  {
+    freq:'21.000–21.025',
+    mode:'CW / Data (Extra only)',
+    tags:['cw','data'],
+    notes:'Extra-only CW, RTTY, and data segment. Common CW DX and narrowband digital activity.'
+  },
+  {
+    freq:'21.025–21.200',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'General, Advanced, and Extra CW, RTTY, and data segment. Novice/Technician privileges are CW only, limited to 200 W PEP.'
+  },
+  {
+    freq:'21.070–21.110',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data activity segment.'
+  },
+  {
+    freq:'21.074',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 15 m; activity rises sharply when propagation is good.'
+  },
+  {
+    freq:'21.0946',
+    mode:'WSPR',
+    tags:['data'],
+    notes:'Common WSPR dial frequency. Use low power and a conservative transmit percentage.'
+  },
+  {
+    freq:'21.110–21.150',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'Mixed CW and data activity; observe current local and international operating practice.'
+  },
+  {
+    freq:'21.140',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT4 USB dial frequency on 15 m; activity is usually lighter than FT8 except during FT4 contests.'
+  },
+  {
+    freq:'21.200–21.225',
+    mode:'Phone / Image (Extra only)',
+    tags:['phone','image'],
+    notes:'Extra-only phone/image segment.'
+  },
+  {
+    freq:'21.225–21.275',
+    mode:'Phone / Image (Advanced + Extra)',
+    tags:['phone','image'],
+    notes:'Advanced and Extra phone/image segment. General phone/image privileges begin at 21.275 MHz.'
+  },
+  {
+    freq:'21.275–21.450',
+    mode:'Phone / Image (General +)',
+    tags:['phone','image'],
+    notes:'General, Advanced, and Extra phone/image segment. Common for DX and general phone operation when 15 m is open.'
+  },
+  {
+    freq:'21.340',
+    mode:'SSTV',
+    tags:['image'],
+    notes:'ARRL voluntary SSTV activity frequency.'
+  },
+  {
+    freq:'21.390',
+    mode:'AM',
+    tags:['phone'],
+    notes:'ARRL voluntary AM calling frequency.'
+  },
+]},
   '12m': { label:'12m — 24.89–24.99 MHz', rows:[
     {freq:'24.890–24.930',mode:'CW / Data',tags:['cw','data'],notes:'CW and digital. FT8 on 24.915. Quiet band — few users.'},
     {freq:'24.915',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 12m FT8. Opens dramatically near solar max.'},
