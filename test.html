@@ -3043,13 +3043,64 @@ const BAND_ACTIVITY = {
     notes:'Maritime Mobile Service Net activity frequency. Keep clear for maritime-mobile, emergency, and traffic traffic.'
   },
 ]},
+/*
   '17m': { label:'17m — 18.068–18.168 MHz', rows:[
     {freq:'18.068–18.110',mode:'CW / Data',tags:['cw','data'],notes:'CW lower segment. FT8 on 18.100. Relatively uncrowded — great for DX.'},
     {freq:'18.100',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 17m FT8. Active, especially on good solar days.'},
     {freq:'18.110–18.168',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Phone only. 17m has no Novice/Tech segment so it\'s often less QRM.'},
     {freq:'18.130',mode:'SSTV',tags:['image'],notes:'17m SSTV calling.'},
     {freq:'18.160',mode:'Global HF Net',tags:['phone'],notes:'Global HF Net morning check-in net.'},
-  ]},
+  ]}, */
+'17m': { label:'17m — 18.068–18.168 MHz', rows:[
+  {
+    freq:'18.068–18.095',
+    mode:'CW',
+    tags:['cw'],
+    notes:'Common CW activity, including DX. 17 m is a WARC band; major contest activity is generally avoided.'
+  },
+  {
+    freq:'18.095–18.110',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'Digital segment. ARRL voluntary plan lists 18.100–18.105 MHz for RTTY and 18.105–18.110 MHz for packet.'
+  },
+  {
+    freq:'18.100',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 17 m; often active when the band is open.'
+  },
+  {
+    freq:'18.104',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT4 USB dial frequency on 17 m; activity is often lighter than FT8.'
+  },
+  {
+    freq:'18.1046',
+    mode:'WSPR',
+    tags:['data'],
+    notes:'Common WSPR dial frequency. Use low power and a conservative transmit percentage.'
+  },
+  {
+    freq:'18.110–18.168',
+    mode:'Phone / Image',
+    tags:['phone','image'],
+    notes:'Phone and image segment. General, Advanced, and Extra licensees have full 17 m access.'
+  },
+  {
+    freq:'18.130',
+    mode:'SSTV',
+    tags:['image'],
+    notes:'Common 17 m SSTV activity frequency; listen first and confirm current activity.'
+  },
+  {
+    freq:'18.160',
+    mode:'Global HF Net',
+    tags:['phone'],
+    notes:'Global HF Net activity frequency. Verify the current schedule and frequency before calling.'
+  },
+]},
   '15m': { label:'15m — 21.0–21.45 MHz', rows:[
     {freq:'21.000–21.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW. DX-only sub-band on 15m.'},
     {freq:'21.025–21.200',mode:'CW / Data',tags:['cw','data'],notes:'CW general. FT8 on 21.074.'},
