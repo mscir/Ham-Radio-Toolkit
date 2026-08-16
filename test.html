@@ -3489,7 +3489,7 @@ const BAND_ACTIVITY = {
     tags:['repeater','phone'],
     notes:'Additional regionally coordinated FM repeater input/output and simplex use; verify your local 6 m band plan before transmitting.'
   },
-]},
+]}, /*
   '2m': { label:'2m — 144–148 MHz', rows:[
     {freq:'144.000–144.100',mode:'CW Only',tags:['cw'],notes:'CW and weak signal. No phone. Meteor scatter and EME activity.'},
     {freq:'144.100',mode:'EME / MS Calling',tags:['cw'],notes:'Earth-Moon-Earth and Meteor Scatter CW calling.'},
@@ -3500,7 +3500,141 @@ const BAND_ACTIVITY = {
     {freq:'146.400–146.580',mode:'FM Simplex',tags:['phone'],notes:'2m FM simplex channels (15 kHz spacing). Move off 146.520 after contact.'},
     {freq:'146.600–147.999',mode:'FM Repeaters',tags:['phone'],notes:'2m repeater outputs. ±600 kHz offset. Most active VHF repeater band.'},
     {freq:'144.900–145.100',mode:'Packet / APRS',tags:['data'],notes:'Packet radio and digital data. APRS on 144.390.'},
-  ]},
+  ]}, */
+'2m': { label:'2m — 144–148 MHz', rows:[
+  {
+    freq:'144.000–144.050',
+    mode:'EME (CW)',
+    tags:['cw'],
+    notes:'ARRL voluntary Earth-Moon-Earth CW segment.'
+  },
+  {
+    freq:'144.050–144.100',
+    mode:'CW / Weak Signal',
+    tags:['cw'],
+    notes:'General CW and weak-signal activity. Meteor scatter, EME, and terrestrial weak-signal work may be found here.'
+  },
+  {
+    freq:'144.100–144.200',
+    mode:'EME / Weak-Signal SSB',
+    tags:['cw','phone','data'],
+    notes:'EME, meteor-scatter, weak-signal SSB, and narrowband digital activity. Check local weak-signal practices before transmitting.'
+  },
+  {
+    freq:'144.150',
+    mode:'MSK144',
+    tags:['data'],
+    notes:'Common MSK144 meteor-scatter activity frequency. Avoid using this frequency for FT4.'
+  },
+  {
+    freq:'144.170',
+    mode:'FT4',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common 2 m FT4 USB dial frequency for weak-signal operation. Activity may be sparse outside contests or scheduled activity.'
+  },
+  {
+    freq:'144.174',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common 2 m FT8 USB dial frequency for weak-signal terrestrial, tropo, meteor-scatter, and EME activity.'
+  },
+  {
+    freq:'144.200',
+    mode:'SSB Calling',
+    tags:['phone'],
+    notes:'<span class="calling-badge">CALLING</span> National 2 m SSB calling frequency. Make contact, then move into the general SSB segment.'
+  },
+  {
+    freq:'144.200–144.275',
+    mode:'SSB / Weak Signal',
+    tags:['phone','cw','data'],
+    notes:'General SSB and weak-signal operating segment.'
+  },
+  {
+    freq:'144.275–144.300',
+    mode:'Propagation Beacons',
+    tags:['cw'],
+    notes:'ARRL voluntary propagation-beacon segment. Listen for openings; avoid transmitting over active beacons.'
+  },
+  {
+    freq:'144.300–144.500',
+    mode:'OSCAR / Satellite',
+    tags:['satellite','data'],
+    notes:'ARRL voluntary amateur-satellite subband. Verify current satellite modes and frequencies before transmitting.'
+  },
+  {
+    freq:'144.390',
+    mode:'APRS',
+    tags:['data'],
+    notes:'North American terrestrial APRS channel: 1200-baud AFSK packet for position reports, messages, weather, and telemetry.'
+  },
+  {
+    freq:'144.500–144.900',
+    mode:'FM Repeater Inputs',
+    tags:['repeater'],
+    notes:'Typical FM repeater-input segment. Frequencies, tones, and pairings are locally coordinated.'
+  },
+  {
+    freq:'144.900–145.100',
+    mode:'Packet / Weak-Signal Simplex',
+    tags:['data'],
+    notes:'Packet radio and weak-signal/FM simplex segment. Common packet channels include 145.010, 145.030, 145.050, 145.070, and 145.090 MHz.'
+  },
+  {
+    freq:'145.100–145.500',
+    mode:'FM Repeater Outputs',
+    tags:['repeater'],
+    notes:'FM repeater outputs, including translator and digital-voice uses in parts of the segment. Check local coordination.'
+  },
+  {
+    freq:'145.500–145.800',
+    mode:'Experimental / Digital',
+    tags:['data','experimental'],
+    notes:'Miscellaneous and experimental modes. Consult local band plans before operating.'
+  },
+  {
+    freq:'145.800–146.000',
+    mode:'OSCAR / Satellite',
+    tags:['satellite'],
+    notes:'Amateur-satellite subband. 145.825 MHz is commonly used for ISS/APRS packet operation when enabled; verify current satellite status first.'
+  },
+  {
+    freq:'146.010–146.370',
+    mode:'FM Repeater Inputs',
+    tags:['repeater'],
+    notes:'Typical FM repeater-input segment. Commonly uses −600 kHz offset pairs; verify the specific repeater and tone.'
+  },
+  {
+    freq:'146.400–146.580',
+    mode:'FM Simplex',
+    tags:['phone'],
+    notes:'Common 2 m FM simplex channels. Use 146.520 MHz to call, then move to another clear simplex channel.'
+  },
+  {
+    freq:'146.520',
+    mode:'FM Simplex Calling',
+    tags:['phone'],
+    notes:'<span class="calling-badge">CALLING</span> National 2 m FM simplex calling frequency.'
+  },
+  {
+    freq:'146.610–147.390',
+    mode:'FM Repeater Outputs',
+    tags:['repeater'],
+    notes:'Primary 2 m FM repeater-output segment. Most systems use a −600 kHz input offset; verify the specific repeater.'
+  },
+  {
+    freq:'147.420–147.570',
+    mode:'FM Simplex',
+    tags:['phone'],
+    notes:'Upper 2 m FM simplex segment. Local channel assignments may vary.'
+  },
+  {
+    freq:'147.600–147.990',
+    mode:'FM Repeater Inputs',
+    tags:['repeater'],
+    notes:'Typical FM repeater-input segment, often paired with 147 MHz outputs using a +600 kHz offset.'
+  },
+]},
   '70cm': { label:'70cm — 420–450 MHz', rows:[
     {freq:'432.100',mode:'SSB Calling',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> Primary 70cm SSB/CW weak-signal calling.'},
     {freq:'432.070',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 70cm FT8 weak signal.'},
