@@ -3234,7 +3234,7 @@ const BAND_ACTIVITY = {
     tags:['phone','image'],
     notes:'Phone and image segment. Common for SSB DX contacts when 12 m is open.'
   },
-]},
+]}, /*
   '10m': { label:'10m — 28.0–29.7 MHz', rows:[
     {freq:'28.000–28.070',mode:'CW',tags:['cw'],notes:'CW segment. DX beacons 28.190–28.225 MHz.'},
     {freq:'28.074',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 10m FT8. Explosive activity when band opens.'},
@@ -3244,7 +3244,99 @@ const BAND_ACTIVITY = {
     {freq:'28.400',mode:'SSB Calling',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> 10m SSB calling frequency.'},
     {freq:'28.500–29.700',mode:'SSB / AM / FM',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Full phone segment. 29.0–29.2 AM activity. 29.600 FM simplex calling. 29.500–29.700 FM repeater outputs.'},
     {freq:'29.600',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> 10m FM simplex national calling frequency.'},
-  ]},
+  ]}, */
+'10m': { label:'10m — 28.000–29.700 MHz', rows:[
+  {
+    freq:'28.000–28.070',
+    mode:'CW',
+    tags:['cw'],
+    notes:'ARRL voluntary CW segment. Common CW DX activity.'
+  },
+  {
+    freq:'28.070–28.150',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data segment. FT8 is commonly found at 28.074 MHz; PSK31 activity is often near 28.120 MHz.'
+  },
+  {
+    freq:'28.074',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 10 m. Activity can increase rapidly during openings.'
+  },
+  {
+    freq:'28.150–28.190',
+    mode:'CW',
+    tags:['cw'],
+    notes:'ARRL voluntary CW segment.'
+  },
+  {
+    freq:'28.190–28.225',
+    mode:'Propagation Beacons',
+    tags:['cw'],
+    notes:'IARU Region 2 beacon subband. Listen for propagation beacons; avoid transmitting over them.'
+  },
+  {
+    freq:'28.200–28.300',
+    mode:'Beacons',
+    tags:['cw'],
+    notes:'ARRL voluntary beacon segment. Useful for checking 10 m propagation; do not transmit over active beacons.'
+  },
+  {
+    freq:'28.300–28.500',
+    mode:'Phone (Novice / Technician +)',
+    tags:['phone'],
+    notes:'Novice and Technician phone segment, limited to 200 W PEP; General, Advanced, and Extra also have access.'
+  },
+  {
+    freq:'28.400',
+    mode:'SSB Calling',
+    tags:['phone'],
+    notes:'Common 10 m SSB calling frequency; listen first, then move after making contact when practical.'
+  },
+  {
+    freq:'28.500–29.300',
+    mode:'Phone / Image',
+    tags:['phone','image'],
+    notes:'General, Advanced, and Extra phone/image segment. Common for SSB, AM, and other phone/image activity.'
+  },
+  {
+    freq:'28.680',
+    mode:'SSTV',
+    tags:['image'],
+    notes:'ARRL voluntary SSTV activity frequency.'
+  },
+  {
+    freq:'29.000–29.200',
+    mode:'AM',
+    tags:['phone'],
+    notes:'ARRL voluntary AM activity segment.'
+  },
+  {
+    freq:'29.300–29.510',
+    mode:'Satellite',
+    tags:['satellite'],
+    notes:'ARRL voluntary satellite uplink/downlink segment; verify current satellite frequencies and operating mode before transmitting.'
+  },
+  {
+    freq:'29.520–29.590',
+    mode:'FM Repeater Inputs',
+    tags:['repeater'],
+    notes:'ARRL voluntary FM repeater input segment. Check local coordination before use.'
+  },
+  {
+    freq:'29.600',
+    mode:'FM Simplex',
+    tags:['phone'],
+    notes:'<span class="calling-badge">CALLING</span> National 10 m FM simplex calling frequency.'
+  },
+  {
+    freq:'29.610–29.700',
+    mode:'FM Repeater Outputs',
+    tags:['repeater'],
+    notes:'ARRL voluntary FM repeater output segment. Check local coordination before use.'
+  },
+]},
   '6m': { label:'6m — 50–54 MHz', rows:[
     {freq:'50.000–50.100',mode:'CW Only',tags:['cw'],notes:'CW only — no phone in this segment. Beacons 50.060–50.080.'},
     {freq:'50.060–50.080',mode:'CW Beacons',tags:['cw'],notes:'Propagation beacons — listen here to check if 6m is open before calling.'},
