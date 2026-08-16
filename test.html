@@ -2752,7 +2752,7 @@ const BAND_ACTIVITY = {
     {freq:'3.845',mode:'SSTV',tags:['image'],notes:'Secondary SSTV calling.'},
     {freq:'3.885',mode:'AM',tags:['phone'],notes:'AM phone. Active AM net frequency.'},
   ]}, */
-	'80m': { label:'80m — 3.5–4.0 MHz', rows:[
+'80m': { label:'80m — 3.5–4.0 MHz', rows:[
   {
     freq:'3.500–3.525',
     mode:'CW / Data (Extra only)',
@@ -2905,12 +2905,45 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary AM calling frequency.'
   },
 ]},
+/*
   '30m': { label:'30m — 10.1–10.15 MHz', rows:[
     {freq:'10.100–10.130',mode:'CW',tags:['cw'],notes:'CW only. Quiet and productive for DX. Often uncrowded. 200W max.'},
     {freq:'10.130–10.140',mode:'RTTY / Data',tags:['data'],notes:'Digital modes. WSPR on 10.1387. PSK31 active around 10.142.'},
     {freq:'10.136',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> FT8 on 30m. Very active. 200W max.'},
     {freq:'10.140–10.150',mode:'CW / Data',tags:['cw','data'],notes:'Mixed CW and digital near band edge. <strong>No phone permitted on 30m.</strong>'},
-  ]},
+  ]}, */
+'30m': { label:'30m — 10.100–10.150 MHz', rows:[
+  {
+    freq:'10.100–10.130',
+    mode:'CW / Data',
+    tags:['cw','data'],
+    notes:'CW and narrowband digital activity. Good for DX and propagation work. Maximum power: 200 W PEP.'
+  },
+  {
+    freq:'10.130–10.140',
+    mode:'RTTY / Data',
+    tags:['data'],
+    notes:'ARRL voluntary RTTY/data segment.'
+  },
+  {
+    freq:'10.136',
+    mode:'FT8',
+    tags:['data'],
+    notes:'<span class="calling-badge">CALLING</span> Common FT8 USB dial frequency on 30 m; often very active.'
+  },
+  {
+    freq:'10.1387',
+    mode:'WSPR',
+    tags:['data'],
+    notes:'Common WSPR dial frequency. Use low power and a conservative transmit percentage.'
+  },
+  {
+    freq:'10.140–10.150',
+    mode:'Packet',
+    tags:['data'],
+    notes:'ARRL voluntary packet segment. Avoid treating it as a general FT8, PSK31, or CW activity area.'
+  },
+]},
   '20m': { label:'20m — 14.0–14.35 MHz', rows:[
     {freq:'14.000–14.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW sub-band. Premier DX CW territory worldwide.'},
     {freq:'14.025–14.150',mode:'CW / Data',tags:['cw','data'],notes:'CW general. FT8 on 14.074. PSK31/RTTY around 14.080–14.099.'},
