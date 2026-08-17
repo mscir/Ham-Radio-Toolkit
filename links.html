@@ -160,7 +160,7 @@
       border-radius: var(--radius);
       background: rgba(12, 25, 33, 0.92);
       overflow: hidden;
-      scroll-margin-top: 18px;
+      scroll-margin-top: 1rem;;
     }
 
     .resource-group[open] {
@@ -587,7 +587,7 @@ html[data-theme="light"] mark.search-match {
         <li><a href="#antennas">Antennas</a></li>
         <li><a href="#propagation">Propagation</a></li>
         <li><a href="#grids">Grid Squares</a></li>
-        <li><a href="#dx">DXing</a></li>
+        <li><a href="#dx">DXing &amp; Awards</a></li>
         <li><a href="#winlink">Winlink</a></li>
         <li><a href="#beacons">Beacons</a></li>
         <li><a href="#logging">Logging</a></li>
@@ -1973,101 +1973,111 @@ html[data-theme="light"] mark.search-match {
     const searchStatus = document.getElementById("search-status");
     const noResults = document.getElementById("no-results");
 
-    const groups = [...document.querySelectorAll(".resource-group")];
+/* start replacement code here */
 
-	  function searchIsEmpty() {
-	  return searchInput.value.trim() === "";
-		}
-		
-		function closeOtherSections(activeGroup) {
-		  groups.forEach((group) => {
-		    if (group !== activeGroup) {
-		      group.open = false;
-		    }
-		  });
-		}
-		function scrollToSection(group) {
-		  window.requestAnimationFrame(() => {
-		    group.scrollIntoView({
-		      behavior: "smooth",
-		      block: "start",
-		      inline: "nearest"
-		    });
-		  });
-		}
-		groups.forEach((group) => {
-			  group.addEventListener("toggle", () => {
-			    if (group.open && searchIsEmpty()) {
-			      closeOtherSections(group);
-			      scrollToSection(group);
-			    }
-			  });
-			});
-		    function getPreferredTheme() {
-		      const savedTheme = localStorage.getItem("ham-radio-theme");
-		
-		      if (savedTheme === "light" || savedTheme === "dark") {
-		        return savedTheme;
-		      }
-		
-		      return window.matchMedia("(prefers-color-scheme: light)").matches
-		        ? "light"
-		        : "dark";
-		    }
-		document.querySelectorAll(".topic-nav a[href^='#']").forEach((link) => {
-		  link.addEventListener("click", (event) => {
-		    if (!searchIsEmpty()) return;
-		
-		    const targetId = link.getAttribute("href");
-		    const targetGroup = document.querySelector(targetId);
-		
-		    if (!targetGroup || !targetGroup.classList.contains("resource-group")) {
-		      return;
-		    }
-		
-		    event.preventDefault();
-		
-		    closeOtherSections(targetGroup);
-		    targetGroup.open = true;
-		    scrollToSection(targetGroup);
-		
-		    history.replaceState(null, "", targetId);
-		  });
-		});
+const groups = [...document.querySelectorAll(".resource-group")];
 
-    closeOtherSections(targetGroup);
-    targetGroup.open = true;
-  });
-}); 
+     function searchIsEmpty() {
+	      return searchInput.value.trim() === "";
+	    }
+
+    function closeOtherSections(activeGroup) {
+	      groups.forEach((group) => {
+	        if (group !== activeGroup) {
+	          group.open = false;
+	        }
+	      });
+	    }
+
+     function scrollToSection(group) {
+	      window.requestAnimationFrame(() => {
+	        group.scrollIntoView({
+	          behavior: "smooth",
+	          block: "start",
+	          inline: "nearest"
+	        });
+	      });
+	    }
+
+    function openSection(group, shouldScroll = true) {
+	      closeOtherSections(group);
+	      group.open = true;
+	
+	      if (shouldScroll) {
+	        scrollToSection(group);
+	      }
+	    }
+
+    /*
+      Clicking a native <summary> triggers this after the <details>
+      section opens. It closes all other groups and moves this group
+      to the top—but only when the search field is empty.
+    */
+    groups.forEach((group) => {
+	      group.addEventListener("toggle", () => {
+	        if (group.open && searchIsEmpty()) {
+	          closeOtherSections(group);
+	          scrollToSection(group);
+	        }
+	      });
+	    });
+
+        /*
+      Clicking a topic-menu link such as <a href="#dx">DXing & Awards</a>.
+    */
+    document.querySelectorAll(".topic-nav a[href^='#']").forEach((link) => {
+	      link.addEventListener("click", (event) => {
+	        if (!searchIsEmpty()) return;
+	
+	        const targetGroup = document.querySelector(link.hash);
+	
+	        if (!targetGroup || !targetGroup.matches("details.resource-group")) {
+	          return;
+	        }
+	
+	        event.preventDefault();
+	        openSection(targetGroup);
+	        history.replaceState(null, "", link.hash);
+	      });
+	    });
+
+    window.addEventListener("load", () => {
+      if (!searchIsEmpty() || !window.location.hash) return;
+
+      const targetGroup = document.querySelector(window.location.hash);
+
+      if (targetGroup?.classList.contains("resource-group")) {
+        openSection(targetGroup, false);
+        window.setTimeout(() => {
+          scrollToSection(targetGroup);
+        }, 80);
+      }
+    });
 	  
     function setTheme(theme) {
-      const isLight = theme === "light";
+	      const isLight = theme === "light";
+	      root.dataset.theme = theme;
+	      localStorage.setItem("ham-radio-theme", theme);
+	      themeToggle.setAttribute("aria-pressed", String(isLight));
+	      themeToggle.setAttribute(
+	        "aria-label",
+	        isLight ? "Switch to dark theme" : "Switch to light theme"
+	      );
+	      themeToggleText.textContent = isLight ? "Dark Theme" : "Light Theme";
+	    }
 
-      root.dataset.theme = theme;
-      localStorage.setItem("ham-radio-theme", theme);
-
-      themeToggle.setAttribute("aria-pressed", String(isLight));
-      themeToggle.setAttribute(
-        "aria-label",
-        isLight ? "Switch to dark theme" : "Switch to light theme"
-      );
-
-      themeToggleText.textContent = isLight ? "Dark Theme" : "Light Theme";
-    }
-
-    setTheme(getPreferredTheme());
-
-    themeToggle.addEventListener("click", () => {
-      const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
-      setTheme(nextTheme);
-    });
-
-    function normalizeText(text) {
-      return text
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .trim();
-    }
+	    setTheme(getPreferredTheme());
+	    themeToggle.addEventListener("click", () => {
+	      const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+	      setTheme(nextTheme);
+	    });
+	
+	    function normalizeText(text) {
+	      return text
+	        .toLowerCase()
+	        .replace(/\s+/g, " ")
+	        .trim();
+	    }
 
     function filterResources() {
       const query = normalizeText(searchInput.value);
@@ -2076,7 +2086,6 @@ html[data-theme="light"] mark.search-match {
       groups.forEach((group) => {
         const cards = [...group.querySelectorAll(".resource-card")];
         let groupMatches = 0;
-
         cards.forEach((card) => {
           const searchableText = normalizeText(
             [
@@ -2085,43 +2094,32 @@ html[data-theme="light"] mark.search-match {
               group.querySelector(".topic-name")?.textContent || ""
             ].join(" ")
           );
-
           const isMatch = !query || searchableText.includes(query);
-
           card.classList.toggle("is-hidden", !isMatch);
-
           if (isMatch) {
             groupMatches += 1;
             matchCount += 1;
           }
         });
-
         const topicName = normalizeText(
           group.querySelector(".topic-name")?.textContent || ""
         );
-
         const topicMatches = query && topicName.includes(query);
-
         if (topicMatches && groupMatches === 0) {
           group.classList.remove("is-hidden");
-
           cards.forEach((card) => {
             card.classList.remove("is-hidden");
           });
-
           groupMatches = cards.length;
           matchCount += cards.length;
         } else {
           group.classList.toggle("is-hidden", Boolean(query && groupMatches === 0));
         }
-
         if (query && groupMatches > 0) {
           group.open = true;
         }
       });
-
       noResults.classList.toggle("visible", Boolean(query && matchCount === 0));
-
       if (!query) {
         searchStatus.textContent = "Browse a topic or search all links.";
       } else if (matchCount === 1) {
@@ -2130,15 +2128,12 @@ html[data-theme="light"] mark.search-match {
         searchStatus.textContent = `${matchCount} matching resources found.`;
       }
     }
-
     searchInput.addEventListener("input", filterResources);
-
     clearButton.addEventListener("click", () => {
       searchInput.value = "";
       filterResources();
       searchInput.focus();
     });
-
     searchInput.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         searchInput.value = "";
