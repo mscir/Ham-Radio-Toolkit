@@ -1975,18 +1975,52 @@ html[data-theme="light"] mark.search-match {
 
     const groups = [...document.querySelectorAll(".resource-group")];
 
-    function getPreferredTheme() {
-      const savedTheme = localStorage.getItem("ham-radio-theme");
+	  function searchIsEmpty() {
+	  return searchInput.value.trim() === "";
+		}
+		
+		function closeOtherSections(activeGroup) {
+		  groups.forEach((group) => {
+		    if (group !== activeGroup) {
+		      group.open = false;
+		    }
+		  });
+		}
+		
+		groups.forEach((group) => {
+		  group.addEventListener("toggle", () => {
+		    if (group.open && searchIsEmpty()) {
+		      closeOtherSections(group);
+		    }
+		  });
+		});
+		    function getPreferredTheme() {
+		      const savedTheme = localStorage.getItem("ham-radio-theme");
+		
+		      if (savedTheme === "light" || savedTheme === "dark") {
+		        return savedTheme;
+		      }
+		
+		      return window.matchMedia("(prefers-color-scheme: light)").matches
+		        ? "light"
+		        : "dark";
+		    }
+          document.querySelectorAll(".topic-nav a[href^='#']").forEach((link) => {
+  link.addEventListener("click", () => {
+    if (!searchIsEmpty()) return;
 
-      if (savedTheme === "light" || savedTheme === "dark") {
-        return savedTheme;
-      }
+    const targetId = link.getAttribute("href");
+    const targetGroup = document.querySelector(targetId);
 
-      return window.matchMedia("(prefers-color-scheme: light)").matches
-        ? "light"
-        : "dark";
+    if (!targetGroup || !targetGroup.classList.contains("resource-group")) {
+      return;
     }
 
+    closeOtherSections(targetGroup);
+    targetGroup.open = true;
+  });
+}); 
+	  
     function setTheme(theme) {
       const isLight = theme === "light";
 
