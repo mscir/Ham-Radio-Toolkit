@@ -675,6 +675,7 @@ body{
   <div class="sb-nav" id="sb-nav-inner">
     <div class="sb-section-label">Live Data</div>
     <button class="nav-btn" onclick="showPanel('aprs',this)"><span class="nav-icon">📡</span>APRS / Station Lookup</button>
+	<button class="nav-btn" onclick="showPanel('beacons',this)"><span class="nav-icon">📶</span>Beacons</button>
     <button class="nav-btn" onclick="showPanel('greyline',this)"><span class="nav-icon">🌍</span>Grey Line Map</button>
     <button class="nav-btn" onclick="showPanel('proppath',this)"><span class="nav-icon">🌐</span>Propagation Path</button>
     <button class="nav-btn active" onclick="showPanel('solar',this)"><span class="nav-icon">☀️</span>Solar / Propagation</button>
@@ -693,6 +694,7 @@ body{
     <button class="nav-btn" onclick="showPanel('privileges',this)"><span class="nav-icon">📋</span>Frequency Privileges</button>
     <button class="nav-btn" onclick="showPanel('grid',this)"><span class="nav-icon">🔲</span>Grid Square Calc</button>
     <button class="nav-btn" onclick="showPanel('qcodes',this)"><span class="nav-icon">📖</span>Q-Codes &amp; Phonetics</button>
+	<a class="nav-btn" href="links.html" target="_blank" rel="noopener noreferrer"><span class="nav-icon">🔗</span>Links &amp; Resources</a>
 
     <div class="sb-section-label">Tools &amp; Calculators</div>
     <button class="nav-btn" onclick="showPanel('antenna',this)"><span class="nav-icon">📐</span>Antenna Calculator</button>
@@ -872,6 +874,51 @@ body{
 
 	
 </div><!-- end panel-grid -->
+
+<!-- Beacon Panel -->
+<section class="panel" id="beacons">
+  <div class="panel-header">
+    <h1>Beacons</h1>
+    <p>Use beacon networks to check real-world HF propagation and signal paths.</p>
+  </div>
+
+  <div class="tool-grid">
+    <a class="tool-card"
+       href="https://www.ncdxf.org/beacon/"
+       target="_blank"
+       rel="noopener noreferrer">
+      <span class="tool-icon">📶</span>
+      <h2>NCDXF/IARU Beacon Network</h2>
+      <p>
+        Check the international beacon schedule, locations, frequencies,
+        and current transmitter status.
+      </p>
+    </a>
+
+    <a class="tool-card"
+       href="https://www.reversebeacon.net/"
+       target="_blank"
+       rel="noopener noreferrer">
+      <span class="tool-icon">📡</span>
+      <h2>Reverse Beacon Network</h2>
+      <p>
+        See near-real-time CW, RTTY, and digital spots, identify band openings,
+        and check whether receiving stations hear your signal.
+      </p>
+    </a>
+
+    <a class="tool-card"
+       href="https://www.wsprnet.org/drupal/wsprnet/map"
+       target="_blank"
+       rel="noopener noreferrer">
+      <span class="tool-icon">🌐</span>
+      <h2>WSPRnet Map</h2>
+      <p>
+        View weak-signal propagation reports from WSPR stations around the world.
+      </p>
+    </a>
+  </div>
+</section>
 
 <!-- PANEL 2: SOLAR CONDITIONS -->
 <div class="panel active" id="panel-solar">
