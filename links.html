@@ -1,0 +1,2100 @@
+links page 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Ham Radio Links & Learning Resources</title>
+
+  <style>
+    :root {
+      --bg: #071017;
+      --panel: #0c1921;
+      --panel-hover: #10242f;
+      --border: #1d3d4c;
+      --text: #e6f3f7;
+      --text-dim: #96b0bb;
+      --accent: #00d4ff;
+      --accent-soft: rgba(0, 212, 255, 0.12);
+      --good: #49e891;
+      --warning: #ffc14d;
+      --radius: 8px;
+      --mono: "Share Tech Mono", "Cascadia Mono", Consolas, monospace;
+      --condensed: "Barlow Condensed", Arial Narrow, Arial, sans-serif;
+      --body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        linear-gradient(rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+        var(--bg);
+      background-size: 28px 28px;
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    a:hover {
+      color: #82eaff;
+    }
+
+    .page-shell {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .page-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-family: var(--condensed);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .page-label::before {
+      width: 22px;
+      height: 1px;
+      background: var(--accent);
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--condensed);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .intro {
+      max-width: 780px;
+      margin: 16px 0 24px;
+      color: var(--text-dim);
+    }
+
+    .notice {
+      margin: 0 0 24px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--warning);
+      border-radius: var(--radius);
+      background: rgba(255, 193, 77, 0.05);
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    .topic-nav {
+      margin: 0 0 24px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(12, 25, 33, 0.9);
+    }
+
+    .topic-nav h2 {
+      margin: 0 0 10px;
+      color: var(--text-dim);
+      font-family: var(--condensed);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .topic-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .topic-nav a {
+      display: inline-block;
+      padding: 5px 9px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(0, 212, 255, 0.045);
+      color: var(--text-dim);
+      font-family: var(--condensed);
+      font-size: 0.83rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .topic-nav a:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .resource-group {
+      margin: 12px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(12, 25, 33, 0.92);
+      overflow: hidden;
+      scroll-margin-top: 18px;
+    }
+
+    .resource-group[open] {
+      border-color: rgba(0, 212, 255, 0.45);
+    }
+
+    .resource-group summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .resource-group summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .resource-group summary::before {
+      display: grid;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      place-items: center;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      content: "+";
+      font-family: var(--mono);
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .resource-group[open] summary::before {
+      content: "−";
+    }
+
+    .resource-group summary:hover {
+      background: var(--panel-hover);
+    }
+
+    .topic-name {
+      color: var(--text);
+      font-family: var(--condensed);
+      font-size: clamp(1.15rem, 3vw, 1.45rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .topic-count {
+      margin-left: auto;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .resource-content {
+      padding: 0 16px 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .topic-description {
+      margin: 14px 0;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+
+    .resource-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .resource-card {
+      min-height: 138px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .resource-card:hover {
+      border-color: rgba(0, 212, 255, 0.55);
+      background: var(--accent-soft);
+    }
+
+    .resource-card h3 {
+      margin: 0 0 7px;
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+
+    .resource-card h3 a {
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .resource-card p {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 0.87rem;
+      line-height: 1.45;
+    }
+
+    .resource-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text-dim);
+      font-family: var(--condensed);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .badge-official {
+      border-color: rgba(73, 232, 145, 0.45);
+      color: var(--good);
+    }
+
+    .badge-tool {
+      border-color: rgba(0, 212, 255, 0.45);
+      color: var(--accent);
+    }
+
+    .badge-us {
+      border-color: rgba(255, 193, 77, 0.45);
+      color: var(--warning);
+    }
+
+    .page-footer {
+      margin-top: 28px;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .page-shell {
+        width: min(100% - 22px, 1100px);
+        padding-top: 20px;
+      }
+
+      .topic-count {
+        display: none;
+      }
+
+      .resource-list {
+        grid-template-columns: 1fr;
+      }
+    }
+	
+	/* dark / light mode */
+	:root {
+  --bg: #071017;
+  --panel: #0c1921;
+  --panel-hover: #10242f;
+  --border: #1d3d4c;
+  --text: #e6f3f7;
+  --text-dim: #96b0bb;
+  --accent: #00d4ff;
+  --accent-soft: rgba(0, 212, 255, 0.12);
+  --good: #49e891;
+  --warning: #ffc14d;
+}
+
+html[data-theme="light"] {
+  --bg: #eef5f7;
+  --panel: #ffffff;
+  --panel-hover: #e5f5fa;
+  --border: #b8d1da;
+  --text: #13232a;
+  --text-dim: #526b75;
+  --accent: #007fa3;
+  --accent-soft: rgba(0, 127, 163, 0.1);
+  --good: #087d42;
+  --warning: #9a5b00;
+}
+
+.page-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--condensed);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  outline: none;
+}
+
+.theme-icon {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 1rem;
+}
+
+.resource-search {
+  position: relative;
+  margin: 0 0 24px;
+}
+
+.resource-search label {
+  display: block;
+  margin: 0 0 7px;
+  color: var(--text-dim);
+  font-family: var(--condensed);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 42px 10px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  background: var(--panel);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 1rem;
+}
+
+.search-input::placeholder {
+  color: var(--text-dim);
+  opacity: 0.8;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-clear {
+  min-width: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 1.2rem;
+}
+
+.search-clear:hover,
+.search-clear:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+
+.search-status {
+  min-height: 20px;
+  margin: 8px 0 0;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.resource-card.is-hidden,
+.resource-group.is-hidden {
+  display: none;
+}
+
+.no-results {
+  display: none;
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.no-results.visible {
+  display: block;
+}
+
+mark.search-match {
+  padding: 0 2px;
+  border-radius: 2px;
+  background: rgba(255, 193, 77, 0.35);
+  color: inherit;
+}
+
+html[data-theme="light"] mark.search-match {
+  background: rgba(255, 193, 77, 0.55);
+}
+
+@media (max-width: 600px) {
+  .page-header-row {
+    flex-direction: column;
+  }
+
+  .theme-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <main class="page-shell">
+    <div class="page-header-row"><div>
+    <div class="page-label">Resource Directory</div>
+    <h1>Ham Radio Links &amp; Learning</h1>
+  </div>
+
+  <button
+    id="theme-toggle"
+    class="theme-toggle"
+    type="button"
+    aria-label="Switch to light theme"
+    aria-pressed="false"
+  >
+    <span class="theme-icon" aria-hidden="true">◐</span>
+    <span id="theme-toggle-text">Light Theme</span>
+  </button>
+</div>
+
+    <p class="intro">
+      Curated references, operating guides, live tools, and beginner-friendly
+      resources for licensed amateur-radio operators. Open a topic to find
+      official information first, followed by practical tools and tutorials.
+    </p>
+
+    <section class="resource-search" aria-labelledby="resource-search-label">
+  <label id="resource-search-label" for="resource-search-input">
+    Search links and topics
+  </label>
+
+  <div class="search-row">
+    <input
+      id="resource-search-input"
+      class="search-input"
+      type="search"
+      placeholder="Try: FT8, APRS, antennas, satellite, DX, Winlink..."
+      autocomplete="off"
+      spellcheck="false"
+    >
+
+    <button
+      id="search-clear"
+      class="search-clear"
+      type="button"
+      aria-label="Clear search"
+      title="Clear search"
+    >
+      ×
+    </button>
+  </div>
+
+  <p id="search-status" class="search-status" aria-live="polite">
+    Browse a topic or search all links.
+  </p>
+</section>
+
+<p id="no-results" class="no-results" role="status">
+  No matching resources found. Try a broader term such as
+  <strong>digital</strong>, <strong>HF</strong>, <strong>antenna</strong>,
+  <strong>satellite</strong>, or <strong>APRS</strong>.
+</p>  
+
+    <p class="notice">
+      <strong>Use current information:</strong> FCC rules control U.S. legal
+      operation. Band plans, calling frequencies, and local repeater use are
+      voluntary conventions and may change. Always listen first and verify
+      local coordination before transmitting.
+    </p>
+
+    <nav class="topic-nav" aria-label="Resource topics">
+      <h2>Jump to topic</h2>
+      <ul>
+        <li><a href="#aprs">APRS</a></li>
+        <li><a href="#hf-bands">HF Bands</a></li>
+        <li><a href="#vhf-uhf">VHF / UHF</a></li>
+        <li><a href="#digital">Digital Modes</a></li>
+        <li><a href="#satellites">Satellites</a></li>
+        <li><a href="#repeaters">Repeaters</a></li>
+        <li><a href="#antennas">Antennas</a></li>
+        <li><a href="#propagation">Propagation</a></li>
+        <li><a href="#grids">Grid Squares</a></li>
+        <li><a href="#dx">DXing</a></li>
+        <li><a href="#winlink">Winlink</a></li>
+        <li><a href="#beacons">Beacons</a></li>
+        <li><a href="#logging">Logging</a></li>
+        <li><a href="#rules">Rules &amp; Practice</a></li>
+      </ul>
+    </nav>
+
+    <!-- Set open on the first topic you want expanded by default. -->
+
+	<!-- APRS -->
+	
+	<details class="resource-group" id="aprs" open>
+	  <summary>
+		<span class="topic-name">APRS</span>
+		<span class="topic-count">10 resources</span>
+	  </summary>
+
+	  <div class="resource-content">
+		<p class="topic-description">
+		  Position reporting, APRS messages, digipeaters, iGates, packet paths,
+		  satellite APRS, and station/tracker software.
+		</p>
+
+		<ul class="resource-list">
+		  <li class="resource-card" data-search="aprs automatic packet reporting system packet radio position gps tracker weather telemetry messages digipeater igate aprs-is">
+			<h3><a href="https://www.aprs.org/" target="_blank" rel="noopener noreferrer">What APRS Is — APRS.org</a></h3>
+			<p>Authoritative overview of APRS as a two-way, real-time tactical data network for position reports, messages, weather, telemetry, and objects.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">Official</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge badge-us">U.S. / Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs.fi map station lookup path packet history igate digipeater weather tracking">
+			<h3><a href="https://aprs.fi/" target="_blank" rel="noopener noreferrer">APRS.fi Live Map &amp; Station Lookup</a></h3>
+			<p>Search callsigns, view local APRS activity, inspect RF packet paths, check weather stations, and confirm whether a beacon reached an iGate.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Live Tool</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs paths wide1-1 wide2-1 digipeater hops congestion packet routing">
+			<h3><a href="https://blog.aprs.fi/2020/02/how-aprs-paths-work.html" target="_blank" rel="noopener noreferrer">How APRS Paths Work</a></h3>
+			<p>Plain-language guide to <code>WIDE1-1,WIDE2-1</code>, digipeater hops, packet routing, and avoiding unnecessary APRS channel congestion.</p>
+			<div class="resource-meta">
+			  <span class="badge">Tutorial</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs.fi documentation user guide messages weather history map objects stations">
+			<h3><a href="https://aprs.fi/doc/guide/guide.html" target="_blank" rel="noopener noreferrer">APRS.fi User Guide</a></h3>
+			<p>Explains station searches, message handling, weather displays, objects, packet history, and map controls on APRS.fi.</p>
+			<div class="resource-meta">
+			  <span class="badge">Documentation</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs frequencies 144.390 144.800 international hf vhf uhf packet">
+			<h3><a href="http://aprsisce.wikidot.com/doc:frequencies" target="_blank" rel="noopener noreferrer">APRS Frequency Reference</a></h3>
+			<p>Reference for terrestrial APRS frequencies around the world, plus HF and satellite APRS operating frequencies.</p>
+			<div class="resource-meta">
+			  <span class="badge">Reference</span>
+			  <span class="badge">Intermediate</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="dire wolf software tnc packet radio soundcard aprs digipeater igate kiss ax.25">
+			<h3><a href="https://github.com/wb2osz/direwolf" target="_blank" rel="noopener noreferrer">Dire Wolf Software TNC</a></h3>
+			<p>Open-source software TNC for decoding packet radio and building an APRS tracker, digipeater, iGate, or receive-only monitor.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Software</span>
+			  <span class="badge">Intermediate</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs software apps client tracker mobile windows android ios directory">
+			<h3><a href="https://www.aprs.org/aprs-software.html" target="_blank" rel="noopener noreferrer">APRS Software Directory</a></h3>
+			<p>Directory of APRS applications for computers, mobile devices, trackers, TNCs, and Internet-connected APRS clients.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">APRS.org</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs-is internet system igate server client tcpip network">
+			<h3><a href="https://www.aprs-is.net/" target="_blank" rel="noopener noreferrer">APRS-IS Information</a></h3>
+			<p>Technical background on the Internet System that distributes APRS data between iGates, maps, and connected clients.</p>
+			<div class="resource-meta">
+			  <span class="badge">Reference</span>
+			  <span class="badge">Intermediate</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="aprs satellite packet iss 145.825 digipeater amsat ariss">
+			<h3><a href="https://www.amsat.org/live-digipeater-satellites/" target="_blank" rel="noopener noreferrer">AMSAT Live APRS Digipeater Satellites</a></h3>
+			<p>Current satellite packet/digipeater information, frequencies, aliases, operating modes, and status references.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">AMSAT</span>
+			  <span class="badge badge-tool">Status Tool</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="iss ariss aprs packet 145.825 status space station satellite">
+			<h3><a href="https://www.ariss.org/current-status-of-iss-stations.html" target="_blank" rel="noopener noreferrer">ARISS ISS Ham-Radio Status</a></h3>
+			<p>Check the current operating status of the ISS amateur-radio stations before attempting ISS voice or packet/APRS operation.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">ARISS</span>
+			  <span class="badge badge-tool">Status Tool</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+		</ul>
+	  </div>
+	</details>
+
+	<!-- HF Band Activity Guide -->
+	
+	<details class="resource-group" id="hf-bands">
+	  <summary>
+		<span class="topic-name">HF Band Activity Guide</span>
+		<span class="topic-count">10 resources</span>
+	  </summary>
+
+	  <div class="resource-content">
+		<p class="topic-description">
+		  U.S. privileges, voluntary band plans, common mode frequencies, DX
+		  activity, propagation, and practical HF operating references.
+		</p>
+
+		<ul class="resource-list">
+		  <li class="resource-card" data-search="hf band allocations license privileges general extra advanced novice technician fcc">
+			<h3><a href="https://www.arrl.org/frequency-allocations" target="_blank" rel="noopener noreferrer">ARRL Frequency Allocations</a></h3>
+			<p>Quick U.S. reference for amateur allocations, license-class privileges, authorized emissions, and special band restrictions.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">ARRL Reference</span>
+			  <span class="badge badge-us">U.S.</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf band plan voluntary cw ssb phone data rtty ft8 calling frequencies">
+			<h3><a href="https://www.arrl.org/band-plan" target="_blank" rel="noopener noreferrer">ARRL Voluntary Band Plan</a></h3>
+			<p>U.S. operating conventions for CW, data, phone, image, AM, beacons, repeaters, satellites, and calling frequencies.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">ARRL Reference</span>
+			  <span class="badge badge-us">U.S.</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf band chart printable frequencies license privileges amateur extra general technician">
+			<h3><a href="https://www.arrl.org/files/file/Regulatory/Band%20Chart/Hambands4_Color_11x8_5.pdf" target="_blank" rel="noopener noreferrer">ARRL U.S. Amateur Band Chart</a></h3>
+			<p>Printable one-page chart showing U.S. privileges and band segments from HF through microwave frequencies.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">ARRL PDF</span>
+			  <span class="badge badge-us">U.S.</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="iaru region 2 band plan americas hf international operating conventions">
+			<h3><a href="https://www.iaru-r2.org/en/reference/band-plans/" target="_blank" rel="noopener noreferrer">IARU Region 2 Band Plans</a></h3>
+			<p>Regional band-plan references for the Americas; useful when comparing U.S. practice with Canadian, Caribbean, and Latin American activity.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">IARU</span>
+			  <span class="badge badge-us">Region 2</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf propagation solar bands open closed muf luf voacap prediction">
+			<h3><a href="https://www.voacap.com/hf/" target="_blank" rel="noopener noreferrer">VOACAP HF Propagation Prediction</a></h3>
+			<p>Plan likely HF communication paths by time, band, season, antenna type, power, and location.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Propagation Tool</span>
+			  <span class="badge">Intermediate</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf real time propagation pskt reporter ft8 ft4 rtty wspr spots map">
+			<h3><a href="https://pskreporter.info/pskmap.html" target="_blank" rel="noopener noreferrer">PSK Reporter Live Digital Map</a></h3>
+			<p>See current FT8, FT4, JS8Call, WSPR, RTTY, and other digital-mode reception reports to identify open bands and paths.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Live Tool</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf dx cluster spots dxpedition callsign band mode pileup">
+			<h3><a href="https://www.dxwatch.com/" target="_blank" rel="noopener noreferrer">DXWatch DX Cluster</a></h3>
+			<p>Live DX spots by band, mode, callsign, entity, and frequency; useful for finding active DX and DXpeditions.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Live Tool</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="reverse beacon network rbn cw rtty ft8 skimmer cq reports propagation">
+			<h3><a href="https://www.reversebeacon.net/" target="_blank" rel="noopener noreferrer">Reverse Beacon Network</a></h3>
+			<p>Shows where automated receiving stations hear CW, RTTY, and other monitored signals, helping evaluate your outbound propagation.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Live Tool</span>
+			  <span class="badge">Intermediate</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf operating guide cq pileup split dx etiquette cw ssb phone contest">
+			<h3><a href="https://www.arrl.org/operating-tips" target="_blank" rel="noopener noreferrer">ARRL Operating Tips</a></h3>
+			<p>Practical guidance for calling CQ, working DX, handling pileups, using repeaters, contests, nets, and general on-air etiquette.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-official">ARRL</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge badge-us">U.S.</span>
+			</div>
+		  </li>
+
+		  <li class="resource-card" data-search="hf contest calendar dx contest calendar cq ww arrl contests">
+			<h3><a href="https://www.contestcalendar.com/" target="_blank" rel="noopener noreferrer">Contest Calendar</a></h3>
+			<p>Global calendar of HF and VHF contests, including mode, bands, dates, and links to operating rules.</p>
+			<div class="resource-meta">
+			  <span class="badge badge-tool">Calendar</span>
+			  <span class="badge">Beginner</span>
+			  <span class="badge">Global</span>
+			</div>
+		  </li>
+		</ul>
+	  </div>
+	</details>
+	
+	<!-- VHF / UHF Activity Guide -->
+	
+	<details class="resource-group" id="vhf-uhf">
+		  <summary>
+			<span class="topic-name">VHF / UHF Activity Guide</span>
+			<span class="topic-count">8 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  6 m through 70 cm activity, simplex, repeaters, weak-signal work,
+			  FM calling frequencies, digital modes, and regional coordination.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="vhf uhf band plan 6m 2m 1.25m 70cm fm repeaters weak signal">
+				<h3><a href="https://www.arrl.org/band-plan" target="_blank" rel="noopener noreferrer">ARRL VHF / UHF Band Plan</a></h3>
+				<p>National voluntary operating framework for weak-signal work, FM simplex, repeaters, satellites, digital modes, ATV, and propagation beacons.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Reference</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="repeaterbook repeaters frequency offset tone ctcss dcs directory 2m 70cm">
+				<h3><a href="https://www.repeaterbook.com/" target="_blank" rel="noopener noreferrer">RepeaterBook</a></h3>
+				<p>Searchable U.S. and international repeater directory with frequencies, offsets, tones, modes, coverage notes, and map tools.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Directory</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="vhf uhf weak signal ssb cw tropo eme meteor scatter 6m 2m 70cm">
+				<h3><a href="https://www.arrl.org/vhf-and-up" target="_blank" rel="noopener noreferrer">ARRL VHF and Above</a></h3>
+				<p>ARRL gateway for VHF/UHF operating, contesting, weak-signal work, propagation, stations, and operating events.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="six meters 6m magic band sporadic e es f2 propagation ft8 ssb beacon">
+				<h3><a href="https://www.dxmaps.com/spots/map.php?Lan=E&amp;Frec=50&amp;ML=M&amp;Map=NA" target="_blank" rel="noopener noreferrer">DXMaps 6 m Propagation Map</a></h3>
+				<p>Live 6-meter spots and map overlays for observing Sporadic-E, F-layer, and other VHF propagation openings.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">North America</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="2m 70cm simplex national calling 146.520 446.000 operating etiquette">
+				<h3><a href="https://www.arrl.org/what-is-ham-radio" target="_blank" rel="noopener noreferrer">ARRL Amateur Radio Operating Overview</a></h3>
+				<p>Beginner-oriented overview of operating types, including local FM contacts, repeaters, simplex, public service, and experimentation.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="maidenhead grid locator vhf uhf grid square rover contest distance">
+				<h3><a href="https://www.levinecentral.com/ham/grid_square.php" target="_blank" rel="noopener noreferrer">Maidenhead Grid Square Calculator</a></h3>
+				<p>Convert latitude/longitude to Maidenhead grid squares and view grid boundaries used for VHF weak-signal work, roving, and awards.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Calculator</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="vhf contest june september january august 6m 2m 70cm arrl">
+				<h3><a href="https://www.arrl.org/contest-calendar" target="_blank" rel="noopener noreferrer">ARRL Contest Calendar</a></h3>
+				<p>Find ARRL VHF contests and other events that greatly increase weak-signal activity on 6 m, 2 m, 70 cm, and higher bands.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Calendar</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="tropo tropospheric propagation vhf uhf ducting forecast map">
+				<h3><a href="https://www.dxinfocentre.com/tropo.html" target="_blank" rel="noopener noreferrer">Tropo Forecast Maps</a></h3>
+				<p>Forecast maps for tropospheric enhancement and ducting, useful for planning VHF/UHF SSB, FT8, FM, and repeater-distance contacts.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Propagation Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Digital Modes -->
+		
+		<details class="resource-group" id="digital">
+		  <summary>
+			<span class="topic-name">Digital Modes</span>
+			<span class="topic-count">9 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  FT8, FT4, WSPR, JS8Call, Winlink, RTTY, PSK31, software setup,
+			  operating etiquette, and weak-signal techniques.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="wsjt-x ft8 ft4 wspr fst4 q65 jt65 digital weak signal software manual">
+				<h3><a href="https://wsjt.sourceforge.io/wsjtx-doc/wsjtx-main-2.6.1.html" target="_blank" rel="noopener noreferrer">WSJT-X User Guide</a></h3>
+				<p>Official documentation for FT8, FT4, WSPR, FST4, Q65, MSK144, and other weak-signal digital modes.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Official Documentation</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="wsjt-x download ft8 ft4 wspr software windows linux mac">
+				<h3><a href="https://sourceforge.net/projects/wsjt/" target="_blank" rel="noopener noreferrer">Download WSJT-X</a></h3>
+				<p>Official download page for WSJT-X, the software suite used for FT8, FT4, WSPR, and several other weak-signal modes.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="psk reporter ft8 ft4 js8call wspr rtty live spots map propagation">
+				<h3><a href="https://pskreporter.info/pskmap.html" target="_blank" rel="noopener noreferrer">PSK Reporter</a></h3>
+				<p>Live map of stations receiving FT8, FT4, JS8Call, WSPR, RTTY, and other digital signals—excellent for checking band openings.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="wspr wsprnet propagation reporter low power beacon map spots">
+				<h3><a href="https://www.wsprnet.org/" target="_blank" rel="noopener noreferrer">WSPRnet</a></h3>
+				<p>Global database and map of WSPR transmission/reception reports for antenna testing and real-time propagation analysis.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="js8call keyboard messaging weak signal ft8 messaging relay store forward">
+				<h3><a href="https://js8call.com/" target="_blank" rel="noopener noreferrer">JS8Call</a></h3>
+				<p>Weak-signal keyboard messaging software based on FT8-style modulation, with directed messages, relays, groups, and store-and-forward features.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="fldigi psk31 rtty olivia contestia hellschreiber digital modes">
+				<h3><a href="http://www.w1hkj.com/" target="_blank" rel="noopener noreferrer">Fldigi Digital-Mode Suite</a></h3>
+				<p>Multi-mode software for PSK31, RTTY, Olivia, Contestia, Hellschreiber, CW, and many legacy or conversational digital modes.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="digital modes frequencies ft8 ft4 js8call wspr psk31 rtty band activity">
+				<h3><a href="https://hamdeck.com/tools/digital-mode-frequencies/" target="_blank" rel="noopener noreferrer">Digital Mode Frequency Finder</a></h3>
+				<p>Quick activity-frequency reference for FT8, FT4, WSPR, JS8Call, RTTY, PSK31, and related digital modes.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Reference Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ft8 dxpedition fox hound f h mode split operation pileup">
+				<h3><a href="https://www.onallbands.com/ft8-fox-and-hound-mode/" target="_blank" rel="noopener noreferrer">FT8 Fox/Hound DXpedition Mode</a></h3>
+				<p>Explains FT8 DXpedition mode, split-frequency operation, and how rare DX stations work high-rate digital pileups.</p>
+				<div class="resource-meta">
+				  <span class="badge">Tutorial</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="digital audio levels alc ft8 clean signal interface soundcard radio setup">
+				<h3><a href="https://www.arrl.org/digital-modes" target="_blank" rel="noopener noreferrer">ARRL Digital Modes</a></h3>
+				<p>ARRL resources on digital operating, software, interface setup, band use, and popular amateur-radio digital protocols.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Satellites / AMSAT / ARISS -->
+		
+		<details class="resource-group" id="satellites">
+		  <summary>
+			<span class="topic-name">Satellites / AMSAT / ARISS</span>
+			<span class="topic-count">8 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Amateur satellites, current status, pass prediction, satellite APRS,
+			  Doppler correction, uplink/downlink planning, and ISS radio status.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="amsat satellites amateur satellite beginners fm linear transponder">
+				<h3><a href="https://www.amsat.org/" target="_blank" rel="noopener noreferrer">AMSAT — Radio Amateur Satellite Corporation</a></h3>
+				<p>Primary U.S. amateur-satellite organization for news, operating resources, satellite status, education, and membership support.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">AMSAT</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="satellite pass prediction tracking grid latitude longitude amsat passes">
+				<h3><a href="https://www.amsat.org/track/" target="_blank" rel="noopener noreferrer">AMSAT Satellite Pass Predictions</a></h3>
+				<p>Calculate upcoming amateur-satellite passes from a grid square or latitude/longitude, then select satellites and timing details.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">AMSAT</span>
+				  <span class="badge badge-tool">Pass Tool</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="amsat live digipeater satellites aprs packet 145.825 ariss">
+				<h3><a href="https://www.amsat.org/live-digipeater-satellites/" target="_blank" rel="noopener noreferrer">AMSAT Live Digipeater Satellites</a></h3>
+				<p>Current APRS and packet-digipeater satellite listings, operating frequencies, aliases, and status sources.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">AMSAT</span>
+				  <span class="badge badge-tool">Status Tool</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="iss ariss amateur radio current status packet aprs voice">
+				<h3><a href="https://www.ariss.org/current-status-of-iss-stations.html" target="_blank" rel="noopener noreferrer">ARISS ISS Ham-Radio Status</a></h3>
+				<p>Check current ISS amateur-radio operation, including whether packet/APRS, voice, cross-band repeater, or school contacts are active.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARISS</span>
+				  <span class="badge badge-tool">Status Tool</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="satellite beginner operating doppler full duplex handheld yagi pass">
+				<h3><a href="https://www.amsat.org/station-and-operating-hints/" target="_blank" rel="noopener noreferrer">AMSAT Station &amp; Operating Hints</a></h3>
+				<p>Practical beginner guidance on antennas, Doppler correction, full-duplex operation, low power, operating etiquette, and satellite station setup.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">AMSAT</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="satnogs satellite telemetry observations database decoder">
+				<h3><a href="https://network.satnogs.org/" target="_blank" rel="noopener noreferrer">SatNOGS Network</a></h3>
+				<p>Open satellite ground-station network with reception observations, waterfall recordings, telemetry, and satellite database links.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="satellite frequencies iaru coordination uplink downlink amateur satellite">
+				<h3><a href="https://www.iaru.org/reference/satellites/" target="_blank" rel="noopener noreferrer">IARU Amateur Satellite Information</a></h3>
+				<p>International coordination reference for amateur-satellite frequencies and spectrum use.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">IARU</span>
+				  <span class="badge">Reference</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="satellite pass prediction heavens above amateur radio satellites">
+				<h3><a href="https://heavens-above.com/" target="_blank" rel="noopener noreferrer">Heavens-Above</a></h3>
+				<p>General satellite-tracking website with visible and amateur-satellite pass predictions after you set your observing location.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Pass Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Repeaters & FM Operating -->
+		
+		<details class="resource-group" id="repeaters">
+		  <summary>
+			<span class="topic-name">Repeaters &amp; FM Operating</span>
+			<span class="topic-count">6 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Repeater directories, offsets, CTCSS/DCS tones, simplex operation,
+			  repeater etiquette, local nets, and coordination.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="repeaterbook repeater frequency ctcss dcs tone offset directory map">
+				<h3><a href="https://www.repeaterbook.com/" target="_blank" rel="noopener noreferrer">RepeaterBook</a></h3>
+				<p>Search repeaters by location, band, frequency, mode, offset, tone, coverage, and operating status.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Directory</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="repeater etiquette kerchunk identification timeout courtesy tone fm operating">
+				<h3><a href="https://www.arrl.org/repeater-operating" target="_blank" rel="noopener noreferrer">ARRL Repeater Operating</a></h3>
+				<p>Operating basics for repeaters: identification, listening first, avoiding kerchunking, using short transmissions, and respecting local systems.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ctcss dcs pl tone repeater access offset programming radio">
+				<h3><a href="https://www.arrl.org/repeaters" target="_blank" rel="noopener noreferrer">ARRL Repeaters Overview</a></h3>
+				<p>ARRL information about repeater operation, coordination, repeater directories, and technical aspects of repeater systems.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="simplex 146.520 446.000 calling frequency fm national operating">
+				<h3><a href="https://www.arrl.org/band-plan" target="_blank" rel="noopener noreferrer">ARRL VHF/UHF Calling Frequencies</a></h3>
+				<p>Use the ARRL band plan to verify national calling frequencies, simplex channels, repeater segments, and mode conventions.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Reference</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="chirp radio programming csv channels repeater frequencies tones">
+				<h3><a href="https://chirpmyradio.com/projects/chirp/wiki/Home" target="_blank" rel="noopener noreferrer">CHIRP Radio Programming Software</a></h3>
+				<p>Open-source radio-programming software for many handheld and mobile radios, including channel, offset, tone, and memory management.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="dmr d-star yaesu fusion c4fm digital voice repeaters digital modes">
+				<h3><a href="https://www.arrl.org/digital-voice" target="_blank" rel="noopener noreferrer">ARRL Digital Voice Resources</a></h3>
+				<p>Overview of digital-voice technologies and operating concepts, including DMR, D-STAR, Fusion/C4FM, and related systems.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Antennas & Feed Lines -->
+		
+		<details class="resource-group" id="antennas">
+		  <summary>
+			<span class="topic-name">Antennas &amp; Feed Lines</span>
+			<span class="topic-count">7 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Antenna fundamentals, dipoles, verticals, loops, impedance matching,
+			  feed line, SWR, RF exposure, grounding, and lightning protection.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="antenna basics dipole vertical yagi loop feedline swr impedance matching">
+				<h3><a href="https://www.arrl.org/antennas" target="_blank" rel="noopener noreferrer">ARRL Antennas</a></h3>
+				<p>ARRL antenna resources covering practical antenna choices, installation, feed lines, matching, measurement, and station improvement.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="antenna modeling nec eznec 4nec2 mmana-gal">
+				<h3><a href="https://www.qsl.net/4nec2/" target="_blank" rel="noopener noreferrer">4NEC2 Antenna Modeling</a></h3>
+				<p>Free NEC-based antenna-modeling software for designing and analyzing wires, verticals, loops, beams, ground systems, and feed points.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="nano vna antenna analyzer swr impedance smith chart calibration">
+				<h3><a href="https://www.nanovna.com/" target="_blank" rel="noopener noreferrer">NanoVNA Resources</a></h3>
+				<p>Starting point for NanoVNA documentation and learning resources for measuring SWR, impedance, resonance, filters, and feed lines.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Measurement</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="coax feedline loss cable impedance rg-8x rg-213 lmr-400 calculator">
+				<h3><a href="https://www.qsl.net/co8tw/Coax_Calculator.htm" target="_blank" rel="noopener noreferrer">Coax Loss Calculator</a></h3>
+				<p>Estimate feed-line attenuation by cable type, frequency, length, and SWR so you can choose suitable coax for HF, VHF, and UHF.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Calculator</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="rf exposure safety calculator fcc mpep evaluation station antenna">
+				<h3><a href="https://www.arrl.org/rf-exposure" target="_blank" rel="noopener noreferrer">ARRL RF Exposure Resources</a></h3>
+				<p>U.S. amateur-radio RF-safety guidance, evaluation resources, and links for understanding station exposure compliance.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Safety</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="lightning protection grounding bonding station safety antenna tower surge">
+				<h3><a href="https://www.arrl.org/grounding-and-bonding-for-the-radio-amateur" target="_blank" rel="noopener noreferrer">Grounding &amp; Bonding for Radio</a></h3>
+				<p>ARRL information on station bonding, RF grounding, electrical safety, surge protection, and lightning-protection planning.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Safety</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="wire antenna dipole inverted v end fed half wave efhw random wire hf portable">
+				<h3><a href="https://www.arrl.org/wire-antennas" target="_blank" rel="noopener noreferrer">ARRL Wire Antennas</a></h3>
+				<p>Practical resources for dipoles, inverted-V antennas, end-fed wires, multiband wire antennas, and portable field installations.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Propagation & Space Weather -->
+		
+		<details class="resource-group" id="propagation">
+		  <summary>
+			<span class="topic-name">Propagation &amp; Space Weather</span>
+			<span class="topic-count">8 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Solar activity, ionospheric conditions, HF prediction, real-time
+			  band openings, VHF propagation, and propagation-reporting tools.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="space weather solar flux sfi sunspots k index a index xray noaa propagation">
+				<h3><a href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA Space Weather Prediction Center</a></h3>
+				<p>Official U.S. space-weather data, solar-flux reports, geomagnetic indices, alerts, forecasts, and solar imagery.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">NOAA</span>
+				  <span class="badge badge-tool">Live Data</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="hamqsl solar data propagation band conditions sfi k index a index">
+				<h3><a href="https://www.hamqsl.com/solar.html" target="_blank" rel="noopener noreferrer">HamQSL Solar Data</a></h3>
+				<p>Compact ham-friendly display of solar flux, sunspots, A/K indices, X-ray data, and current propagation conditions.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Data</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="voacap hf propagation prediction antenna time band location">
+				<h3><a href="https://www.voacap.com/hf/" target="_blank" rel="noopener noreferrer">VOACAP Online HF Prediction</a></h3>
+				<p>Model likely HF path reliability using station locations, antennas, power, time, month, band, and solar conditions.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Prediction Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="propquest propagation prediction hf dx map solar">
+				<h3><a href="https://www.propquest.co.uk/" target="_blank" rel="noopener noreferrer">Propquest</a></h3>
+				<p>Interactive HF propagation forecasting and mapping tool for exploring predicted paths, MUF, and likely band performance.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Prediction Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="psk reporter ft8 ft4 rtty js8call live propagation map spots">
+				<h3><a href="https://pskreporter.info/pskmap.html" target="_blank" rel="noopener noreferrer">PSK Reporter</a></h3>
+				<p>Use live digital-mode reception reports as real-world evidence of current propagation rather than relying only on a forecast.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="wspr wsprnet propagation antenna signal noise low power map">
+				<h3><a href="https://www.wsprnet.org/" target="_blank" rel="noopener noreferrer">WSPRnet Propagation Reports</a></h3>
+				<p>Search low-power WSPR spots by band, time, transmitter, receiver, grid, and signal-to-noise ratio to study marginal paths.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="tropo ducting vhf uhf forecast 2m 70cm 6m propagation">
+				<h3><a href="https://www.dxinfocentre.com/tropo.html" target="_blank" rel="noopener noreferrer">Tropo Forecast Maps</a></h3>
+				<p>Forecast tropospheric enhancement and ducting that can extend VHF/UHF FM, SSB, FT8, and repeater range.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Forecast Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="six meter 6m sporadic e es opening map dxmaps">
+				<h3><a href="https://www.dxmaps.com/spots/map.php?Lan=E&amp;Frec=50&amp;ML=M&amp;Map=NA" target="_blank" rel="noopener noreferrer">DXMaps 6 m Opening Map</a></h3>
+				<p>Watch real-time 6-meter activity and spot maps for Sporadic-E, F2, and multi-hop openings.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">North America</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Grid Squares & Coordinates-->
+		
+		<details class="resource-group" id="grids">
+		  <summary>
+			<span class="topic-name">Grid Squares &amp; Coordinates</span>
+			<span class="topic-count">5 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Maidenhead locators, coordinate conversion, grid-square mapping,
+			  VHF awards, APRS location data, and rover operation.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="maidenhead grid locator square converter latitude longitude calculator">
+				<h3><a href="https://www.levinecentral.com/ham/grid_square.php" target="_blank" rel="noopener noreferrer">Maidenhead Grid Square Calculator</a></h3>
+				<p>Convert coordinates to a Maidenhead grid square, find a grid center point, and view locator boundaries.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Calculator</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="grid square map maidenhead locator find grid location">
+				<h3><a href="https://www.mapability.com/ei8ic/giant_map.php" target="_blank" rel="noopener noreferrer">Maidenhead Locator Map</a></h3>
+				<p>Interactive world map of Maidenhead fields, squares, and subsquares for visualizing locator boundaries.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Map Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="grid distance bearing great circle calculator ham radio qth locator">
+				<h3><a href="https://www.qrz.com/gridmapper" target="_blank" rel="noopener noreferrer">QRZ GridMapper</a></h3>
+				<p>Map a grid square and estimate great-circle distance and bearing between amateur-radio locations.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Map Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="grid square vhf uhf contest rover grid chase award">
+				<h3><a href="https://www.arrl.org/vhf-uhf-microwave-awards" target="_blank" rel="noopener noreferrer">ARRL VHF/UHF/Microwave Awards</a></h3>
+				<p>Overview of ARRL awards that use VHF/UHF contacts, grids, distance, band achievements, and roving activity.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="aprs grid locator maidenhead coordinates position tracker">
+				<h3><a href="https://aprs.fi/" target="_blank" rel="noopener noreferrer">APRS.fi Grid and Position Lookup</a></h3>
+				<p>Use APRS.fi to inspect station positions, location reports, grids, and received-path history from callsign searches.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- DXing & Awards -->
+		
+		<details class="resource-group" id="dx">
+		  <summary>
+			<span class="topic-name">DXing &amp; Awards</span>
+			<span class="topic-count">8 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  DX clusters, DXpeditions, DXCC, operating split, pileup etiquette,
+			  FT8 Fox/Hound, propagation tools, and confirmation systems.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="dxcc award countries entities dxing awards arrl">
+				<h3><a href="https://www.arrl.org/dxcc" target="_blank" rel="noopener noreferrer">ARRL DXCC Program</a></h3>
+				<p>Official information for the premier DX award program, including entities, rules, crediting, and endorsements.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Award</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="club log dxpedition dxcc log search needed countries">
+				<h3><a href="https://clublog.org/" target="_blank" rel="noopener noreferrer">Club Log</a></h3>
+				<p>DX-focused online log tools for checking DXpedition logs, tracking needed entities, analyzing activity, and managing uploads.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">DX Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="dx cluster spots dxpedition frequency band mode callsign">
+				<h3><a href="https://www.dxwatch.com/" target="_blank" rel="noopener noreferrer">DXWatch Cluster</a></h3>
+				<p>Live DX spots from worldwide cluster networks, filterable by callsign, band, mode, country, date, and frequency.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="dx summit dx cluster spots dxpedition">
+				<h3><a href="https://www.dxsummit.fi/" target="_blank" rel="noopener noreferrer">DX Summit</a></h3>
+				<p>Alternative real-time DX cluster interface for browsing current spots and filtering by band, mode, or DX entity.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="reverse beacon network rbn cw rtty ft8 dx propagation skimmer">
+				<h3><a href="https://www.reversebeacon.net/" target="_blank" rel="noopener noreferrer">Reverse Beacon Network</a></h3>
+				<p>Check whether skimmer stations are hearing your CQ, useful for confirming outbound CW and digital DX paths.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="dxpedition ft8 fox hound f h split pileup operating">
+				<h3><a href="https://www.onallbands.com/using-the-ft8-dxpedition-mode-a-k-a-fox-and-hound%EF%BB%BF/" target="_blank" rel="noopener noreferrer">Using FT8 DXpedition Mode</a></h3>
+				<p>Step-by-step introduction to working a Fox/Hound FT8 DXpedition, including split settings and calling behavior.</p>
+				<div class="resource-meta">
+				  <span class="badge">Tutorial</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="lotw logbook of the world dxcc confirmation qsl">
+				<h3><a href="https://lotw.arrl.org/" target="_blank" rel="noopener noreferrer">Logbook of The World</a></h3>
+				<p>ARRL’s electronic QSO-confirmation system used for DXCC, WAS, VUCC, and other award credits.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="dx code of conduct pileup ethics split operation callsign">
+				<h3><a href="https://dx-code.org/" target="_blank" rel="noopener noreferrer">DX Code of Conduct</a></h3>
+				<p>Concise guidance for ethical and efficient DX operating, especially pileups, split operation, calling discipline, and DXpeditions.</p>
+				<div class="resource-meta">
+				  <span class="badge">Operating Practice</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Winlink & Emergency Messaging -->
+		
+		<details class="resource-group" id="winlink">
+		  <summary>
+			<span class="topic-name">Winlink &amp; Emergency Messaging</span>
+			<span class="topic-count">7 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Winlink email over radio, VARA HF, packet, message forms, RMS
+			  gateways, preparedness, public-service communications, and ARES.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="winlink email over radio hf vara ardop packet rms gateway emergency messaging">
+				<h3><a href="https://winlink.org/" target="_blank" rel="noopener noreferrer">Winlink Global Radio Email</a></h3>
+				<p>Official starting point for email over amateur radio using HF, VHF/UHF packet, VARA, ARDOP, and RMS gateway systems.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Official</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="winlink express download setup windows email radio">
+				<h3><a href="https://winlink.org/WinlinkExpress" target="_blank" rel="noopener noreferrer">Winlink Express</a></h3>
+				<p>Windows client software for composing and sending Winlink messages through Telnet, packet, VARA HF, ARDOP, and other transports.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="vara hf modem winlink robust narrow bandwidth digital email">
+				<h3><a href="https://rosmodem.wordpress.com/" target="_blank" rel="noopener noreferrer">VARA Modem</a></h3>
+				<p>Software modem used with Winlink for high-performance HF and VHF/UHF data links, including robust narrow-band operation.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="winlink rms gateway map channel frequency vara ardop packet">
+				<h3><a href="https://winlink.org/RMSChannels" target="_blank" rel="noopener noreferrer">Winlink RMS Channel Listing</a></h3>
+				<p>Find gateway stations, frequencies, modes, and channel information for Winlink radio access.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Official Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ares emergency communications amateur radio training public service">
+				<h3><a href="https://www.arrl.org/ares" target="_blank" rel="noopener noreferrer">ARRL Amateur Radio Emergency Service</a></h3>
+				<p>Information on ARES organization, training, public-service communication, local groups, and emergency communication participation.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ares training emergency communications courses arrl">
+				<h3><a href="https://learn.arrl.org/" target="_blank" rel="noopener noreferrer">ARRL Learning Center</a></h3>
+				<p>ARRL training portal with courses and learning materials for operating, emergency communications, technical topics, and licensing.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Training</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ics forms winlink template emergency messages radiogram incident command">
+				<h3><a href="https://winlink.org/content/standardized_templates" target="_blank" rel="noopener noreferrer">Winlink Standardized Templates</a></h3>
+				<p>Standard forms and templates for incident communications, radiograms, weather reporting, ICS messages, and public-service traffic.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Winlink</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Beacons -->
+		
+		<details class="resource-group" id="beacons">
+		  <summary>
+			<span class="topic-name">Beacons</span>
+			<span class="topic-count">9 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  HF propagation beacons, 10 m beacon networks, WSPR monitoring,
+			  Reverse Beacon Network reports, VHF/UHF beacons, schedules, and
+			  legal operating guidance.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="beacon beacons hf propagation ncdxf iaru ibp schedule 14.100 18.110 21.150 24.930 28.200 cw">
+				<h3><a href="https://www.ncdxf.org/beacon/" target="_blank" rel="noopener noreferrer">NCDXF / IARU HF Beacon Schedule</a></h3>
+				<p>Official schedule for the worldwide HF beacon network on 20, 17, 15, 12, and 10 meters, including current station sequence.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Official</span>
+				  <span class="badge badge-tool">Live Schedule</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ncdxf beacon locations callsign grid station international beacon project">
+				<h3><a href="https://www.ncdxf.org/beacon/beaconlocations.html" target="_blank" rel="noopener noreferrer">NCDXF Beacon Locations &amp; Callsigns</a></h3>
+				<p>Reference list of all International Beacon Project stations, DX entities, callsigns, locations, grid squares, and sequence slots.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Official</span>
+				  <span class="badge">Reference</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="iaru region 2 beacon network hf 10m propagation beacons americas">
+				<h3><a href="https://www.iaru-r2.org/en/on-the-air/beacon-network/" target="_blank" rel="noopener noreferrer">IARU Region 2 Beacon Network</a></h3>
+				<p>Region 2 information on the International Beacon Project and additional propagation-beacon activity, especially on 10 meters.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">IARU</span>
+				  <span class="badge badge-us">Region 2</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="reverse beacon network rbn skimmer cw rtty ft8 spots propagation cq">
+				<h3><a href="https://www.reversebeacon.net/" target="_blank" rel="noopener noreferrer">Reverse Beacon Network</a></h3>
+				<p>See where skimmer stations hear your CW, RTTY, and monitored digital transmissions. RBN receives and reports signals; it is not a transmitting beacon network.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="ncdxf beacon rbn reports reception spots monitor">
+				<h3><a href="https://www.ncdxf.org/beacon/RBN.html" target="_blank" rel="noopener noreferrer">NCDXF Beacon Reception via RBN</a></h3>
+				<p>Use Reverse Beacon Network reports to see which skimmers are hearing NCDXF/IARU beacon stations and on which bands.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="wspr wsprnet beacon propagation weak signal reporter low power">
+				<h3><a href="https://www.wsprnet.org/" target="_blank" rel="noopener noreferrer">WSPRnet</a></h3>
+				<p>Search digital weak-signal beacon reports to study propagation paths, antenna performance, signal-to-noise ratios, and time-of-day behavior.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Live Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="fcc beacon definition automatic control 97.203 power rules amateur beacon">
+				<h3><a href="https://www.law.cornell.edu/cfr/text/47/97.203" target="_blank" rel="noopener noreferrer">FCC Beacon Station Rule — §97.203</a></h3>
+				<p>U.S. rule text covering amateur beacon stations, automatic control, identification, and operating requirements.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">FCC Rule</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Reference</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="beacon subband 10m 28.200 28.300 hf band plan propagation">
+				<h3><a href="https://www.arrl.org/band-plan" target="_blank" rel="noopener noreferrer">ARRL Beacon Subbands &amp; Band Plan</a></h3>
+				<p>Use the ARRL voluntary plan to identify U.S. beacon segments, including 10-meter propagation-beacon activity and VHF/UHF beacon areas.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Reference</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="beacon monitor ncdxf iaru propagation display schedule signal">
+				<h3><a href="https://www.dxpredictor.com/beacon" target="_blank" rel="noopener noreferrer">NCDXF / IARU Beacon Monitor</a></h3>
+				<p>Visual monitor for International Beacon Project timing, stations, frequencies, and recent reception information.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Monitor</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- Logging, LoTW & Confirmations -->
+		
+		<details class="resource-group" id="logging">
+		  <summary>
+			<span class="topic-name">Logging, LoTW &amp; Confirmations</span>
+			<span class="topic-count">8 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  Logging applications, ADIF files, Logbook of The World, eQSL, QRZ
+			  logs, QSL cards, DXCC confirmation, and data backup.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="lotw logbook of the world qso confirmation dxcc was vucc award">
+				<h3><a href="https://lotw.arrl.org/" target="_blank" rel="noopener noreferrer">ARRL Logbook of The World</a></h3>
+				<p>Secure electronic QSO confirmation system for ARRL awards including DXCC, WAS, VUCC, and other supported programs.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="tqsl trusted qsl lotw upload certificate adif">
+				<h3><a href="https://www.arrl.org/tqsl-download" target="_blank" rel="noopener noreferrer">Trusted QSL Download</a></h3>
+				<p>Download TQSL, the software used to sign and upload logs securely to Logbook of The World.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Software</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="adif amateur data interchange format log export import qso">
+				<h3><a href="https://adif.org/" target="_blank" rel="noopener noreferrer">ADIF — Amateur Data Interchange Format</a></h3>
+				<p>Reference for the common log-file format used to move QSO records between logging software, services, awards, and online logs.</p>
+				<div class="resource-meta">
+				  <span class="badge">Technical Reference</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="n3fjp logging software contest log general logger amateur radio">
+				<h3><a href="https://www.n3fjp.com/" target="_blank" rel="noopener noreferrer">N3FJP Amateur Radio Logging</a></h3>
+				<p>Popular Windows logging applications for general QSOs, awards, net control, and many contest formats.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Beginner–Intermediate</span>
+				  <span class="badge">U.S. / Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="log4om logging software dx cluster lotw club log rig control">
+				<h3><a href="https://www.log4om.com/" target="_blank" rel="noopener noreferrer">Log4OM</a></h3>
+				<p>Feature-rich logging application with DX-cluster integration, rig control, award tracking, LoTW, Club Log, and online lookup support.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Software</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="club log dx log upload award tracking dxpedition log search">
+				<h3><a href="https://clublog.org/" target="_blank" rel="noopener noreferrer">Club Log</a></h3>
+				<p>Online log analysis, DXpedition log search, award tracking, and data-upload tools popular with active DX operators.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Logging Tool</span>
+				  <span class="badge">Intermediate</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="eqsl electronic qsl card confirmation logbook">
+				<h3><a href="https://www.eqsl.cc/" target="_blank" rel="noopener noreferrer">eQSL</a></h3>
+				<p>Electronic QSL-card and QSO-confirmation service used by many operators and supported by selected award programs.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Confirmation</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="qrz logbook callsign lookup qso log">
+				<h3><a href="https://logbook.qrz.com/" target="_blank" rel="noopener noreferrer">QRZ Logbook</a></h3>
+				<p>Online QSO logging connected to QRZ callsign lookup, with imports, exports, confirmations, and optional award integrations.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-tool">Logging Tool</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge">Global</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+		
+		<!-- FCC Rules & Operating Practice -->
+		
+		<details class="resource-group" id="rules">
+		  <summary>
+			<span class="topic-name">FCC Rules &amp; Operating Practice</span>
+			<span class="topic-count">8 resources</span>
+		  </summary>
+
+		  <div class="resource-content">
+			<p class="topic-description">
+			  U.S. Amateur Service rules, identification, third-party traffic,
+			  permitted transmissions, RF safety, operating etiquette, and license
+			  privileges.
+			</p>
+
+			<ul class="resource-list">
+			  <li class="resource-card" data-search="fcc part 97 rules regulations amateur radio legal identification frequencies emissions">
+				<h3><a href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97" target="_blank" rel="noopener noreferrer">FCC Part 97 — Amateur Radio Rules</a></h3>
+				<p>The current official U.S. Amateur Radio Service rules covering privileges, station operation, identification, emissions, and restrictions.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">Official Rule</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Reference</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="fcc amateur communications operations faq legal third party business encryption music">
+				<h3><a href="https://www.fcc.gov/wireless/bureau-divisions/mobility-division/amateur-radio-service/amateur-communications-operations" target="_blank" rel="noopener noreferrer">FCC Amateur Communications &amp; Operations FAQ</a></h3>
+				<p>Plain-language FCC answers about permitted communications, third-party traffic, business use, messages, and operating questions.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">FCC</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="fcc amateur license uls callsign lookup vanity renew application">
+				<h3><a href="https://wireless2.fcc.gov/UlsApp/UlsSearch/searchLicense.jsp" target="_blank" rel="noopener noreferrer">FCC ULS License Search</a></h3>
+				<p>Search U.S. amateur licenses, callsigns, license classes, mailing records, grant dates, and current license status.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">FCC Tool</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="arrl frequency allocations license privileges general extra technician band chart">
+				<h3><a href="https://www.arrl.org/frequency-allocations" target="_blank" rel="noopener noreferrer">ARRL Frequency Allocations</a></h3>
+				<p>Easy-to-read companion reference for U.S. license privileges, authorized bands, special restrictions, and mode/emission categories.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Reference</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="arrl band plan voluntary conventions calling frequencies operating segments">
+				<h3><a href="https://www.arrl.org/band-plan" target="_blank" rel="noopener noreferrer">ARRL Voluntary Band Plan</a></h3>
+				<p>Recommended frequency and mode-use conventions that help operators avoid interference within legally authorized band segments.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL Reference</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Beginner</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="operating ethics etiquette cq qso identification simplex repeater dx pileup">
+				<h3><a href="https://www.arrl.org/operating-tips" target="_blank" rel="noopener noreferrer">ARRL Operating Tips</a></h3>
+				<p>Practical guidance for making contacts, calling CQ, operating repeaters, joining nets, working DX, contesting, and courteous on-air behavior.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="rf exposure safety fcc station antenna mpep evaluation">
+				<h3><a href="https://www.arrl.org/rf-exposure" target="_blank" rel="noopener noreferrer">ARRL RF Exposure Resources</a></h3>
+				<p>RF-safety references and evaluation guidance for amateur stations, antennas, power levels, operating locations, and compliance planning.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge badge-us">U.S.</span>
+				  <span class="badge">Safety</span>
+				</div>
+			  </li>
+
+			  <li class="resource-card" data-search="new ham beginner resources utc phonetic alphabet q codes operating arrl">
+				<h3><a href="https://www.arrl.org/new-ham-resources" target="_blank" rel="noopener noreferrer">ARRL New Ham Resources</a></h3>
+				<p>Beginner resource collection covering first contacts, UTC, basic operating, station setup, licensing, and continuing education.</p>
+				<div class="resource-meta">
+				  <span class="badge badge-official">ARRL</span>
+				  <span class="badge">Beginner</span>
+				  <span class="badge badge-us">U.S.</span>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		</details>
+
+    <footer class="page-footer">
+      Resource directory for licensed amateur-radio operators. External links
+      open in a new tab.
+    </footer>
+  </main>
+  
+  <script>
+  (() => {
+    const root = document.documentElement;
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeToggleText = document.getElementById("theme-toggle-text");
+
+    const searchInput = document.getElementById("resource-search-input");
+    const clearButton = document.getElementById("search-clear");
+    const searchStatus = document.getElementById("search-status");
+    const noResults = document.getElementById("no-results");
+
+    const groups = [...document.querySelectorAll(".resource-group")];
+
+    function getPreferredTheme() {
+      const savedTheme = localStorage.getItem("ham-radio-theme");
+
+      if (savedTheme === "light" || savedTheme === "dark") {
+        return savedTheme;
+      }
+
+      return window.matchMedia("(prefers-color-scheme: light)").matches
+        ? "light"
+        : "dark";
+    }
+
+    function setTheme(theme) {
+      const isLight = theme === "light";
+
+      root.dataset.theme = theme;
+      localStorage.setItem("ham-radio-theme", theme);
+
+      themeToggle.setAttribute("aria-pressed", String(isLight));
+      themeToggle.setAttribute(
+        "aria-label",
+        isLight ? "Switch to dark theme" : "Switch to light theme"
+      );
+
+      themeToggleText.textContent = isLight ? "Dark Theme" : "Light Theme";
+    }
+
+    setTheme(getPreferredTheme());
+
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+      setTheme(nextTheme);
+    });
+
+    function normalizeText(text) {
+      return text
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function filterResources() {
+      const query = normalizeText(searchInput.value);
+      let matchCount = 0;
+
+      groups.forEach((group) => {
+        const cards = [...group.querySelectorAll(".resource-card")];
+        let groupMatches = 0;
+
+        cards.forEach((card) => {
+          const searchableText = normalizeText(
+            [
+              card.dataset.search || "",
+              card.textContent || "",
+              group.querySelector(".topic-name")?.textContent || ""
+            ].join(" ")
+          );
+
+          const isMatch = !query || searchableText.includes(query);
+
+          card.classList.toggle("is-hidden", !isMatch);
+
+          if (isMatch) {
+            groupMatches += 1;
+            matchCount += 1;
+          }
+        });
+
+        const topicName = normalizeText(
+          group.querySelector(".topic-name")?.textContent || ""
+        );
+
+        const topicMatches = query && topicName.includes(query);
+
+        if (topicMatches && groupMatches === 0) {
+          group.classList.remove("is-hidden");
+
+          cards.forEach((card) => {
+            card.classList.remove("is-hidden");
+          });
+
+          groupMatches = cards.length;
+          matchCount += cards.length;
+        } else {
+          group.classList.toggle("is-hidden", Boolean(query && groupMatches === 0));
+        }
+
+        if (query && groupMatches > 0) {
+          group.open = true;
+        }
+      });
+
+      noResults.classList.toggle("visible", Boolean(query && matchCount === 0));
+
+      if (!query) {
+        searchStatus.textContent = "Browse a topic or search all links.";
+      } else if (matchCount === 1) {
+        searchStatus.textContent = "1 matching resource found.";
+      } else {
+        searchStatus.textContent = `${matchCount} matching resources found.`;
+      }
+    }
+
+    searchInput.addEventListener("input", filterResources);
+
+    clearButton.addEventListener("click", () => {
+      searchInput.value = "";
+      filterResources();
+      searchInput.focus();
+    });
+
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        searchInput.value = "";
+        filterResources();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
