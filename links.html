@@ -599,7 +599,7 @@ html[data-theme="light"] mark.search-match {
 
 	<!-- APRS -->
 	
-	<details class="resource-group" id="aprs" open>
+	<details class="resource-group" id="aprs">
 	  <summary>
 		<span class="topic-name">APRS</span>
 		<span class="topic-count">10 resources</span>
@@ -2140,6 +2140,21 @@ const groups = [...document.querySelectorAll(".resource-group")];
         filterResources();
       }
     });
+
+	window.addEventListener("pageshow", () => {
+      if (window.location.hash) return;
+      groups.forEach((group) => {
+        group.open = false;
+      });
+      window.setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "auto"
+        });
+      }, 0);
+    });
+
   })();
 </script>
 </body>
