@@ -1986,14 +1986,23 @@ html[data-theme="light"] mark.search-match {
 		    }
 		  });
 		}
-		
-		groups.forEach((group) => {
-		  group.addEventListener("toggle", () => {
-		    if (group.open && searchIsEmpty()) {
-		      closeOtherSections(group);
-		    }
+		function scrollToSection(group) {
+		  window.requestAnimationFrame(() => {
+		    group.scrollIntoView({
+		      behavior: "smooth",
+		      block: "start",
+		      inline: "nearest"
+		    });
 		  });
-		});
+		}
+		groups.forEach((group) => {
+			  group.addEventListener("toggle", () => {
+			    if (group.open && searchIsEmpty()) {
+			      closeOtherSections(group);
+			      scrollToSection(group);
+			    }
+			  });
+			});
 		    function getPreferredTheme() {
 		      const savedTheme = localStorage.getItem("ham-radio-theme");
 		
@@ -2005,16 +2014,26 @@ html[data-theme="light"] mark.search-match {
 		        ? "light"
 		        : "dark";
 		    }
-          document.querySelectorAll(".topic-nav a[href^='#']").forEach((link) => {
-  link.addEventListener("click", () => {
-    if (!searchIsEmpty()) return;
-
-    const targetId = link.getAttribute("href");
-    const targetGroup = document.querySelector(targetId);
-
-    if (!targetGroup || !targetGroup.classList.contains("resource-group")) {
-      return;
-    }
+		document.querySelectorAll(".topic-nav a[href^='#']").forEach((link) => {
+		  link.addEventListener("click", (event) => {
+		    if (!searchIsEmpty()) return;
+		
+		    const targetId = link.getAttribute("href");
+		    const targetGroup = document.querySelector(targetId);
+		
+		    if (!targetGroup || !targetGroup.classList.contains("resource-group")) {
+		      return;
+		    }
+		
+		    event.preventDefault();
+		
+		    closeOtherSections(targetGroup);
+		    targetGroup.open = true;
+		    scrollToSection(targetGroup);
+		
+		    history.replaceState(null, "", targetId);
+		  });
+		});
 
     closeOtherSections(targetGroup);
     targetGroup.open = true;
