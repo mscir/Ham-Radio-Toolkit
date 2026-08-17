@@ -7094,6 +7094,7 @@ window.showPanel = function(id, btn) {
 const MENU_PANELS = [
   { section:'Live Data', items:[
     { id:'aprs',         icon:'📡', label:'APRS / Station Lookup' },
+	{ id:'beacons',      icon:'📶', label:'Beacons' },
     { id:'greyline',     icon:'🌍', label:'Grey Line Map' },
     { id:'proppath',     icon:'🌐', label:'Propagation Path' },
     { id:'solar',        icon:'☀️', label:'Solar / Propagation', locked:true },
@@ -7112,6 +7113,7 @@ const MENU_PANELS = [
     { id:'privileges',   icon:'📋', label:'Frequency Privileges' },
     { id:'grid',         icon:'🔲', label:'Grid Square Calc' },
     { id:'qcodes',       icon:'📖', label:'Q-Codes & Phonetics' },
+	{ id: 'links',       icon: '🔗',label: 'Links & Resources', href: 'https://mscir.github.io/Ham-Radio-Toolkit/links.html'},
   ]},
   { section:'Tools & Calculators', items:[
     { id:'antenna',      icon:'📐', label:'Antenna Calculator' },
@@ -7149,13 +7151,23 @@ function rebuildNav(hidden) {
     lbl.textContent = section.section;
     nav.appendChild(lbl);
     visible.forEach(item => {
-      const btn = document.createElement('button');
-      btn.className = 'nav-btn';
-      btn.setAttribute('data-panel', item.id);
-      btn.innerHTML = `<span class="nav-icon">${item.icon}</span>${item.label}`;
-      btn.setAttribute('onclick', `showPanel('${item.id}', this)`);
-      nav.appendChild(btn);
-    });
+  const navItem = document.createElement(item.href ? 'a' : 'button');
+
+  navItem.className = 'nav-btn';
+  navItem.setAttribute('data-panel', item.id);
+  navItem.innerHTML = `<span class="nav-icon">${item.icon}</span>${item.label}`;
+
+  if (item.href) {
+    navItem.href = item.href;
+    navItem.target = '_blank';
+    navItem.rel = 'noopener noreferrer';
+  } else {
+    navItem.type = 'button';
+    navItem.setAttribute('onclick', `showPanel('${item.id}', this)`);
+  }
+
+  nav.appendChild(navItem);
+});
   });
   // Re-mark active panel button if it's still visible
   const activePanel = document.querySelector('.panel.active');
