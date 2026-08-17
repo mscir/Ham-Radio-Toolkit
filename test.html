@@ -875,50 +875,126 @@ body{
 	
 </div><!-- end panel-grid -->
 
-<!-- Beacon Panel -->
-<section class="panel" id="panel-beacons">
+<!-- PANEL: BEACONS -->
+<div class="panel" id="panel-beacons">
   <div class="panel-header">
-    <h1>Beacons</h1>
-    <p>Use beacon networks to check real-world HF propagation and signal paths.</p>
+    <div class="panel-badge">▸ LIVE DATA · PROPAGATION</div>
+    <div class="panel-title">HF <span>Beacons</span></div>
+    <div class="panel-desc">
+      Beacons are on-air reference signals and reception-reporting networks that help
+      you see whether radio paths are open—before you spend time calling CQ.
+    </div>
   </div>
 
-  <div class="tool-grid">
-    <a class="tool-card"
-       href="https://www.ncdxf.org/beacon/"
-       target="_blank"
-       rel="noopener noreferrer">
-      <span class="tool-icon">📶</span>
-      <h2>NCDXF/IARU Beacon Network</h2>
-      <p>
-        Check the international beacon schedule, locations, frequencies,
-        and current transmitter status.
-      </p>
-    </a>
+  <div class="section-label">▸ Which Beacon Tool Should I Use?</div>
 
-    <a class="tool-card"
-       href="https://www.reversebeacon.net/"
-       target="_blank"
-       rel="noopener noreferrer">
-      <span class="tool-icon">📡</span>
-      <h2>Reverse Beacon Network</h2>
-      <p>
-        See near-real-time CW, RTTY, and digital spots, identify band openings,
-        and check whether receiving stations hear your signal.
-      </p>
-    </a>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px">
 
-    <a class="tool-card"
-       href="https://www.wsprnet.org/drupal/wsprnet/map"
-       target="_blank"
-       rel="noopener noreferrer">
-      <span class="tool-icon">🌐</span>
-      <h2>WSPRnet Map</h2>
-      <p>
-        View weak-signal propagation reports from WSPR stations around the world.
-      </p>
-    </a>
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:15px">
+      <div style="font-size:24px;margin-bottom:7px">📶</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:var(--accent);margin-bottom:5px">
+        Scheduled HF Beacons
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim)">
+        Fixed stations send known signals on a known schedule. Listen for them to
+        check whether a specific HF path is open at that moment.
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:9px">
+        Best for: quick 10–20 m propagation checks.
+      </div>
+    </div>
+
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:15px">
+      <div style="font-size:24px;margin-bottom:7px">🌐</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:var(--good);margin-bottom:5px">
+        WSPR Propagation Reports
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim)">
+        Very-low-power digital stations transmit and receive automatically.
+        Reception reports create a broad, data-rich picture of weak-signal paths.
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:9px">
+        Best for: antenna testing, QRP, and quiet-path discovery.
+      </div>
+    </div>
+
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:15px">
+      <div style="font-size:24px;margin-bottom:7px">📡</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:var(--amber);margin-bottom:5px">
+        Reverse Beacon Network
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim)">
+        Receiving stations monitor the bands and post spots for signals they decode.
+        Send CW CQ or TEST and see who heard you and how well.
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:9px">
+        Best for: checking whether your CW signal is getting out.
+      </div>
+    </div>
+
   </div>
-</section>
+
+  <div class="section-label">▸ Start Here</div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:18px">
+
+    <a href="https://www.ncdxf.org/beacon/"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="display:block;text-decoration:none;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.35);border-radius:var(--r);padding:15px;color:var(--text)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--accent)">
+        📶 NCDXF/IARU Beacon Network ↗
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:6px">
+        Follow the schedule for fixed international beacons on 20, 17, 15, 12, and 10 meters.
+      </div>
+    </a>
+
+    <a href="https://www.wsprnet.org/drupal/wsprnet/map"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="display:block;text-decoration:none;background:rgba(57,255,20,.05);border:1px solid rgba(57,255,20,.30);border-radius:var(--r);padding:15px;color:var(--text)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--good)">
+        🌐 WSPRnet Map ↗
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:6px">
+        Explore worldwide weak-signal reception reports and current propagation paths.
+      </div>
+    </a>
+
+    <a href="https://www.reversebeacon.net/"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="display:block;text-decoration:none;background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.32);border-radius:var(--r);padding:15px;color:var(--text)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--amber)">
+        📡 Reverse Beacon Network ↗
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:6px">
+        Find real-time automated spots and check whether CW receiver stations hear your signal.
+      </div>
+    </a>
+
+  </div>
+
+  <div style="background:rgba(255,255,255,.035);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:13px 15px;font-size:12px;line-height:1.7;color:var(--text-dim)">
+    <strong style="color:var(--text)">A practical workflow:</strong>
+    listen for a scheduled beacon or review WSPR reports to identify a likely open band,
+    then call CQ. If you use CW, check the Reverse Beacon Network afterward to learn
+    which receiving stations heard you.
+  </div>
+
+  <div style="margin-top:14px;font-size:12px;color:var(--text-dim);line-height:1.7">
+    Looking for more DX clusters, propagation tools, digital-mode resources, operating
+    references, and station tools?
+    <a href="https://mscir.github.io/Ham-Radio-Toolkit/links.html"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="color:var(--accent)">
+      Open the Links &amp; Resources library ↗
+    </a>.
+  </div>
+</div><!-- end panel-beacons -->
+
 
 <!-- PANEL 2: SOLAR CONDITIONS -->
 <div class="panel active" id="panel-solar">
