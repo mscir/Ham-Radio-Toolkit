@@ -1998,15 +1998,15 @@ const groups = [...document.querySelectorAll(".resource-group")];
 	        });
 	      });
 	    }
-
-    function openSection(group, shouldScroll = true) {
-	      closeOtherSections(group);
-	      group.open = true;
-	
-	      if (shouldScroll) {
-	        scrollToSection(group);
-	      }
-	    }
+	  
+ 	function openSection(group, shouldScroll = true) {
+      closeOtherSections(group);
+      const wasOpen = group.open;
+      group.open = true;
+      if (shouldScroll && wasOpen) {
+        scrollToSection(group);
+      }
+    }
 
     /*
       Clicking a native <summary> triggers this after the <details>
