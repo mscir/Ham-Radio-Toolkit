@@ -995,29 +995,28 @@ body{
 
 <!-- PANEL: PROPAGATION PATH TOOL -->
 <div class="panel" id="panel-proppath">
-
-  <div class="panel-header">
-    <div class="panel-badge">▸ ESTIMATE · LIVE NOAA SWPC SOLAR DATA</div>
-    <div class="panel-title">HF Propagation <span>Estimate</span></div>
-    <div class="panel-desc">
-      Use current solar and geomagnetic conditions to estimate which HF bands may be
-      worth checking for a destination region. This is a planning aid—not a live
-      measurement of a specific radio path.
-    </div>
+  	<div class="panel-badge">▸ CURRENT-CONDITIONS ADVISOR · NOAA SWPC</div>
+	<div class="panel-title">HF Propagation <span>Advisor</span></div>
+	<div class="panel-desc">
+	  See which HF bands may be worth checking under current solar and geomagnetic
+	  conditions. For a real point-to-point prediction, compare a specific route in VOACAP.
+	</div>
   </div>
 
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px">
 
-    <div style="flex:1;min-width:180px">
-      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">
-        Destination region or call prefix
-      </div>
-      <input id="pp-dest"
-             class="calc-input"
-             type="text"
-             placeholder="Examples: W6, VK, JA, EU, South America"
-             style="width:100%;margin:0">
-    </div>
+	<div style="flex:1;min-width:180px">
+	  <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">
+	    Operating note
+	    <span style="color:var(--text-dim);font-weight:400">(optional)</span>
+	  </div>
+	
+	  <input id="pp-dest"
+	         class="calc-input"
+	         type="text"
+	         placeholder="Example: DX, VK, JA, portable, or local"
+	         style="width:100%;margin:0">
+	</div>
 
     <div style="flex:1;min-width:140px">
       <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">
@@ -5770,80 +5769,233 @@ function filterQCodes() {
 // PROPAGATION PATH TOOL
 // ===========================================
 function runPropPath() {
-  const dest = (document.getElementById('pp-dest').value || '').trim().toUpperCase();
-  const timeMode = document.getElementById('pp-time').value;
   const result = document.getElementById('pp-result');
   const noSolar = document.getElementById('pp-no-solar');
+  const bandsEl = document.getElementById('pp-bands');
+  const notesEl = document.getElementById('pp-notes');
+  const timeChoice = document.getElementById('pp-time').value;
+  const note = document.getElementById('pp-dest').value.trim();
 
-  // Try to get live solar values from the dashboard
-  const sfiEl = document.getElementById('sv-sfi');
-  const kEl   = document.getElementById('sv-k');
-  const sfi = sfiEl ? parseInt(sfiEl.textContent) || 0 : 0;
-  const ki  = kEl  ? parseInt(kEl.textContent)  || 0 : 0;
+  const readNumber = (...ids) => {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      const match = el?.textContent.match(/-?\d+(\.\d+)?/);
 
-  if (!sfi || !solarLoaded) {
-    result.style.display='none';
-    noSolar.style.display='block';
-    noSolar.innerHTML = solarLoaded
-      ? '⚠ Could not read solar data. Go to Solar / Propagation and wait for it to load, then return here.'
-      : '⚠ Solar data not yet loaded. Click <strong>Solar / Propagation</strong> in the sidebar first, wait for the data to appear, then come back here and click Analyze.';
+      if (match) return Number(match[0]);
+    }
+    return null;
+  };
+
+  const sfi = readNumber('sv-sfi', 'solarFlux', 'solar-flux');
+  const k = readNumber('sv-k', 'kp', 'k-index');
+
+  if (!Number.isFinite(sfi) || !Number.isFinite(k)) {
+    result.style.display = 'none';
+    noSolar.style.display = 'block';
     return;
   }
-  noSolar.style.display='none'; result.style.display='block';
 
-  const isDay = timeMode === 'auto'
-    ? (new Date().getHours() >= 7 && new Date().getHours() < 20)
-    : timeMode === 'day';
+  noSolar.style.display = 'none';
+  result.style.display = 'block';
 
-  // Determine latitude category from destination prefix
-  const highLat = /^(OH|SM|LA|OZ|TF|EI|VE[789]|KL|UA9|JW|JX)/i.test(dest);
-  const tropical = /^(9Y|YV|TI|HH|J3|VP9|ZF|KH[6-9]|VK|JA|BY|HS|VU)/i.test(dest);
+  const hour = new Date().getHours();
+  const isDay = timeChoice === 'day' || (timeChoice === 'auto' && hour >= 7 && hour < 19);
+  const period = isDay ? 'daytime' : 'nighttime';
 
-  // MUF estimate based on SFI
-  const muf = sfi >= 200 ? 28 : sfi >= 150 ? 24 : sfi >= 120 ? 21 : sfi >= 100 ? 18 : sfi >= 80 ? 14 : 10;
-  // Geomag penalty
-  const geoOk = ki <= 3;
-  const geoPoor = ki >= 5;
+  const storm = k >= 5;
+  const disturbed = k >= 4;
+  const quiet = k <= 2;
 
   const bands = [
-    { name:'160m', freq:1.8,  day:'poor', night: ki<=2?'fair':'poor', note:'Works only at night, short paths. Rare DX.' },
-    { name:'80m',  freq:3.5,  day:ki<=2?'fair':'poor', night: ki<=3?'good':'fair', note:'Good for regional/continental at night.' },
-    { name:'40m',  freq:7.0,  day:'fair', night:ki<=3?'good':'fair', note:'Workhorse band — great night DX, fair days.' },
-    { name:'30m',  freq:10.1, day:muf>=10?'fair':'poor', night:ki<=3?'good':'fair', note:'No phone (CW/data only). Often reliable.' },
-    { name:'20m',  freq:14.0, day:muf>=14?'good':'fair', night:ki<=2?'fair':'poor', note:'Most reliable DX band. Good most of the day.' },
-    { name:'17m',  freq:18.1, day:muf>=18?'good':'fair', night:muf>=18&&ki<=2?'fair':'poor', note:'Excellent when open. Less crowded than 20m.' },
-    { name:'15m',  freq:21.0, day:muf>=21?'good':'poor', night:muf>=21&&ki<=1?'fair':'poor', note:'Great DX daytime when SFI is high.' },
-    { name:'12m',  freq:24.9, day:muf>=24?'good':'poor', night:'poor', note:'Opens during high solar flux. Daytime DX.' },
-    { name:'10m',  freq:28.0, day:muf>=28?'good':'poor', night:'poor', note:'Spectacular DX at solar maximum, closes at night.' },
-    { name:'6m',   freq:50.0, day:sfi>=150?'fair':'poor', night:'poor', note:'Magic band — sporadic-E and TEP openings, unpredictable.' },
+    {
+      name: '160m',
+      freq: 1.8,
+      day: -2,
+      night: 2,
+      detail: 'Primarily a nighttime regional and DX band.'
+    },
+    {
+      name: '80m',
+      freq: 3.5,
+      day: -1,
+      night: 2,
+      detail: 'Usually strongest after dark; good for regional contacts.'
+    },
+    {
+      name: '60m',
+      freq: 5.3,
+      day: 0,
+      night: 1,
+      detail: 'Often useful for regional communication, especially near dusk and dawn.'
+    },
+    {
+      name: '40m',
+      freq: 7.1,
+      day: 1,
+      night: 2,
+      detail: 'A versatile day-and-night band; often reliable for regional work.'
+    },
+    {
+      name: '30m',
+      freq: 10.1,
+      day: 1,
+      night: 1,
+      detail: 'Often stable for CW/data; phone is not permitted on this band.'
+    },
+    {
+      name: '20m',
+      freq: 14.2,
+      day: 2,
+      night: -1,
+      detail: 'A primary daytime DX band; can remain open near sunset.'
+    },
+    {
+      name: '17m',
+      freq: 18.1,
+      day: 2,
+      night: -2,
+      detail: 'Often productive when open; usually favors daylight.'
+    },
+    {
+      name: '15m',
+      freq: 21.2,
+      day: 2,
+      night: -2,
+      detail: 'Favored by good solar flux and daylight.'
+    },
+    {
+      name: '12m',
+      freq: 24.9,
+      day: 1,
+      night: -3,
+      detail: 'Usually needs stronger solar conditions and daylight.'
+    },
+    {
+      name: '10m',
+      freq: 28.4,
+      day: 1,
+      night: -3,
+      detail: 'Best during daylight with strong ionization or sporadic-E.'
+    },
+    {
+      name: '6m',
+      freq: 50.1,
+      day: 0,
+      night: -2,
+      detail: 'Highly variable; sporadic-E and other short-lived openings matter greatly.'
+    }
   ];
 
-  const colorMap = { good:'var(--good)', fair:'var(--amber)', poor:'var(--poor)' };
-  const bgMap = { good:'rgba(57,255,20,.10)', fair:'rgba(255,180,0,.10)', poor:'rgba(255,60,60,.08)' };
+  function rateBand(band) {
+    let score = isDay ? band.day : band.night;
 
-  let bandsHtml = '';
-  bands.forEach(b => {
-    let cond = isDay ? b.day : b.night;
-    // High latitude penalty
-    if (highLat && ki >= 3 && (b.freq >= 14 || isDay)) cond = cond === 'good' ? 'fair' : 'poor';
-    if (geoPoor) cond = cond === 'good' ? 'fair' : 'poor';
-    bandsHtml += `<div style="background:${bgMap[cond]};border:1px solid ${colorMap[cond]}44;border-radius:var(--r);padding:10px 14px">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--heading)">${b.name}</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${colorMap[cond]};margin:4px 0">${cond.toUpperCase()}</div>
-      <div style="font-size:12px;color:var(--text-dim);line-height:1.5">${b.note}</div>
-    </div>`;
-  });
+    // Solar-flux contribution increasingly favors upper HF.
+    if (band.freq >= 14) {
+      if (sfi >= 160) score += 2;
+      else if (sfi >= 120) score += 1;
+      else if (sfi < 85) score -= 2;
+      else if (sfi < 100) score -= 1;
+    } else if (band.freq >= 7) {
+      if (sfi >= 110) score += 1;
+      else if (sfi < 75) score -= 1;
+    } else if (sfi >= 100 && isDay) {
+      score += 1;
+    }
 
-  document.getElementById('pp-bands').innerHTML = bandsHtml;
+    // Geomagnetic penalty: never make every band automatically impossible.
+    if (storm) {
+      if (band.freq >= 14) score -= 3;
+      else if (band.freq >= 7) score -= 2;
+      else score -= 1;
+    } else if (disturbed) {
+      if (band.freq >= 14) score -= 2;
+      else if (band.freq >= 7) score -= 1;
+    } else if (quiet && band.freq >= 14) {
+      score += 1;
+    }
 
-  let notes = `<strong style="color:var(--heading)">Conditions for ${dest||'general DX'} — ${isDay?'Daytime':'Nighttime'}</strong><br>`;
-  notes += `SFI: <strong style="color:var(--accent)">${sfi}</strong> · K-index: <strong style="color:${ki<=3?'var(--good)':ki<=4?'var(--amber)':'var(--poor)}'}">${ki}</strong> · Est. MUF: ~${muf} MHz<br>`;
-  if (highLat) notes += `⚠ High-latitude path — geomagnetic disturbance has amplified impact on upper bands.<br>`;
-  if (tropical) notes += `☀ Tropical/transequatorial path — TEP propagation may enhance 6m and upper HF.<br>`;
-  if (geoPoor) notes += `⚠ K-index ${ki} — geomagnetic storm in progress. Expect degraded propagation, especially on upper bands and polar paths.<br>`;
-  notes += `<span style="color:var(--text-dim);font-size:12px">These are estimates only. Always listen to confirm a band is open!</span>`;
-  document.getElementById('pp-notes').innerHTML = notes;
-}
+    // High bands at night are generally unlikely, regardless of SFI.
+    if (!isDay && band.freq >= 18) score -= 2;
+
+    if (score >= 3) {
+      return { label: 'Worth checking', color: 'var(--good)' };
+    }
+    if (score >= 1) {
+      return { label: 'Possible', color: 'var(--fair)' };
+    }
+    if (score >= -1) {
+      return {
+        label: storm || disturbed ? 'Storm-affected' : 'Variable',
+        color: 'var(--amber)'
+      };
+    }
+    return { label: 'Unlikely now', color: 'var(--poor)' };
+  }
+
+  const ratedBands = bands.map((band) => ({
+    ...band,
+    rating: rateBand(band)
+  }));
+
+  bandsEl.innerHTML = ratedBands.map((band) => `
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);
+                border-radius:var(--r);padding:12px 13px">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;
+                  color:var(--heading);margin-bottom:4px">${band.name}</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;
+                  font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+                  color:${band.rating.color};margin-bottom:6px">
+        ${band.rating.label}
+      </div>
+      <div style="font-size:11px;line-height:1.55;color:var(--text-dim)">
+        ${band.detail}
+      </div>
+    </div>
+  `).join('');
+
+  const best = ratedBands
+    .filter((band) => band.rating.label === 'Worth checking')
+    .map((band) => band.name);
+
+  const possible = ratedBands
+    .filter((band) => band.rating.label === 'Possible')
+    .map((band) => band.name);
+
+  const solarText = sfi >= 150
+    ? 'strong support for higher HF bands'
+    : sfi >= 110
+      ? 'moderate support for upper HF bands'
+      : sfi >= 85
+        ? 'modest support for upper HF bands'
+        : 'limited support for upper HF bands';
+
+  const geomagneticText = storm
+    ? 'storm-level geomagnetic activity; DX and high-latitude paths may be severely disrupted'
+    : disturbed
+      ? 'elevated geomagnetic activity; paths may be unstable, especially at higher frequencies'
+      : quiet
+        ? 'quiet geomagnetic conditions, generally favorable for stable paths'
+        : 'moderate geomagnetic conditions; expect normal day-to-day variability';
+
+  const bestText = best.length
+    ? best.join(', ')
+    : possible.length
+      ? `${possible.join(', ')} may be worth monitoring`
+      : 'no bands rate strongly under this simplified estimate';
+
+  notesEl.innerHTML = `
+    <strong style="color:var(--heading)">Current conditions:</strong>
+    SFI <strong>${sfi.toFixed(0)}</strong> means ${solarText}.
+    K-index <strong>${k.toFixed(1)}</strong> indicates ${geomagneticText}.
+    Based on ${period} conditions, ${bestText}.
+    ${note ? `<br><br><strong style="color:var(--heading)">Operating note:</strong> ${note}` : ''}
+    <br><br>
+    <strong style="color:var(--heading)">Important:</strong>
+    This is a general band advisor, not a callsign lookup or a point-to-point prediction.
+    For a route-specific estimate, open VOACAP and set both your station and the destination.
+    For live evidence, use WSPRnet or the Reverse Beacon Network.
+  `;
+} //end of runPropPath
 
 // ===========================================
 // APRS / STATION LOOKUP
