@@ -5461,9 +5461,10 @@ const GOAL_RECS = {
   ]
 };
 
+const DEFAULT_GOAL = 'dx';
+
 function initGoals() {
   const grid = document.getElementById('goal-grid');
-
   if (!grid) return;
 
   grid.innerHTML = '';
@@ -5473,7 +5474,7 @@ function initGoals() {
 
     d.className = 'goal-btn';
 
-    if (g.id === 'dx') {
+    if (g.id === DEFAULT_GOAL) {
       d.classList.add('active');
     }
 
@@ -7939,9 +7940,9 @@ function initCqZoneMap() {
   initQCodes();
   initCW();
   initCqZoneMap();
-  if (typeof initGoals === 'function') {
+if (typeof initGoals === 'function') {
 	  initGoals();
-	  renderGoalRec('emcomm');
+	  renderGoalRec(DEFAULT_GOAL);
 	}
 
   // ── 2. License class from cookie ───────────
