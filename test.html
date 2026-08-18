@@ -1600,7 +1600,7 @@ minimum necessary power.</div>
       <div style="font-size: 11px; color: var(--text-dim); line-height: 1.7; margin-bottom: 12px;">
         FCC requires hams to evaluate RF exposure (Part 97.13). This is a simplified estimate — always use the <a href="https://www.fcc.gov/consumers/guides/rf-safety-calculators" target="_blank" style="color: var(--accent);">FCC's online calculator</a> for compliance.
       </div>
-      <div class="calc-row"><label class="calc-label">Power (W)</label><input class="calc-input" id="rf-watts" type="number" placeholder="e.g. 100" oninput="calcRF()"></div>
+      <div class="calc-row"><label class="calc-label">Power (W)</label><input class="calc-input" id="rf-exposure-watts" type="number" placeholder="e.g. 100" oninput="calcRF()"></div>
       <div class="calc-row"><label class="calc-label">Gain (dBi)</label><input class="calc-input" id="rf-gain" type="number" placeholder="e.g. 2.15" oninput="calcRF()"></div>
       <div class="calc-row"><label class="calc-label">Distance (m)</label><input class="calc-input" id="rf-dist" type="number" placeholder="e.g. 5" oninput="calcRF()"></div>
       <div class="calc-row"><label class="calc-label">Duty Cycle %</label><input class="calc-input" id="rf-duty" type="number" placeholder="e.g. 50" oninput="calcRF()"></div>
@@ -4007,7 +4007,7 @@ function calcDB() {
   el.textContent = `${a}W → ${b}W  =  ${dir}${db} dB`;
 }
 function calcRF() {
-  const p = parseFloat(document.getElementById('rf-watts').value);
+  const p = parseFloat(document.getElementById('rf-exposure-watts').value);
   const g = parseFloat(document.getElementById('rf-gain').value);
   const d = parseFloat(document.getElementById('rf-dist').value);
   const dc = parseFloat(document.getElementById('rf-duty').value) / 100;
