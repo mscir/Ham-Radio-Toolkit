@@ -1873,10 +1873,12 @@ repeater and drop you.</div></div></div>
   <div class="panel-header">
     <div class="panel-badge">▸ FIND YOUR DIGITAL MODE</div>
     <div class="panel-title">Digital Mode <span>Selector</span></div>
-    <div class="panel-desc">What do you want to do? Select a goal and 
-get a mode recommendation, tuning frequency, and software to get 
-started. All modes require a PC with a sound card interface or built-in 
-USB audio (Signalink, DigiRig, or radio's built-in).</div>
+    <div class="panel-desc">
+  Choose an operating goal to see suitable modes, typical calling frequencies,
+  and software or equipment to get started. Computer-based modes commonly use a
+  radio’s built-in USB audio or an interface such as DigiRig or Signalink. CW,
+  SSB phone, FM repeaters, and many FM satellite contacts do not require a PC.
+  Always verify your license privileges, local band plan, and current satellite status.</div>
   </div>
   <div class="goal-grid" id="goal-grid"><div class="goal-btn"><div class="goal-icon">🌍</div><div class="goal-label">Work DX</div></div><div class="goal-btn"><div class="goal-icon">📡</div><div class="goal-label">Weak Signal</div></div><div class="goal-btn"><div class="goal-icon">💬</div><div class="goal-label">Ragchew</div></div><div class="goal-btn"><div class="goal-icon">🏆</div><div class="goal-label">Contesting</div></div><div class="goal-btn active"><div class="goal-icon">🚨</div><div class="goal-label">Emerg Comms</div></div><div class="goal-btn"><div class="goal-icon">🏠</div><div class="goal-label">Local / Regional</div></div><div class="goal-btn"><div class="goal-icon">🛸</div><div class="goal-label">Satellites</div></div><div class="goal-btn"><div class="goal-icon">📷</div><div class="goal-label">SSTV Images</div></div></div>
   <div id="digital-result-area" class="digital-result active"><div class="mode-rec-card">
@@ -5098,46 +5100,397 @@ function translateRST() {
 // DIGITAL MODE SELECTOR
 // ===========================================
 const GOALS = [
-  {id:'dx',icon:'🌍',label:'Work DX',desc:'Contact distant stations worldwide'},
-  {id:'weaksg',icon:'📡',label:'Weak Signal',desc:'Push signal further than possible on phone'},
-  {id:'ragchew',icon:'💬',label:'Ragchew',desc:'Have a long conversational contact'},
-  {id:'contest',icon:'🏆',label:'Contesting',desc:'Maximize QSO count in a contest'},
-  {id:'emcomm',icon:'🚨',label:'Emerg Comms',desc:'Emergency and public service nets'},
-  {id:'local',icon:'🏠',label:'Local / Regional',desc:'Talk to nearby hams, club members'},
-  {id:'satellite',icon:'🛸',label:'Satellites',desc:'Operate through amateur satellites'},
-  {id:'image',icon:'📷',label:'SSTV Images',desc:'Send and receive slow-scan pictures'},
+  {
+    id: 'dx',
+    icon: '🌍',
+    label: 'Work DX & Awards',
+    desc: 'Work distant stations and pursue award contacts'
+  },
+  {
+    id: 'weaksg',
+    icon: '📡',
+    label: 'Weak-Signal QSOs',
+    desc: 'Make contacts under marginal signal conditions'
+  },
+  {
+    id: 'ragchew',
+    icon: '💬',
+    label: 'Keyboard Chat',
+    desc: 'Have a conversational digital QSO'
+  },
+  {
+    id: 'contest',
+    icon: '🏆',
+    label: 'Contesting',
+    desc: 'Make fast exchanges and maximize QSO count'
+  },
+  {
+    id: 'emcomm',
+    icon: '🚨',
+    label: 'Emergency Messaging',
+    desc: 'Send messages when normal communications are unavailable'
+  },
+  {
+    id: 'local',
+    icon: '🏠',
+    label: 'Local Voice & Data',
+    desc: 'Use local repeaters, simplex, tracking, and packet data'
+  },
+  {
+    id: 'satellite',
+    icon: '🛸',
+    label: 'Satellite Contacts',
+    desc: 'Operate through amateur radio satellites'
+  },
+  {
+    id: 'image',
+    icon: '📷',
+    label: 'Images',
+    desc: 'Send and receive amateur-radio images'
+  },
+  {
+    id: 'propagation',
+    icon: '📈',
+    label: 'Propagation Testing',
+    desc: 'Test paths, antennas, and weak-signal propagation'
+  }
 ];
 
 const GOAL_RECS = {
-  dx: [{name:'FT8',tag:'Best Choice',body:'FT8 is <strong>the dominant DX mode</strong> on HF today. Its -20 dB sensitivity means you can work DX when phone would be impossible. Run 50–100W and log hundreds of countries. Dial: 14.074 (20m), 7.074 (40m), 21.074 (15m). Software: <strong>WSJT-X (free)</strong>.',details:[{l:'Software',v:'WSJT-X (free)'},{l:'TX Cycle',v:'15 sec'},{l:'Bandwidth',v:'50 Hz'},{l:'Top Band',v:'20m / 15m'},{l:'Power',v:'50–100 W'},{l:'Sensitivity',v:'-20 dB SNR'}]},
-    {name:'CW',tag:'Classic DX',body:'CW remains a premier DX mode — <strong>6 dB better than SSB</strong> and works on all HF bands. CW DX calling at the bottom of each band. Practice to ~13 WPM minimum.',details:[{l:'Learning',v:'LCWO.net / Ninja'},{l:'Top Band',v:'20m / 40m / 80m'},{l:'Bandwidth',v:'~150 Hz'},{l:'Power',v:'100 W typical'},{l:'Extra Sub-band',v:'Bottom of each band'}]}],
-  weaksg: [{name:'FT8 / FT4',tag:'Best Choice',body:'FT8 (designed by K1JT) is built for weak signal work — routinely works paths impossible on SSB or CW. <strong>FT4 is faster</strong> (7.5 sec cycles) and nearly as sensitive. Perfect for VHF weak signal on 2m/6m.',details:[{l:'Software',v:'WSJT-X (free)'},{l:'Sensitivity',v:'-20 dB SNR'},{l:'VHF Freq',v:'144.174 (2m)'},{l:'6m Freq',v:'50.313 MHz'},{l:'TX Cycle',v:'15 sec'}]},
-    {name:'JT65',tag:'EME/Moonbounce',body:'JT65 was the original weak-signal digital mode — still used for <strong>Earth-Moon-Earth (EME)</strong> operation. Much slower than FT8 but occasionally used for extreme weak-signal paths.',details:[{l:'Software',v:'WSJT-X (free)'},{l:'Sensitivity',v:'-25 dB SNR'},{l:'Use case',v:'EME / 2m weak sig'},{l:'TX Cycle',v:'60 sec'}]}],
-  ragchew: [{name:'SSB Phone',tag:'Best Choice',body:'For real conversation, nothing beats <strong>SSB voice</strong>. USB on 20m/17m/15m (14.200–14.350 common), LSB on 40m/80m (7.200–7.300 evenings). Make real friends, not just signal reports.',details:[{l:'20m Calling',v:'14.200–14.300'},{l:'40m evenings',v:'7.200–7.290'},{l:'80m local',v:'3.800–4.000'},{l:'Power',v:'100 W typical'},{l:'Mode',v:'USB / LSB'}]},
-    {name:'Olivia',tag:'Digital Ragchew',body:'<strong>Olivia</strong> is a resilient digital keyboard-to-keyboard mode for conversational QSOs. More readable than SSB in noise, less clinical than FT8. Popular on 14.106 and 7.073 MHz.',details:[{l:'Software',v:'Fldigi (free)'},{l:'20m Freq',v:'14.106 MHz'},{l:'40m Freq',v:'7.073 MHz'},{l:'Bandwidth',v:'500 Hz / 250 Hz'},{l:'TX',v:'Keyboard real-time'}]}],
-  contest: [{name:'FT8 / FT4',tag:'Best Choice',body:'FT8 Contests (ARRL Digital Contest, FT8 Round Up) let you log <strong>hundreds of QSOs</strong> in a weekend. Fast, forgiving of poor conditions, and WSJT-X handles logging automatically.',details:[{l:'Software',v:'WSJT-X + N1MM'},{l:'Top Contest',v:'ARRL FT8 RU'},{l:'TX Cycle',v:'15 / 7.5 sec'},{l:'Power',v:'50–100 W'}]},
-    {name:'CW',tag:'Traditional',body:'CW remains the most <strong>contest-efficient</strong> traditional mode — high QSO rates, wide international participation, CQ WW and ARRL DX contests. Learn at 20+ WPM for serious contesting.',details:[{l:'Top Contests',v:'CQ WW / ARRL DX'},{l:'Speed',v:'20–30+ WPM'},{l:'Bandwidth',v:'~200 Hz'},{l:'Software',v:'N1MM+ / Win-Test'}]}],
-  emcomm: [{name:'Winlink / VARA HF',tag:'Best Choice',body:'<strong>Winlink</strong> is the standard for email-over-radio emergency communications. Messages route through radio gateways to email even without internet. Used by EMCOMM groups, ARES, RACES. Frequencies: 14.110 (Winlink PACTOR/VARA), check <strong>winlink.org</strong> for local gateways.',details:[{l:'Software',v:'Winlink Express (free)'},{l:'Protocol',v:'VARA HF / PACTOR'},{l:'20m Freq',v:'14.100–14.120'},{l:'Function',v:'Store & forward email'}]},
-    {name:'JS8Call',tag:'Alternative',body:'<strong>JS8Call</strong> is FT8-derived but allows free-text messages, relay, and store-forward — a digital peer-to-peer network. Used by preparedness groups. Great for when infrastructure is down.',details:[{l:'Software',v:'JS8Call (free)'},{l:'Freq',v:'14.078 MHz (20m)'},{l:'Relay',v:'Built-in peer network'},{l:'TX Cycle',v:'15 sec'}]}],
-  local: [{name:'FM Repeater',tag:'Best Choice',body:'For local use, an FM repeater on 2m (144 MHz) or 70cm (440 MHz) is the go-to. Find local repeaters at <strong>RepeaterBook.com</strong>. A basic handheld radio (HT) works fine. Program the frequency, offset, and CTCSS tone.',details:[{l:'2m Calling',v:'146.520 MHz'},{l:'70cm Calling',v:'446.000 MHz'},{l:'Offset 2m',v:'±600 kHz'},{l:'Offset 70cm',v:'±5.0 MHz'},{l:'Tone',v:'CTCSS or DCS — check repeaterbook'}]},
-    {name:'APRS',tag:'Data/Tracking',body:'<strong>APRS (144.390 MHz)</strong> lets you broadcast your GPS position and short messages on 2m. A phone with APRSdroid + HT works. Great for events, EMCOMM, and seeing what hams are active locally.',details:[{l:'Frequency',v:'144.390 MHz'},{l:'Software',v:'APRSdroid (Android)'},{l:'Mode',v:'1200 baud AFSK'},{l:'Function',v:'Position + messaging'}]}],
-  satellite: [{name:'FM Satellites (SO-50, etc.)',tag:'Best Choice',body:'Entry-level satellite operation uses a simple <strong>dual-band FM HT</strong> and a handheld yagi antenna. Satellites like AO-91 and AO-92 have FM transponders. Passes last 10–15 minutes. Use <strong>heavens-above.com</strong> or ISS Detector app for pass times.',details:[{l:'Uplink',v:'435.150 MHz (70cm)'},{l:'Downlink',v:'145.960 MHz (2m)'},{l:'Equipment',v:'Dual-band HT + yagi'},{l:'Pass finder',v:'heavens-above.com / gpredict'},{l:'Mode',v:'FM voice'}]},
-    {name:'Linear Transponders',tag:'Advanced',body:'SSB/CW linear transponders (FO-29, AO-7) allow <strong>SSB and CW contacts worldwide</strong> via satellite — but require more complex tracking and beam steering. Start with FM satellites first.',details:[{l:'Mode',v:'USB / CW'},{l:'Equipment',v:'Full-duplex SSB rig'},{l:'Example sat',v:'AO-7, FO-29'},{l:'Skill level',v:'Intermediate+'}]}],
-  image: [{name:'SSTV',tag:'Best Choice',body:'<strong>Slow-Scan TV (SSTV)</strong> sends still images over HF radio. Software (MMSSTV, QSSTV) converts your audio into picture. Tune to <strong>14.230 MHz USB (20m)</strong> to see images being exchanged right now.',details:[{l:'Software',v:'MMSSTV (free/Win)'},{l:'20m Freq',v:'14.225–14.230 MHz'},{l:'Mode',v:'Scottie 1 / Martin 1'},{l:'Tx Time',v:'~110 sec/image'},{l:'Bandwidth',v:'~2.7 kHz (stays in SSB)'},{l:'Linux/Mac',v:'QSSTV (free)'}]}],
+  dx: [
+    {
+      name: 'FT8',
+      tag: 'Best digital choice',
+      body: `
+        <strong>FT8</strong> is the most widely used digital mode for routine HF DX
+        and award chasing. It can decode very weak signals and provides short,
+        structured exchanges for callsign, grid, signal report, and confirmation.
+        Use <strong>WSJT-X</strong>; set power conservatively and keep the radio’s
+        audio level clean.
+      `,
+      details: [
+        { l: 'Software', v: 'WSJT-X (free)' },
+        { l: '20m dial', v: '14.074 MHz' },
+        { l: '40m dial', v: '7.074 MHz' },
+        { l: '15m dial', v: '21.074 MHz' },
+        { l: 'Cycle', v: '15 seconds' },
+        { l: 'Exchange', v: 'Structured / short' }
+      ]
+    },
+    {
+      name: 'CW or SSB',
+      tag: 'Non-digital alternatives',
+      body: `
+        <strong>CW</strong> remains excellent for DX because it occupies little bandwidth
+        and can be copied well under weak conditions. <strong>SSB</strong> is ideal when
+        you want a voice QSO instead of a structured digital exchange. Neither requires
+        a computer audio interface.
+      `,
+      details: [
+        { l: 'CW bandwidth', v: '~150–500 Hz' },
+        { l: 'SSB mode', v: 'USB above 10 MHz' },
+        { l: 'Best use', v: 'DX + conversation' },
+        { l: 'Computer', v: 'Not required' }
+      ]
+    }
+  ],
+
+  weaksg: [
+    {
+      name: 'FT8',
+      tag: 'Best starting point',
+      body: `
+        <strong>FT8</strong> is the easiest entry point for weak-signal HF and VHF work.
+        It is designed to decode signals far below normal listening level and has broad,
+        active worldwide participation.
+      `,
+      details: [
+        { l: 'Software', v: 'WSJT-X (free)' },
+        { l: 'HF 20m dial', v: '14.074 MHz' },
+        { l: '6m dial', v: '50.313 MHz' },
+        { l: '2m dial', v: '144.174 MHz' },
+        { l: 'Cycle', v: '15 seconds' }
+      ]
+    },
+    {
+      name: 'Q65',
+      tag: 'Specialized weak signal',
+      body: `
+        <strong>Q65</strong> is a modern WSJT-X mode suited to difficult weak-signal
+        paths, including certain VHF/UHF, EME, and other specialized operations.
+        It is more appropriate for new operators to explore than treating older
+        JT65 as the default recommendation.
+      `,
+      details: [
+        { l: 'Software', v: 'WSJT-X (free)' },
+        { l: 'Best use', v: 'VHF/UHF / EME' },
+        { l: 'Strength', v: 'Deep weak-signal decode' },
+        { l: 'Note', v: 'Use local activity plans' }
+      ]
+    }
+  ],
+
+  ragchew: [
+    {
+      name: 'JS8Call',
+      tag: 'Best digital choice',
+      body: `
+        <strong>JS8Call</strong> combines weak-signal capability with free-text
+        keyboard messaging, directed messages, relays, and store-and-forward features.
+        It is a strong choice for a deliberate text conversation when signals are weak.
+      `,
+      details: [
+        { l: 'Software', v: 'JS8Call (free)' },
+        { l: '20m dial', v: '14.078 MHz' },
+        { l: '40m dial', v: '7.078 MHz' },
+        { l: 'Style', v: 'Keyboard-to-keyboard' },
+        { l: 'Cycle', v: '15 seconds' }
+      ]
+    },
+    {
+      name: 'VarAC or Olivia',
+      tag: 'Alternatives',
+      body: `
+        <strong>VarAC</strong> provides a chat-oriented digital experience using the
+        VARA modem. <strong>Olivia</strong>, commonly operated through Fldigi, is
+        deliberately robust in noise and supports relaxed keyboard QSOs. Activity
+        varies by band and region, so listen first and follow local band plans.
+      `,
+      details: [
+        { l: 'VarAC software', v: 'VarAC + VARA' },
+        { l: 'Olivia software', v: 'Fldigi (free)' },
+        { l: 'Best use', v: 'Text conversation' },
+        { l: 'Computer', v: 'Audio interface needed' }
+      ]
+    }
+  ],
+
+  contest: [
+    {
+      name: 'FT4',
+      tag: 'Best digital choice',
+      body: `
+        <strong>FT4</strong> uses faster 7.5-second cycles than FT8 and is designed
+        for contest-style exchanges. It is a practical first choice when the contest
+        rules support it. Check the event rules before operating.
+      `,
+      details: [
+        { l: 'Software', v: 'WSJT-X + logger' },
+        { l: 'Cycle', v: '7.5 seconds' },
+        { l: 'Best use', v: 'Fast digital exchanges' },
+        { l: 'Logging', v: 'N1MM+ / other logger' }
+      ]
+    },
+    {
+      name: 'RTTY, CW, or SSB',
+      tag: 'Major contest modes',
+      body: `
+        <strong>RTTY</strong> remains common in digital contests. <strong>CW</strong>
+        supports high-rate exchanges with narrow bandwidth, while <strong>SSB</strong>
+        is the main voice contest mode. Each mode has different band segments and
+        contest rules, so use the event’s published information.
+      `,
+      details: [
+        { l: 'RTTY software', v: 'Fldigi / N1MM+' },
+        { l: 'CW software', v: 'N1MM+ / keyer' },
+        { l: 'SSB', v: 'Radio + microphone' },
+        { l: 'Computer', v: 'Not always required' }
+      ]
+    }
+  ],
+
+  emcomm: [
+    {
+      name: 'Winlink Messaging',
+      tag: 'Best choice',
+      body: `
+        <strong>Winlink Express</strong> provides store-and-forward email and forms
+        over radio. It can use <strong>VARA HF</strong>, VARA FM, ARDOP, packet, or
+        other supported transports. Coordinate with your local ARES, RACES, served
+        agency, or emergency-communications group before relying on any frequency or gateway.
+      `,
+      details: [
+        { l: 'Software', v: 'Winlink Express' },
+        { l: 'Transport', v: 'VARA / ARDOP / packet' },
+        { l: 'Function', v: 'Email + forms' },
+        { l: 'Frequency', v: 'Use gateway directory' },
+        { l: 'Computer', v: 'Usually required' }
+      ]
+    },
+    {
+      name: 'JS8Call',
+      tag: 'Peer-to-peer option',
+      body: `
+        <strong>JS8Call</strong> supports direct text messaging, relays, and
+        store-and-forward features without depending on an email gateway. It can
+        complement—but does not replace—trained local emergency communication plans.
+      `,
+      details: [
+        { l: 'Software', v: 'JS8Call (free)' },
+        { l: 'Style', v: 'Peer-to-peer text' },
+        { l: 'Strength', v: 'Weak-signal capable' },
+        { l: 'Important', v: 'Follow local procedures' }
+      ]
+    }
+  ],
+
+  local: [
+    {
+      name: 'FM Voice',
+      tag: 'Best starting point',
+      body: `
+        <strong>FM repeaters and simplex</strong> are often the simplest way to meet
+        nearby amateurs, participate in local nets, and ask for practical help. A basic
+        handheld or mobile radio may be all that is needed. Use a current local repeater
+        directory for frequency, offset, tone, and operating guidance.
+      `,
+      details: [
+        { l: '2m simplex', v: '146.520 MHz*' },
+        { l: '70cm simplex', v: '446.000 MHz*' },
+        { l: 'Equipment', v: 'HT or mobile radio' },
+        { l: 'Computer', v: 'Not required' },
+        { l: 'Note', v: '*Verify local band plan' }
+      ]
+    },
+    {
+      name: 'APRS / Packet',
+      tag: 'Local data & tracking',
+      body: `
+        <strong>APRS</strong> is useful for position reports, short messages, weather,
+        objects, and event coordination. Packet and VARA FM can also support local data
+        use. In North America, terrestrial APRS commonly uses 144.390 MHz; verify local
+        practice, use short paths, and beacon responsibly.
+      `,
+      details: [
+        { l: 'APRS NA', v: '144.390 MHz' },
+        { l: 'Mode', v: '1200-baud AFSK' },
+        { l: 'Uses', v: 'Position + messaging' },
+        { l: 'Software', v: 'APRS app / TNC' }
+      ]
+    }
+  ],
+
+  satellite: [
+    {
+      name: 'FM Satellite Voice',
+      tag: 'Best starting point',
+      body: `
+        <strong>FM satellites</strong> are a beginner-friendly way to make short
+        VHF/UHF contacts through space. They generally require a dual-band radio,
+        directional antenna, pass prediction, and careful operating etiquette.
+        Satellite status, transponder availability, and frequencies can change.
+      `,
+      details: [
+        { l: 'Mode', v: 'FM voice' },
+        { l: 'Equipment', v: 'Dual-band radio + yagi' },
+        { l: 'Timing', v: 'Use pass prediction' },
+        { l: 'Status', v: 'Check AMSAT live list' },
+        { l: 'Computer', v: 'Optional' }
+      ]
+    },
+    {
+      name: 'Linear Satellites',
+      tag: 'Advanced',
+      body: `
+        <strong>Linear transponder satellites</strong> support SSB and CW within a
+        shared passband. They offer more flexibility than single-channel FM satellites
+        but require greater attention to Doppler shift, frequency control, and often
+        full-duplex capability.
+      `,
+      details: [
+        { l: 'Mode', v: 'SSB / CW' },
+        { l: 'Equipment', v: 'Full-duplex preferred' },
+        { l: 'Skill', v: 'Intermediate+' },
+        { l: 'Status', v: 'Check AMSAT live list' }
+      ]
+    }
+  ],
+
+  image: [
+    {
+      name: 'SSTV',
+      tag: 'Best choice',
+      body: `
+        <strong>Slow-Scan Television (SSTV)</strong> sends still images over an
+        SSB radio channel. It is a fun visual mode for HF and VHF activity. On HF,
+        14.230 MHz USB is a widely used SSTV calling frequency; listen before transmitting.
+      `,
+      details: [
+        { l: 'Windows', v: 'MMSSTV' },
+        { l: 'Linux', v: 'QSSTV' },
+        { l: '20m calling', v: '14.230 MHz USB' },
+        { l: 'Common modes', v: 'Scottie / Martin' },
+        { l: 'Interface', v: 'Audio interface' }
+      ]
+    }
+  ],
+
+  propagation: [
+    {
+      name: 'WSPR',
+      tag: 'Best propagation tool',
+      body: `
+        <strong>WSPR</strong> sends extremely low-power, structured beacon transmissions
+        that receiving stations automatically report online. It is excellent for checking
+        antenna performance and discovering weak propagation paths, but it is not a
+        two-way conversational QSO mode.
+      `,
+      details: [
+        { l: 'Software', v: 'WSJT-X / WSPR' },
+        { l: 'Purpose', v: 'Path + antenna testing' },
+        { l: 'Reports', v: 'WSPRnet map' },
+        { l: 'Power', v: 'Low power common' },
+        { l: 'QSO mode', v: 'No' }
+      ]
+    },
+    {
+      name: 'Reverse Beacon Network',
+      tag: 'CW confirmation',
+      body: `
+        <strong>Reverse Beacon Network</strong> receivers decode and report CW stations
+        they hear. Send a normal CQ or TEST and then check whether monitoring stations
+        copied your signal. It provides real reception evidence, rather than a forecast.
+      `,
+      details: [
+        { l: 'Mode', v: 'CW' },
+        { l: 'Purpose', v: 'Signal confirmation' },
+        { l: 'Reports', v: 'ReverseBeacon.net' },
+        { l: 'Computer', v: 'Not required to transmit' }
+      ]
+    }
+  ]
 };
 
 function initGoals() {
   const grid = document.getElementById('goal-grid');
+
+  if (!grid) return;
+
   grid.innerHTML = '';
-  GOALS.forEach(g => {
+
+  GOALS.forEach((g) => {
     const d = document.createElement('div');
+
     d.className = 'goal-btn';
-    d.innerHTML = `<div class="goal-icon">${g.icon}</div><div class="goal-label">${g.label}</div>`;
+
+    if (g.id === 'dx') {
+      d.classList.add('active');
+    }
+
+    d.innerHTML = `
+      <div class="goal-icon">${g.icon}</div>
+      <div class="goal-label">${g.label}</div>
+    `;
+
     d.onclick = () => {
-      document.querySelectorAll('.goal-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.goal-btn').forEach((button) => {
+        button.classList.remove('active');
+      });
+
       d.classList.add('active');
       renderGoalRec(g.id);
     };
+
     grid.appendChild(d);
   });
 }
@@ -7586,7 +7939,10 @@ function initCqZoneMap() {
   initQCodes();
   initCW();
   initCqZoneMap();
-  if (typeof initGoals === 'function') initGoals();
+  if (typeof initGoals === 'function') {
+	  initGoals();
+	  renderGoalRec('emcomm');
+	}
 
   // ── 2. License class from cookie ───────────
   const savedClass = getLicenseCookie();
