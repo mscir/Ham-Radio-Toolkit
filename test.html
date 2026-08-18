@@ -993,21 +993,39 @@ body{
   </div>
 </div><!-- end panel-beacons -->
 
-<!-- PANEL: PROPAGATION PATH -->
+
+<!-- PANEL: PROPAGATION PATH TOOL -->
 <div class="panel" id="panel-proppath">
   <div class="panel-header">
-    <div class="panel-badge">▸ LIVE DATA · PROPAGATION</div>
-    <div class="panel-title">Propagation <span>Path</span></div>
-    <div class="panel-desc">
-      Explore real-time day/night boundaries and estimate likely HF radio paths.
-    </div>
+    <div class="panel-badge">▸ USES LIVE SOLAR DATA · NOAA SWPC</div>
+    <div class="panel-title">Propagation <span>Path Tool</span></div>
+    <div class="panel-desc">Enter a destination to estimate which HF bands are most likely open right now based on live solar indices. Requires solar data to be loaded first.</div>
   </div>
-
-  <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);
-              border-radius:var(--r);padding:18px;color:var(--text-dim);
-              font-size:13px;line-height:1.75">
-    This panel is ready for a propagation map, a grey-line tool, or links to
-    propagation prediction services.
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px">
+    <div style="flex:1;min-width:180px">
+      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Destination (call prefix or region)</div>
+      <input id="pp-dest" class="calc-input" type="text" placeholder="e.g. W6, VK, JA, EU, DX" style="width:100%;margin:0">
+    </div>
+    <div style="flex:1;min-width:140px">
+      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Time of Day</div>
+      <select id="pp-time" class="calc-input" style="width:100%;margin:0">
+        <option value="auto">Auto (use local time)</option>
+        <option value="day">Daytime</option>
+        <option value="night">Nighttime</option>
+      </select>
+    </div>
+    <button class="calc-btn" onclick="runPropPath()" style="width:auto;padding:10px 22px;margin:0">Analyze</button>
+  </div>
+  <div id="pp-result" style="display:none">
+    <div class="section-label">▸ Band-by-Band Forecast</div>
+    <div id="pp-bands" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:16px"></div>
+    <div id="pp-notes" style="font-size:13px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px"></div>
+  </div>
+  <div id="pp-no-solar" style="display:none;color:var(--amber);font-size:13px;padding:16px;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.2);border-radius:var(--r)">
+    ⚠ Solar data not yet loaded. Go to Solar / Propagation and wait for data to load, then return here.
+  </div>
+  <div style="margin-top:20px;font-size:12px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:14px">
+    <strong style="color:var(--heading)">How it works:</strong> Predictions are based on the current Solar Flux Index (SFI) and K-index. SFI determines the Maximum Usable Frequency (MUF) — higher SFI opens higher bands. K-index geomagnetic disturbance degrades propagation, especially at high latitudes. Day/night affects F2 layer behaviour: lower bands improve at night, higher bands may close. These are estimates — always listen to confirm a band is open!
   </div>
 </div><!-- end panel-proppath -->
 
