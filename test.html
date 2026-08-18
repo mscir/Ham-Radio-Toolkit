@@ -5780,6 +5780,42 @@ function aprsLookup() {
     </div>
   `;
 }
+// =========================================
+// APRS Buttons
+// ==========================================
+	function getAprsCallsign() {
+		  return document.getElementById('aprs-callsign').value
+		    .trim()
+		    .toUpperCase()
+		    .replace(/\s+/g, '');
+		}
+		
+		function openAprsFi() {
+			  const callsign = getAprsCallsign();			
+			  if (callsign) {
+			    window.open(
+			      `https://aprs.fi/info/${encodeURIComponent(callsign)}`,
+			      '_blank',
+			      'noopener,noreferrer'
+			    );
+			  } else {
+			    window.open('https://aprs.fi/', '_blank', 'noopener,noreferrer');
+			  }
+			}
+			
+			function openQrz() {
+			  const callsign = getAprsCallsign();
+			
+			  if (callsign) {
+			    window.open(
+			      `https://www.qrz.com/db/${encodeURIComponent(callsign)}`,
+			      '_blank',
+			      'noopener,noreferrer'
+			    );
+			  } else {
+			    window.open('https://www.qrz.com/', '_blank', 'noopener,noreferrer');
+			  }
+			}
 
 // ===========================================
 // CW AUDIO PLAYBACK & PRACTICE
@@ -7370,40 +7406,6 @@ function initCqZoneMap() {
 		    const hit = (button.getAttribute('onclick') || '').match(/showPanel\(['"]([^'"]+)/);
 		    return hit ? hit[1] : null;
 		  }
-		
-	function getAprsCallsign() {
-		  return document.getElementById('aprs-callsign').value
-		    .trim()
-		    .toUpperCase()
-		    .replace(/\s+/g, '');
-		}
-		
-		function openAprsFi() {
-			  const callsign = getAprsCallsign();			
-			  if (callsign) {
-			    window.open(
-			      `https://aprs.fi/info/${encodeURIComponent(callsign)}`,
-			      '_blank',
-			      'noopener,noreferrer'
-			    );
-			  } else {
-			    window.open('https://aprs.fi/', '_blank', 'noopener,noreferrer');
-			  }
-			}
-			
-			function openQrz() {
-			  const callsign = getAprsCallsign();
-			
-			  if (callsign) {
-			    window.open(
-			      `https://www.qrz.com/db/${encodeURIComponent(callsign)}`,
-			      '_blank',
-			      'noopener,noreferrer'
-			    );
-			  } else {
-			    window.open('https://www.qrz.com/', '_blank', 'noopener,noreferrer');
-			  }
-			}
 
   function buildIndex() {
     const buttons = [...document.querySelectorAll('#sb-nav-inner .nav-btn')];
