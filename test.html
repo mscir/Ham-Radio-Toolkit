@@ -7367,9 +7367,43 @@ function initCqZoneMap() {
   const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
   function panelIdFromButton(button) {
-    const hit = (button.getAttribute('onclick') || '').match(/showPanel\(['"]([^'"]+)/);
-    return hit ? hit[1] : null;
-  }
+		    const hit = (button.getAttribute('onclick') || '').match(/showPanel\(['"]([^'"]+)/);
+		    return hit ? hit[1] : null;
+		  }
+		
+	function getAprsCallsign() {
+		  return document.getElementById('aprs-callsign').value
+		    .trim()
+		    .toUpperCase()
+		    .replace(/\s+/g, '');
+		}
+		
+		function openAprsFi() {
+			  const callsign = getAprsCallsign();			
+			  if (callsign) {
+			    window.open(
+			      `https://aprs.fi/info/${encodeURIComponent(callsign)}`,
+			      '_blank',
+			      'noopener,noreferrer'
+			    );
+			  } else {
+			    window.open('https://aprs.fi/', '_blank', 'noopener,noreferrer');
+			  }
+			}
+			
+			function openQrz() {
+			  const callsign = getAprsCallsign();
+			
+			  if (callsign) {
+			    window.open(
+			      `https://www.qrz.com/db/${encodeURIComponent(callsign)}`,
+			      '_blank',
+			      'noopener,noreferrer'
+			    );
+			  } else {
+			    window.open('https://www.qrz.com/', '_blank', 'noopener,noreferrer');
+			  }
+			}
 
   function buildIndex() {
     const buttons = [...document.querySelectorAll('#sb-nav-inner .nav-btn')];
@@ -7383,41 +7417,6 @@ function initCqZoneMap() {
       return { id, title, description, labels, searchable: `${title} ${description} ${labels} ${clean(panel.textContent)}`.toLowerCase(), nav };
     });
   }
-
-	function getAprsCallsign() {
-  return document.getElementById('aprs-callsign').value
-    .trim()
-    .toUpperCase()
-    .replace(/\s+/g, '');
-}
-
-function openAprsFi() {
-	  const callsign = getAprsCallsign();
-	
-	  if (callsign) {
-	    window.open(
-	      `https://aprs.fi/info/${encodeURIComponent(callsign)}`,
-	      '_blank',
-	      'noopener,noreferrer'
-	    );
-	  } else {
-	    window.open('https://aprs.fi/', '_blank', 'noopener,noreferrer');
-	  }
-	}
-	
-	function openQrz() {
-	  const callsign = getAprsCallsign();
-	
-	  if (callsign) {
-	    window.open(
-	      `https://www.qrz.com/db/${encodeURIComponent(callsign)}`,
-	      '_blank',
-	      'noopener,noreferrer'
-	    );
-	  } else {
-	    window.open('https://www.qrz.com/', '_blank', 'noopener,noreferrer');
-	  }
-	}
 
   function install() {
     const sidebar = document.querySelector('#sidebar');
