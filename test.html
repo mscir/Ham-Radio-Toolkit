@@ -2217,283 +2217,138 @@ take it with a grain of salt!</div>
 </div>
 
 
-<!-- PANEL: PROPAGATION PATH TOOL -->
-<div class="panel" id="panel-proppath">
-  <div class="panel-header">
-    <div class="panel-badge">▸ USES LIVE SOLAR DATA · NOAA SWPC</div>
-    <div class="panel-title">Propagation <span>Path Tool</span></div>
-    <div class="panel-desc">Enter a destination to estimate which HF bands are most likely open right now based on live solar indices. Requires solar data to be loaded first.</div>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px">
-    <div style="flex:1;min-width:180px">
-      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Destination (call prefix or region)</div>
-      <input id="pp-dest" class="calc-input" type="text" placeholder="e.g. W6, VK, JA, EU, DX" style="width:100%;margin:0">
-    </div>
-    <div style="flex:1;min-width:140px">
-      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Time of Day</div>
-      <select id="pp-time" class="calc-input" style="width:100%;margin:0">
-        <option value="auto">Auto (use local time)</option>
-        <option value="day">Daytime</option>
-        <option value="night">Nighttime</option>
-      </select>
-    </div>
-    <button class="calc-btn" onclick="runPropPath()" style="width:auto;padding:10px 22px;margin:0">Analyze</button>
-  </div>
-  <div id="pp-result" style="display:none">
-    <div class="section-label">▸ Band-by-Band Forecast</div>
-    <div id="pp-bands" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:16px"></div>
-    <div id="pp-notes" style="font-size:13px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px"></div>
-  </div>
-  <div id="pp-no-solar" style="display:none;color:var(--amber);font-size:13px;padding:16px;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.2);border-radius:var(--r)">
-    ⚠ Solar data not yet loaded. Go to Solar / Propagation and wait for data to load, then return here.
-  </div>
-  <div style="margin-top:20px;font-size:12px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:14px">
-    <strong style="color:var(--heading)">How it works:</strong> Predictions are based on the current Solar Flux Index (SFI) and K-index. SFI determines the Maximum Usable Frequency (MUF) — higher SFI opens higher bands. K-index geomagnetic disturbance degrades propagation, especially at high latitudes. Day/night affects F2 layer behaviour: lower bands improve at night, higher bands may close. These are estimates — always listen to confirm a band is open!
-  </div>
-</div>
-
-<!-- PANEL: APRS / STATION LOOKUP -->
+<!-- PANEL: APRS & STATION LOOKUP -->
 <div class="panel" id="panel-aprs">
   <div class="panel-header">
-    <div class="panel-badge">▸ LIVE DATA · APRS.FI · QRZ.COM</div>
-    <div class="panel-title">APRS &amp; Station <span>Lookup</span></div>
-    <div class="panel-desc">Look up any callsign on APRS.fi for live position and activity, or open QRZ.com for full station biography, log, and awards data.</div>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
-    <div style="flex:1;min-width:200px">
-      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Callsign</div>
-      <input id="aprs-call" class="calc-input" type="text" placeholder="e.g. W1AW" style="width:100%;margin:0;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')aprsLookup()">
+    <div class="panel-badge">▸ LIVE DATA · PACKET RADIO</div>
+    <div class="panel-title">APRS &amp; <span>Station Lookup</span></div>
+    <div class="panel-desc">
+      Find APRS-equipped stations, check local packet activity, and learn how position,
+      weather, messages, and tactical information move across amateur radio.
     </div>
-    <button class="calc-btn" onclick="aprsLookup()" style="width:auto;padding:10px 20px;margin:0">Look Up</button>
   </div>
-  <div id="aprs-result" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px"></div>
-  <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:14px">
-    <div class="section-label">▸ About APRS</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;font-size:13px;color:var(--text);line-height:1.8">
-      <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
-        <strong style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.08em;text-transform:uppercase">What is APRS?</strong><br>
-  APRS is an amateur-radio digital system for exchanging position reports,
-  messages, weather, telemetry, station status, and tactical objects. In North
-  America, terrestrial APRS normally operates on <strong>144.390 MHz</strong>
-  using 1200-baud Bell 202 AFSK packet.
-<p>Packets may be heard directly by nearby stations, retransmitted over RF by
-  digipeaters, or forwarded to APRS-IS by iGates. Because 144.390 MHz is a
-  shared channel, use a suitable path and conservative beaconing interval.</p>
-<p><section class="aprs-resources" aria-labelledby="aprs-resources-heading">
-<br>
-  <h2 id="aprs-resources-heading">Recommended Links</h2>
-
-  <section aria-labelledby="learn-aprs-heading">
-    <h3 id="learn-aprs-heading">Learn APRS</h3>
-    <ul>
-      <li>
-        <a href="https://www.aprs.org/" target="_blank" rel="noopener noreferrer">
-          What APRS Is (APRS.org)
-        </a>
-        <p>
-          An authoritative overview of APRS as a two-way, tactical, real-time
-          digital communications system—not merely vehicle tracking.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="https://blog.aprs.fi/2020/02/how-aprs-paths-work.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          How APRS Paths Work
-        </a>
-        <p>
-          Explains <code>WIDE1-1,WIDE2-1</code>, packet hops, and why
-          unnecessarily long paths create channel congestion.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="https://aprs.fi/doc/guide/guide.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          APRS.fi User Guide
-        </a>
-        <p>
-          Learn how to search for stations, read packet history and paths,
-          send messages, view weather data, and use APRS.fi map tools.
-        </p>
-      </li>
-    </ul>
-  </section>
-
-  <section aria-labelledby="use-aprs-heading">
-    <h3 id="use-aprs-heading">Use APRS</h3>
-    <ul>
-      <li>
-        <a href="https://aprs.fi/" target="_blank" rel="noopener noreferrer">
-          View Live APRS Activity on APRS.fi
-        </a>
-        <p>
-          Search by callsign, view a local map, inspect packet paths, or confirm
-          whether a beacon reached an iGate.
-        </p>
-      </li>
-
-      <li>
-        <a href="https://aprs.fi/" target="_blank" rel="noopener noreferrer">
-          Find Local APRS Digipeaters and iGates
-        </a>
-        <p>
-          Use the APRS.fi map to search your county, callsign, or nearby active
-          stations instead of relying on a static infrastructure list.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="http://aprsisce.wikidot.com/doc:frequencies"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          APRS Frequency Reference
-        </a>
-        <p>
-          A reference for APRS frequencies in other regions, on HF, and via
-          satellites.
-        </p>
-      </li>
-    </ul>
-  </section>
-
-  <section aria-labelledby="build-aprs-heading">
-    <h3 id="build-aprs-heading">Build or Experiment</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/wb2osz/direwolf"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Dire Wolf Software TNC
-        </a>
-        <p>
-          Use a computer, audio interface, SDR, or conventional FM radio as a
-          packet modem, APRS decoder, digipeater, or iGate.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="https://www.aprs.org/aprs-software.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          APRS Software and Application Directory
-        </a>
-        <p>
-          Find current APRS applications instead of relying on a fixed list
-          that may become outdated.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="https://www.aprs-is.net/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          APRS-IS Information
-        </a>
-        <p>
-          Learn about the Internet backbone behind APRS maps, iGates, and
-          Internet-connected APRS clients.
-        </p>
-      </li>
-    </ul>
-  </section>
-
-  <section aria-labelledby="satellite-aprs-heading">
-    <h3 id="satellite-aprs-heading">Satellite APRS</h3>
-    <ul>
-      <li>
-        <a
-          href="https://www.amsat.org/live-digipeater-satellites/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          AMSAT Live APRS Digipeater Satellites
-        </a>
-        <p>
-          Check active or known APRS satellites, operating frequencies, packet
-          aliases, and status references. This is the recommended link to check
-          before using 145.825 MHz or another satellite APRS frequency.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="https://www.ariss.org/current-status-of-iss-stations.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ARISS ISS Ham-Radio Status
-        </a>
-        <p>
-          Verify current ISS amateur-radio activity before transmitting. The ISS
-          packet system may be unavailable or reconfigured for operations.
-        </p>
-      </li>
-
-      <li>
-        <a
-          href="https://www.aprs.org/ariss.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ISS/APRS Packet FAQ
-        </a>
-        <p>
-          Background on ISS and satellite APRS packet operation, digipeater
-          aliases, and shared use of 145.825 MHz.
-        </p>
-      </li>
-    </ul>
-  </section>
-</section>
+  <div class="section-label">▸ Quick Station Lookup</div>
+  <div style="display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;align-items:end;margin-bottom:18px">
+    <div>
+      <label for="aprs-callsign"
+             style="display:block;font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px">
+        Callsign or APRS SSID
+      </label>
+      <input id="aprs-callsign"
+             class="calc-input"
+             type="text"
+             placeholder="Example: N0CALL or N0CALL-9"
+             autocomplete="off"
+             style="width:100%;margin:0;text-transform:uppercase">
+    </div>
+    <button class="solar-refresh-btn" type="button" onclick="openAprsFi()">
+      📡 Open APRS.fi
+    </button>
+    <button class="solar-refresh-btn" type="button" onclick="openQrz()">
+      🔎 Open QRZ
+    </button>
   </div>
-      <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px">
-        <strong style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.08em;text-transform:uppercase">APRS Frequencies</strong><br>
-        <strong>144.390 MHz</strong> — North America (primary)<br>
-		<strong>144.930 MHz</strong> — Uruguay, Panama<br>
-		<strong>145.570 MHz</strong> — Brazil<br>
-        <strong>144.800 MHz</strong> — Europe, Russia, South Africa<br>
-        <strong>145.175 MHz</strong> — Australia<br>
-		<strong>144.575 MHZ</strong> — New Zealand<br>
-        <strong>144.660 MHz</strong> — Japan<br>
-		<strong>144.640 MHz</strong> — China, Taiwan<br>
-		<br><br>
-  <a href="https://www.amsat.org/live-digipeater-satellites/" target="_blank" rel="noopener noreferrer">
-    Check AMSAT’s Live Digipeater Satellites list</a>
-  for current satellite availability, frequencies, supported packet modes, and operating aliases. Satellite status and modes can change without notice.
-<br><br>
-		<strong>CO-128 / MARMOTSat</strong> — 145.875 MHz; 1k2 GreenCube packet digipeater<br>
-		<strong>CroCube</strong> — 436.775 MHz; 9k6 GFSK/G3RUH digipeater; alias <code>9A0CC</code><br>
-		<strong>Foresail-1p</strong> — 437.125 MHz; 9k6 GMSK / Skylink digipeater<br>
-		<strong>GRBBeta</strong> — 145.935 MHz uplink / 436.785 MHz downlink; 9k6 GFSK/G3RUH; alias <code>HA2GRB</code><br>
-		<strong>ISS / ARISS</strong> — 145.825 MHz; 1k2 APRS; aliases <code>RS0ISS</code>, <code>NA1SS</code>, or <code>ARISS</code> when enabled<br>
-		<strong>IO-86 / LAPAN-A2</strong> — 145.825 MHz; 1k2 APRS; aliases <code>YB0X</code> or <code>ARISS</code><br>
-		<strong>KNACKSAT-2</strong> — 145.825 MHz; 9k6 APRS<br>
-		<strong>LASARsat</strong> — 436.925 MHz; 9k6 GFSK/G3RUH; alias <code>OK0LSR</code><br>
-		<strong>Marina</strong> — 145.925 MHz uplink / 436.680 MHz downlink; 9k6 GFSK/G3RUH<br>
-		<strong>NO-44 / PCSAT-1</strong> — 145.825 MHz; 1k2 APRS; alias <code>W3ADO-1</code> or <code>PCSAT-1</code><br>
-		<strong>SONATE-2</strong> — 145.825 MHz; 1k2 APRS; alias <code>DP0SNX</code><br>
+  <div style="font-size:12px;color:var(--text-dim);line-height:1.7;margin:-8px 0 18px">
+    APRS.fi is best for recent packets, maps, weather, and RF paths. QRZ is best for a
+    station biography, location, awards, and contact information.
+  </div>
+  <div class="section-label">▸ APRS in One Minute</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:18px">
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-size:22px;margin-bottom:6px">📍</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--accent)">
+        Position &amp; Objects
       </div>
-	</div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:5px">
+        Share a station position, moving tracker position, tactical object, or event resource
+        on a local radio map.
+      </div>
+    </div>
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-size:22px;margin-bottom:6px">💬</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--good)">
+        Messages &amp; Weather
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:5px">
+        Send short messages, publish weather telemetry, and exchange useful local information
+        through RF and Internet gateways.
+      </div>
+    </div>
+    <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-size:22px;margin-bottom:6px">🔁</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--amber)">
+        Digipeaters &amp; iGates
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:5px">
+        Digipeaters repeat packets by RF. iGates exchange eligible packet traffic between RF
+        and APRS-IS, allowing maps and Internet clients to see local activity.
+      </div>
     </div>
   </div>
-	<!-- had extra div removed 14 aug 26 
-</div>
-     -->
+  <div class="section-label">▸ First-Time Setup Checklist</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:18px">
+    <div style="border-left:3px solid var(--accent);background:rgba(0,212,255,.04);padding:11px 13px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--accent)">
+        1. Choose the local frequency
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:4px">
+        In North America, terrestrial APRS is normally <strong style="color:var(--text)">144.390 MHz</strong>.
+        Check the Links library for regional, HF, and satellite frequencies.
+      </div>
+    </div>
+    <div style="border-left:3px solid var(--good);background:rgba(57,255,20,.035);padding:11px 13px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--good)">
+        2. Start with a short path
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:4px">
+        For a typical mobile or portable station, begin with
+        <code style="color:var(--text);font-family:'Share Tech Mono',monospace">WIDE1-1,WIDE2-1</code>.
+        Local conditions may differ—avoid excessive hops.
+      </div>
+    </div>
+    <div style="border-left:3px solid var(--amber);background:rgba(255,184,0,.035);padding:11px 13px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--amber)">
+        3. Beacon thoughtfully
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:4px">
+        A moving station needs more frequent updates than a home station. Use a conservative
+        interval so the shared channel remains usable for everyone.
+      </div>
+    </div>
+  </div>
+  <div style="background:rgba(255,255,255,.035);border-left:3px solid var(--poor);border-radius:0 var(--r) var(--r) 0;padding:12px 14px;font-size:12px;line-height:1.7;color:var(--text-dim);margin-bottom:18px">
+    <strong style="color:var(--text)">Privacy note:</strong>
+    APRS position reports can be public and may be retained by Internet services. Before enabling
+    automatic beaconing, consider whether you want to reveal your home location, travel pattern,
+    SSID, status text, or equipment details.
+  </div>
+  <div class="section-label">▸ Next Steps</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+    <a href="https://aprs.fi/"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="display:block;text-decoration:none;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.35);border-radius:var(--r);padding:14px;color:var(--text)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--accent)">
+        📡 Browse Live APRS Activity ↗
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:5px">
+        Search a callsign, view local packets, inspect paths, and explore nearby digipeaters and iGates.
+      </div>
+    </a>
+    <a href="https://mscir.github.io/Ham-Radio-Toolkit/links.html#aprs"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="display:block;text-decoration:none;background:rgba(57,255,20,.05);border:1px solid rgba(57,255,20,.30);border-radius:var(--r);padding:14px;color:var(--text)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.07em;color:var(--good)">
+        🔗 APRS Learning &amp; Tools Library ↗
+      </div>
+      <div style="font-size:12px;line-height:1.65;color:var(--text-dim);margin-top:5px">
+        Open the full resource list for paths, software, APRS-IS, satellite APRS, frequencies, and documentation.
+      </div>
+    </a>
+  </div>
+</div><!-- end panel-aprs -->
+
 <!-- PANEL: CW PRACTICE -->
 <div class="panel" id="panel-cwpractice">
   <div class="panel-header">
