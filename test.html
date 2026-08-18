@@ -7384,6 +7384,41 @@ function initCqZoneMap() {
     });
   }
 
+	function getAprsCallsign() {
+  return document.getElementById('aprs-callsign').value
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, '');
+}
+
+function openAprsFi() {
+	  const callsign = getAprsCallsign();
+	
+	  if (callsign) {
+	    window.open(
+	      `https://aprs.fi/info/${encodeURIComponent(callsign)}`,
+	      '_blank',
+	      'noopener,noreferrer'
+	    );
+	  } else {
+	    window.open('https://aprs.fi/', '_blank', 'noopener,noreferrer');
+	  }
+	}
+	
+	function openQrz() {
+	  const callsign = getAprsCallsign();
+	
+	  if (callsign) {
+	    window.open(
+	      `https://www.qrz.com/db/${encodeURIComponent(callsign)}`,
+	      '_blank',
+	      'noopener,noreferrer'
+	    );
+	  } else {
+	    window.open('https://www.qrz.com/', '_blank', 'noopener,noreferrer');
+	  }
+	}
+
   function install() {
     const sidebar = document.querySelector('#sidebar');
     const nav = document.querySelector('#sb-nav-inner');
