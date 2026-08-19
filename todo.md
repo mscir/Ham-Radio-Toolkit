@@ -1,11 +1,18 @@
 STEP 1: 
-   verify all pages
-   next step verify: Your First QSO, change which items in the highlighted lists (3) so they correspond to the entered text e.g. 322
-   on Your First QSO in RST Translator, when user enters a number bold those in the thee columns showing their choice
-
-STEP 2
-   after all pages heen verified
-    - if any new content was added that is not in the links page, add it there.
-
-STEP 3
-   verify ALL links on links page work
+<br>verify all pages
+<br>next step verify: Your First QSO
+<br>... in RST Translator, when user enters a number bold those #s in the 3 columns showing their choice
+<br>
+<br>STEP 2
+<br>after all pages have been verified
+<br> if any new content was added that is not in the links page, add it there.
+<br> make sure to update nav section if needed for new content
+<br>
+<br>STEP 3
+<br>verify ALL links on links page work
+<br>
+<br>STEP 4 
+<br>label this beta version 1.0.0
+<br>
+<br>STEP 5
+<br>Submit to Quin and Tom for their suggestions
