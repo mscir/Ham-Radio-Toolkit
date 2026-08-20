@@ -5013,14 +5013,37 @@ ft8: [
 	    note: 'Before saving, verify the other station’s callsign, grid, band, and mode. You can then import ADIF into tools such as Log4OM, Ham Radio Deluxe, or your preferred logbook service.'
 	  }
 	],
-  cw: [
-    {title:'Practice before going on the air',text:'CW (Morse code) takes practice. Aim for at least 10–13 WPM before trying an HF QSO. Use apps like <strong>Morse Code Ninja</strong>, <strong>LCWO.net</strong>, or a straight key connected to your rig\'s keyer input.',note:'<strong>You do not need to copy perfectly.</strong> Most operators will slow down (QRS) if you ask. Sending "QRS PSE" (please slow down) is totally normal and expected.'},
-    {title:'Find a CQ station',text:'Tune across the CW segment of your target band. Listen for a repeated "CQ CQ CQ DE [callsign]" pattern. Start in the General segment (not Extra-exclusive sub-bands) to find more patient operators.'},
-    {title:'Answer a CQ',text:'Wait for the CQ to finish, then send their callsign once and yours twice.',example:'W1ABC DE KG5NEW KG5NEW K'},
-    {title:'Standard CW exchange',text:'Most CW QSOs follow: RST signal report → name → QTH → 73. Keep it short for your first contacts.',example:'UR 579 579 NAME [NAME] [NAME] QTH [CITY] [CITY] HW? AR KG5NEW DE W1ABC K',note:'<strong>Key prosigns:</strong> K = invitation to transmit. AR = end of message. SK = end of contact. 73 = best regards. 88 = love and kisses.'},
-    {title:'CW phonetics & prosigns',text:'Learn the key abbreviations: <strong>HW?</strong> = How do you copy? <strong>QSL?</strong> = Did you receive? <strong>QSL</strong> = I confirm. <strong>QRN</strong> = static noise. <strong>QRM</strong> = interference. <strong>QRZ?</strong> = Who is calling me?'},
-    {title:'Sign off',text:'',example:'SK 73 DE KG5NEW'},
-  ],
+cw: [
+	  {
+	    title: 'Practice and prepare',
+	    text: 'CW (Morse code) takes practice, but you do not need perfect copy before making your first QSO. Begin when you can reliably copy and send call signs at a comfortable speed. Practice with <strong>Morse Code Ninja</strong>, <strong>LCWO.net</strong>, or another trainer; then configure a straight key or paddle according to your radio manual.',
+	    note: '<strong>Do not wait for perfection.</strong> If a station is sending too fast, send “QRS PSE” (please slow down). Most CW operators are happy to slow down for a beginner.'
+	  },
+	  {
+	    title: 'Find a CQ station',
+	    text: 'Tune across a CW segment where your license privileges permit operation. Listen for a repeated “CQ CQ CQ DE [callsign]” pattern. Confirm that the station is not working a pileup or calling a specific geographic area before replying.',
+	    note: 'CW is permitted only where your license class authorizes it. Check your current frequency privileges and the band plan before transmitting.'
+	  },
+	  {
+	    title: 'Answer a CQ',
+	    text: 'Wait until the CQ finishes, then send the other station’s call sign once and your own call sign once or twice. End with <strong>K</strong> to invite their reply.',
+	    example: 'W1ABC DE KG5NEW KG5NEW K'
+	  },
+	  {
+	    title: 'Exchange the basics',
+	    text: 'A simple CW QSO usually includes a real <strong>RST</strong> report, your name, and your QTH. Keep the first exchange short and repeat important information if conditions are poor. A contest-style “5NN” report is common in contests but is not necessary for a casual first contact.',
+	    example: 'W1ABC DE KG5NEW<br>UR RST 579 579<br>NAME [NAME] [NAME]<br>QTH [CITY] [CITY]<br>HW CPY? BK'
+	  },
+	  {
+	    title: 'Essential CW abbreviations and prosigns',
+	    text: '<strong>K</strong> = go ahead / invitation to transmit.<br><strong>KN</strong> = go ahead; only the addressed station should reply.<br><strong>AR</strong> = end of message or transmission.<br><strong>BK</strong> = turn it back to the other operator.<br><strong>SK</strong> = end of contact.<br><strong>DE</strong> = from / this is.<br><strong>QRS PSE</strong> = please send more slowly.<br><strong>AGN?</strong> = repeat again.<br><strong>HW CPY?</strong> = how do you copy?<br><strong>QTH</strong> = location.<br><strong>RST</strong> = readability, signal strength, tone.'
+	  },
+	  {
+	    title: 'Sign off',
+	    text: 'Thank the other operator, send your final call sign, and close with <strong>SK</strong>.',
+	    example: 'TNX FER QSO W1ABC<br>73 DE KG5NEW SK'
+	  }
+	],
 };
 
 function showQSO(mode, btn) {
