@@ -5089,7 +5089,7 @@ function showQSO(mode, btn) {
         <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap">
           <div><div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">RST Report Received</div>
             <input id="rst-input" class="calc-input" style="width:120px;margin:0;font-size:20px;text-align:center;letter-spacing:.2em" maxlength="3" placeholder="599" oninput="translateRST()"></div>
-          <div style="font-size:12px;color:var(--text-dim);padding-bottom:10px">Type the RST you received from the other station</div>
+          <div style="font-size:12px;color:var(--text-dim);padding-bottom:10px">Enter an RS phone report (such as 57) or an RST CW report (such as 579).</div>
         </div>
         <div id="rst-out" style="display:none">
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px" id="rst-cards"></div>
@@ -5104,14 +5104,14 @@ function showQSO(mode, btn) {
           <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.1em">TONE (T) — CW only</div>
             <div style="line-height:1.9;color:var(--text-dim)">1 — Very rough AC<br>2 — Very rough AC<br>3 — Rough, rectified AC<br>4 — Rough, some ripple<br>5 — Filtered, ripple<br>6 — Slight buzz<br>7 — Near DC, slight trace<br>8 — Good DC, barely noticeable<br><strong style="color:var(--good)">9 — Pure DC tone</strong></div></div>
         </div>
-        <div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.7">
-          <strong style="color:var(--text)">Common reports:</strong> 
-          <strong style="color:var(--accent)">59</strong> = perfect phone, 
-          <strong style="color:var(--accent)">599</strong> = perfect CW, 
-          <strong style="color:var(--amber)">57</strong> = good readable but not strong, 
-          <strong style="color:var(--poor)">33</strong> = marginal copy. 
-          In contests, almost everyone says 59/599 regardless — it's a formality.
-        </div>
+		<div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.7">
+		  <strong style="color:var(--text)">Common reports:</strong>
+		  <strong style="color:var(--accent)">59</strong> = perfectly readable and extremely strong on phone;
+		  <strong style="color:var(--accent)">599</strong> = perfectly readable, extremely strong, and pure tone on CW;
+		  <strong style="color:var(--amber)">57</strong> = perfectly readable with moderately strong signal;
+		  <strong style="color:var(--poor)">33</strong> = readable with considerable difficulty and weak signal.
+		  In contests, 59 or 599 is commonly used as a standard exchange; outside contests, an honest report is more useful.
+		</div>
       </div>`;
     return;
   }
