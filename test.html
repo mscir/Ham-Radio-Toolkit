@@ -5318,13 +5318,26 @@ function genCQScript() {
 
 // RST Translator
 function translateRST() {
-  const raw = (document.getElementById('rst-input')?.value||'').replace(/\D/g,'');
+  const raw = (document.getElementById('rst-input')?.value || '').trim();
   const out = document.getElementById('rst-out');
   const cards = document.getElementById('rst-cards');
   const summary = document.getElementById('rst-summary');
   if (!out||!cards||!summary) return;
-  if (raw.length < 2) { out.style.display='none'; return; }
-  out.style.display='';
+  if (!raw) {
+	  out.style.display = 'none';
+	  return;
+	}
+	
+	out.style.display = '';
+	
+	if (!/^\d{2,3}$/.test(raw)) {
+	  cards.innerHTML = '';
+	  summary.innerHTML = `
+	    <strong style="color:var(--poor)">Enter a 2- or 3-digit report:</strong>
+	    Use RS for phone (such as 57) or RST for CW (such as 579).
+	  `;
+	  return;
+	}
 
   const R_TEXT = [
 	  '',
