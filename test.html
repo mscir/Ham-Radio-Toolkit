@@ -4869,14 +4869,43 @@ function updateSolarAgeBadge() {
 // ===========================================
 const QSO_DATA = {
   ssb: [
-    {title:'Check your equipment',text:'Make sure your transceiver is set to <strong>USB (Upper Sideband)</strong> for 20m/17m/15m/12m/10m, or <strong>LSB (Lower Sideband)</strong> for 40m/80m/160m. Set power to 25–50W to start. Connect a proper antenna and confirm SWR is below 2:1.',note:'<strong>Rule of thumb:</strong> 40m and below = LSB. 20m and above = USB.'},
-    {title:'Listen before transmitting',text:'Tune around your target band. Listen for a minute. Find a clear frequency with no ongoing QSOs. Check above AND below — a station might be transmitting on the other side of a contact you can only hear one side of.',example:'"Is this frequency in use? [pause 5 seconds] This is KG5NEW."',note:'<strong>FCC requires:</strong> Always identify with your callsign before or during any transmission.'},
-    {title:'Tune across the band edge slowly',text:'Use the RIT (Receive Incremental Tuning) or just listen carefully. CW QSOs nearby can cause audio artifacts. Make sure the frequency is genuinely clear.'},
-    {title:'Call CQ',text:'Press PTT, pause half a second for the amp/rig to key up, then speak clearly and at a moderate pace. Three rounds of CQ, then your call twice.',example:'"CQ CQ CQ, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo, calling CQ and standing by."',note:'<strong>Tip:</strong> Saying "CQ DX" limits replies to overseas stations. Just "CQ" invites everyone.'},
-    {title:'Answer a station calling CQ',text:'Tune to their frequency, wait for a pause in their CQ, then call them: their callsign once, your callsign twice (phonetic).',example:'"W1ABC, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo — over."'},
-    {title:'Exchange the basics',text:'Standard HF SSB exchange: <strong>signal report (RST)</strong>, <strong>name</strong>, and <strong>QTH (location)</strong>. Keep it simple for your first QSO — the other station will appreciate it.',example:'"Good morning, you\'re 59 here in Texas. Name is [name], QTH is [city]. Back to you."'},
-    {title:'Sign off properly',text:'FCC requires you to ID at the end of every contact and every 10 minutes during a long QSO.',example:'"Thanks for the QSO, 73, this is KG5NEW signing with W1ABC."'},
-  ],
+  {
+    title: 'Check your equipment',
+    text: 'Make sure your transceiver is set to <strong>USB (Upper Sideband)</strong> for 20m/17m/15m/12m/10m, or <strong>LSB (Lower Sideband)</strong> for 40m/80m/160m. Set power to 25–50W to start. Connect a proper antenna and confirm SWR is below 2:1.',
+    note: '<strong>Rule of thumb:</strong> 40m and below = LSB. 20m and above = USB.'
+  },
+  {
+    title: 'Listen before transmitting',
+    text: 'Tune around your target band. Listen for a minute. Find a clear frequency with no ongoing QSOs. Check above AND below — a station might be transmitting on the other side of a contact you can only hear one side of.',
+    example: '"Is this frequency in use? [pause 5 seconds] This is KG5NEW."',
+    note: '<strong>FCC requires:</strong> Always identify with your callsign before or during any transmission.'
+  },
+  {
+    title: 'Tune across the band edge slowly',
+    text: 'Use the RIT (Receive Incremental Tuning) or just listen carefully. CW QSOs nearby can cause audio artifacts. Make sure the frequency is genuinely clear.'
+  },
+  {
+    title: 'Call CQ',
+    text: 'Press PTT, pause half a second for the amp/rig to key up, then speak clearly and at a moderate pace. Three rounds of CQ, then your call twice.',
+    example: '"CQ CQ CQ, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo, calling CQ and standing by."',
+    note: '<strong>Tip:</strong> Saying "CQ DX" limits replies to overseas stations. Just "CQ" invites everyone.'
+  },
+  {
+    title: 'Answer a station calling CQ',
+    text: 'Tune to their frequency, wait for a pause in their CQ, then call them: their callsign once, your callsign twice (phonetic).',
+    example: '"W1ABC, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo — over."'
+  },
+  {
+    title: 'Exchange the basics',
+    text: 'Standard HF SSB exchange: <strong>signal report (RST)</strong>, <strong>name</strong>, and <strong>QTH (location)</strong>. Keep it simple for your first QSO — the other station will appreciate it.',
+    example: '"Good morning, you\'re 59 here in Texas. Name is [name], QTH is [city]. Back to you."'
+  },
+  {
+    title: 'Sign off properly',
+    text: 'FCC requires you to ID at the end of every contact and every 10 minutes during a long QSO.',
+    example: '"Thanks for the QSO, 73, this is KG5NEW signing with W1ABC."'
+  }
+],
   'fm-rep': [
     {title:'Program the repeater',text:'Enter the <strong>output frequency</strong> (what you listen to), set the correct <strong>offset</strong> direction and amount, and enter the <strong>CTCSS/DCS tone</strong> from the repeater directory. Find local repeaters at <strong>RepeaterBook.com</strong>.'},
     {title:'Listen first',text:'Monitor the output frequency for at least 30 seconds. If someone is talking, wait for a natural pause between transmissions — identified by the courtesy tone.'},
