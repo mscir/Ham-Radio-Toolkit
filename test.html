@@ -4909,15 +4909,45 @@ const QSO_DATA = {
     textAfter: 'In the U.S., transmit your assigned call sign at the end of the communication and at least every 10 minutes during a longer contact.'
   }
 ],
-  'fm-rep': [
-    {title:'Program the repeater',text:'Enter the <strong>output frequency</strong> (what you listen to), set the correct <strong>offset</strong> direction and amount, and enter the <strong>CTCSS/DCS tone</strong> from the repeater directory. Find local repeaters at <strong>RepeaterBook.com</strong>.'},
-    {title:'Listen first',text:'Monitor the output frequency for at least 30 seconds. If someone is talking, wait for a natural pause between transmissions — identified by the courtesy tone.'},
-    {title:'Identify before transmitting',text:'Even a quick "kerchunk" test requires your callsign by law. Say your callsign every time you key up.',note:'<strong>FCC rule:</strong> Every transmission must include your callsign. No anonymous kerchunking.'},
-    {title:'Make your call',text:'Press PTT, wait a beat for the repeater to open up, then speak.',example:'"[Your callsign] monitoring." or "[Your callsign], anyone available for a quick QSO?"',note:'<strong>Tip:</strong> Say your callsign in plain speech first — phonetics are optional for FM.'},
-    {title:'Respond to a response',text:'The other station will reply with their callsign and a greeting. Respond naturally — FM repeater QSOs are conversational.',example:'"Good evening W1ABC, this is KG5NEW. Copying you 5-by-5 here in [city]. How are conditions on your end?"'},
-    {title:'Use the courtesy tone',text:'Wait for the courtesy tone (a brief beep from the repeater) before transmitting. It means the repeater timer has reset. Leaving a gap also lets others break in with emergency traffic.'},
-    {title:'Sign off',text:'End with both callsigns.',example:'"KG5NEW and W1ABC, 73 and good night."'},
-  ],
+'fm-rep': [
+	  {
+	    title: 'Program the repeater',
+	    text: 'Confirm the <strong>output frequency</strong> (what you listen to), <strong>input offset</strong> direction and amount, and required <strong>CTCSS/DCS access setting</strong> using a current repeater directory or the repeater owner/club. Then listen on the output frequency to confirm the repeater is active.',
+	    note: 'RepeaterBook.com is a useful starting point, but directory information can be outdated. Verify local repeater details when possible.'
+	  },
+	  {
+	    title: 'Listen first',
+	    text: 'Monitor the output frequency for at least 30 seconds. If someone is talking, wait for a natural pause between transmissions. Many repeaters use a courtesy tone, but not every repeater does.'
+	  },
+	  {
+	    title: 'Identify when you make your call or test access',
+	    text: 'Do not briefly key a repeater just to see whether you can reach it and then remain silent. If you need to test access, identify yourself.',
+	    example: '"KG5NEW testing."',
+	    textAfter: 'When starting a contact, give your call sign. During a longer QSO, identify at least every 10 minutes and at the end of the contact.',
+	    note: 'An unidentified “kerchunk” is poor practice. Identifying a test transmission lets others know who is using the repeater.'
+	  },
+	  {
+	    title: 'Make your call',
+	    text: 'Press PTT, wait briefly for the repeater to key up, then speak clearly. Give your call sign, then listen for a response.',
+	    example: '"KG5NEW monitoring." or "KG5NEW, listening for a call."',
+	    note: '<strong>Tip:</strong> Plain speech is fine for a local FM repeater. Use phonetics if your call sign is not copied clearly.'
+	  },
+	  {
+	    title: 'Respond to a response',
+	    text: 'The other operator will usually reply with their call sign and a greeting. Respond naturally—FM repeater QSOs are conversational, and a formal signal report is optional.',
+	    example: '"Good evening, W1ABC. This is KG5NEW. You are 5-by-5 here in [city]. How are you doing?"'
+	  },
+	  {
+	    title: 'Leave room between transmissions',
+	    text: 'Many repeaters send a courtesy tone after a station unkeys. When it is your turn, wait for the tone—if the repeater uses one—and leave a short pause before replying. This gives another station time to join, make a call, or pass emergency traffic.',
+	    note: 'Do not immediately key up over the previous station. Listen for the repeater and for anyone who may need to break in.'
+	  },
+	  {
+	    title: 'Sign off',
+	    text: 'When you are ready to end the contact, thank the other operator, exchange final call signs, and say 73.',
+	    example: '"W1ABC, this is KG5NEW. Thanks for the QSO—73 and good night."'
+	  }
+	],
   'fm-simplex': [
     {title:'Find a simplex frequency',text:'<strong>146.520 MHz</strong> is the national 2m FM simplex calling frequency. <strong>446.000 MHz</strong> is the national 70cm FM simplex calling. <strong>52.525 MHz</strong> is 6m FM simplex. These are calling frequencies — move off after making contact if having a long QSO.',note:'<strong>Simplex</strong> means you and the other station transmit and receive on the same frequency — no repeater involved.'},
     {title:'Listen first',text:'Simplex calling frequencies are often busy. Listen for 30 seconds. If clear, proceed.'},
