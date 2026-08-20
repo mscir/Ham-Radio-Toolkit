@@ -4871,8 +4871,7 @@ const QSO_DATA = {
   ssb: [
   {
     title: 'Check your equipment',
-    text: 'Make sure your transceiver is set to <strong>USB (Upper Sideband)</strong> for 20m/17m/15m/12m/10m, or <strong>LSB (Lower Sideband)</strong> for 40m/80m/160m. Set power to 25–50W to start. Connect a proper antenna and confirm SWR is below 2:1.',
-    note: '<strong>Rule of thumb:</strong> 40m and below = LSB. 20m and above = USB.'
+    text: 'Confirm that your antenna system is appropriate for the band, your radio is set to the correct sideband, and your transmit audio is clean. Start with a modest power level suitable for your rig, antenna, license privileges, and conditions; increase only if necessary.<br>Use <strong>USB</strong> on 20m, 17m, 15m, 12m, and 10m. Use <strong>LSB</strong> on 40m, 80m, and 160m.<br>Note: The usual HF convention is “40m and below = LSB; 20m and above = USB.” Always operate only where your license privileges allow.'
   },
   {
     title: 'Listen before transmitting',
@@ -4887,23 +4886,25 @@ const QSO_DATA = {
   {
     title: 'Call CQ',
     text: 'Press PTT, pause half a second for the amp/rig to key up, then speak clearly and at a moderate pace. Three rounds of CQ, then your call twice.',
-    example: '"CQ CQ CQ, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo, calling CQ and standing by."',
+    example: '"CQ CQ CQ, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo, calling CQ and listening."',
     note: '<strong>Tip:</strong> Saying "CQ DX" limits replies to overseas stations. Just "CQ" invites everyone.'
   },
   {
     title: 'Answer a station calling CQ',
     text: 'Tune to their frequency, wait for a pause in their CQ, then call them: their callsign once, your callsign twice (phonetic).',
-    example: '"W1ABC, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo — over."'
+    example: '"W1ABC, this is Kilo Golf Five November Whiskey Echo, Kilo Golf Five November Whiskey Echo — over."',
+    textAfter: 'Then listen. The calling station will normally come back to you if they copied you.'
   },
   {
     title: 'Exchange the basics',
-    text: 'Standard HF SSB exchange: <strong>signal report (RST)</strong>, <strong>name</strong>, and <strong>QTH (location)</strong>. Keep it simple for your first QSO — the other station will appreciate it.',
+    text: 'For an HF phone QSO, exchange an honest RS signal report, your name, and your location. On phone, the usual report is two numbers: readability from 1–5 and signal strength from 1–9. The “T” in RST refers to CW tone and is normally not used for voice.',
     example: '"Good morning, you\'re 59 here in Texas. Name is [name], QTH is [city]. Back to you."'
   },
   {
     title: 'Sign off properly',
-    text: 'FCC requires you to ID at the end of every contact and every 10 minutes during a long QSO.',
-    example: '"Thanks for the QSO, 73, this is KG5NEW signing with W1ABC."'
+    text: 'When you are ready to end the contact, thank the other operator, exchange final call signs, and say 73:',
+    example: '"Thanks for the QSO, W1ABC. 73 from KG5NEW."',
+    textAfter: 'In the U.S., transmit your assigned call sign at the end of the communication and at least every 10 minutes during a longer contact.'
   }
 ],
   'fm-rep': [
@@ -5021,6 +5022,7 @@ function showQSO(mode, btn) {
         <div class="step-title">${s.title}</div>
         ${s.text?`<div class="step-text">${s.text}</div>`:''}
         ${s.example?`<div class="step-example">${s.example}</div>`:''}
+		${s.textAfter ? `<div class="step-text">${s.textAfter}</div>` : ''}
         ${s.note?`<div class="step-note"><strong>Note:</strong> ${s.note}</div>`:''}
       </div>
     </div>`;
