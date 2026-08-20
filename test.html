@@ -4948,14 +4948,39 @@ const QSO_DATA = {
 	    example: '"W1ABC, this is KG5NEW. Thanks for the QSO—73 and good night."'
 	  }
 	],
-  'fm-simplex': [
-    {title:'Find a simplex frequency',text:'<strong>146.520 MHz</strong> is the national 2m FM simplex calling frequency. <strong>446.000 MHz</strong> is the national 70cm FM simplex calling. <strong>52.525 MHz</strong> is 6m FM simplex. These are calling frequencies — move off after making contact if having a long QSO.',note:'<strong>Simplex</strong> means you and the other station transmit and receive on the same frequency — no repeater involved.'},
-    {title:'Listen first',text:'Simplex calling frequencies are often busy. Listen for 30 seconds. If clear, proceed.'},
-    {title:'Call CQ or announce yourself',text:'',example:'"CQ CQ, this is KG5NEW on 146.520, listening."'},
-    {title:'Make contact and exchange info',text:'Simplex range is typically 5–30 miles line-of-sight depending on terrain and antenna height. Exchange signal reports and location.',example:'"W1ABC, you\'re 5-by-5 here — I\'m running 5W to a 5/8 wave on my car. You?"'},
-    {title:'Move to a working frequency',text:'If you expect a longer QSO, agree to move to another simplex frequency so the calling channel stays clear for others.',example:'"How about we move to 146.490 for a longer chat? [Wait for acknowledgment] KG5NEW moving to 490."'},
-    {title:'Sign off',text:'',example:'"KG5NEW clear with W1ABC."'},
-  ],
+	'fm-simplex': [
+	  {
+	    title: 'Find a simplex frequency',
+	    text: '<strong>146.520 MHz</strong> is the widely used U.S. 2-meter FM simplex calling frequency. <strong>446.000 MHz</strong> is the commonly used 70-centimeter FM voice simplex calling frequency. <strong>52.525 MHz</strong> is a widely used 6-meter FM calling frequency.<br>These are calling frequencies: establish contact, then move to an appropriate local simplex working frequency if you expect a longer QSO.',
+	    note: '<strong>Simplex</strong> means both stations transmit and receive on the same frequency—no repeater is involved. Check your local band plan before choosing a working frequency.'
+	  },
+	  {
+	    title: 'Listen first',
+	    text: 'Listen on the calling frequency for at least 30 seconds. You may hear only one side of a simplex contact, especially if the other station is farther away. If the channel sounds clear, ask whether it is in use and wait briefly for a reply.',
+	    example: '"Is this frequency in use? KG5NEW."'
+	  },
+	  {
+	    title: 'Call CQ or announce yourself',
+	    text: 'If the frequency is clear, make a short call and then listen for a response.',
+	    example: '"CQ, CQ, this is KG5NEW on 146.520 simplex, listening."<br><br>or<br><br>"KG5NEW monitoring 146.520."'
+	  },
+	  {
+	    title: 'Make contact and exchange information',
+	    text: 'Simplex range varies widely with terrain, antenna height, power, obstructions, and whether you are using a handheld, mobile, or base station. Exchange a realistic signal report and your location; describing your setup can be useful but is optional.',
+	    example: '"W1ABC, you are 5-by-5 here in [city]. I am mobile with 5 watts. How copy?"'
+	  },
+	  {
+	    title: 'Move to a working frequency',
+	    text: 'If you expect a longer QSO, agree on a locally appropriate simplex working frequency so the calling channel remains available for other stations. Confirm the new frequency before either operator changes channels.',
+	    example: '"How about moving to a local simplex working frequency for a longer chat? KG5NEW standing by for your confirmation."',
+	    textAfter: '"KG5NEW moving to [frequency]."'
+	  },
+	  {
+	    title: 'Sign off',
+	    text: 'End the contact with final call signs and 73.',
+	    example: '"W1ABC, this is KG5NEW clear. Thanks for the QSO—73."'
+	  }
+	],
   ft8: [
     {title:'Install WSJT-X software',text:'Download <strong>WSJT-X</strong> (free) from physics.princeton.edu/pulsar/k1jt/wsjtx.html. Configure your callsign, grid square (e.g. EM10), and audio/CAT interface to your radio.'},
     {title:'Set up your radio for FT8',text:'Set mode to <strong>USB</strong> (use USB for all digital modes even on 40m/80m). Set audio drive low — <strong>ALC should NOT move</strong>. Use ~50% of rated power. Disable any speech processing, noise reduction, or DSP filtering.'},
