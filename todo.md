@@ -1,7 +1,6 @@
 STEP 1: 
 <br>verify all pages
-<br>next step verify: Your First QSO
-<br>... in RST Translator, when user enters a number bold those #s in the 3 columns showing their choice
+<br>next step verify: *** QSO Log
 <br>
 <br>STEP 2
 <br>after all pages have been verified
