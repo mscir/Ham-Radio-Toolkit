@@ -1,6 +1,7 @@
 STEP 1: 
 <br>verify all pages
 <br>next step verify: *** QSO Log
+<br>... Repeaters page is cluttered, hide some sections in show/hide divs, then add nodes and reflectors content
 <br>
 <br>STEP 2
 <br>after all pages have been verified
