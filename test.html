@@ -4948,7 +4948,7 @@ const QSO_DATA = {
 	    example: '"W1ABC, this is KG5NEW. Thanks for the QSO—73 and good night."'
 	  }
 	],
-	'fm-simplex': [
+'fm-simplex': [
 	  {
 	    title: 'Find a simplex frequency',
 	    text: '<strong>146.520 MHz</strong> is the widely used U.S. 2-meter FM simplex calling frequency. <strong>446.000 MHz</strong> is the commonly used 70-centimeter FM voice simplex calling frequency. <strong>52.525 MHz</strong> is a widely used 6-meter FM calling frequency.<br>These are calling frequencies: establish contact, then move to an appropriate local simplex working frequency if you expect a longer QSO.',
@@ -4981,14 +4981,38 @@ const QSO_DATA = {
 	    example: '"W1ABC, this is KG5NEW clear. Thanks for the QSO—73."'
 	  }
 	],
-  ft8: [
-    {title:'Install WSJT-X software',text:'Download <strong>WSJT-X</strong> (free) from physics.princeton.edu/pulsar/k1jt/wsjtx.html. Configure your callsign, grid square (e.g. EM10), and audio/CAT interface to your radio.'},
-    {title:'Set up your radio for FT8',text:'Set mode to <strong>USB</strong> (use USB for all digital modes even on 40m/80m). Set audio drive low — <strong>ALC should NOT move</strong>. Use ~50% of rated power. Disable any speech processing, noise reduction, or DSP filtering.'},
-    {title:'Tune to the FT8 frequency',text:'Popular FT8 dial frequencies: <strong>14.074 MHz</strong> (20m, most active), <strong>7.074 MHz</strong> (40m), <strong>21.074 MHz</strong> (15m), <strong>10.136 MHz</strong> (30m, 200W max).',note:'<strong>FT8 uses a 15-second TX/RX cycle.</strong> Your computer clock must be accurate to ±1 second — sync to internet time (Windows: w32tm /resync or use Meinberg NTP).'},
-    {title:'Watch the waterfall and decode',text:'WSJT-X will decode signals automatically every 15 seconds and show them in the Band Activity window. You\'ll see callsigns, grid squares, and signal reports (dB SNR). Green = you can work them, red = already worked.'},
-    {title:'Call CQ or answer a CQ',text:'Double-click a CQ call in the Band Activity window — WSJT-X will automatically start a QSO sequence. To call CQ yourself, click <strong>CQ</strong> in the TX/RX area and make sure <strong>Auto Seq</strong> is checked. WSJT-X handles the whole exchange automatically.',note:'<strong>FT8 QSO exchange:</strong> CQ → signal report → signal report → RR73 (roger, 73) → 73. The whole contact takes about 90 seconds.'},
-    {title:'Log your contact',text:'WSJT-X logs automatically to an ADIF file. Import into a logbook program (Ham Radio Deluxe, Log4OM, QRZ logbook) for confirmation and DXCC/WAS tracking.'},
-  ],
+ft8: [
+	  {
+	    title: 'Install WSJT-X software',
+	    text: 'Download <strong>WSJT-X</strong> from the official project site. It is free software for FT8, FT4, WSPR, Q65, and other weak-signal modes. In Settings, enter your callsign and <strong>Maidenhead grid square</strong> (for example, EM10), then configure the correct radio-control (CAT) and audio input/output devices.',
+	    note: '<strong>Start here:</strong> Use the current official WSJT-X download and User Guide rather than an old bookmarked download address.'
+	  },
+	  {
+	    title: 'Configure your station',
+	    text: 'Use <strong>USB</strong> or your radio’s designated <strong>DATA/USB-D</strong> mode as specified by its manual, including on 40m and 80m. Disable speech processing and set transmit audio for a clean signal; avoid or minimize ALC action according to your radio manual.',
+	    textAfter: 'FT8 has a high duty cycle. Start at low power and use only the clean RF power needed for the contact, staying within your equipment’s duty-cycle limits.'
+	  },
+	  {
+	    title: 'Select a frequency and synchronize time',
+	    text: 'Select FT8 mode in WSJT-X and tune to the standard dial frequency for your band. Common HF examples include <strong>14.074 MHz</strong> on 20m, <strong>7.074 MHz</strong> on 40m, and <strong>21.074 MHz</strong> on 15m. Verify your license privileges, local band plan, and the current WSJT-X frequency list before transmitting.',
+	    note: '<strong>FT8 uses 15-second transmit/receive sequences.</strong> Synchronize your computer clock with a reliable time service; timing errors can prevent decodes.'
+	  },
+	  {
+	    title: 'Decode and choose a station',
+	    text: 'WSJT-X decodes signals at the end of each 15-second interval and lists them in the <strong>Band Activity</strong> window. Look for CQ calls, then choose a station you can hear that matches your operating goal. You will see callsigns, grid squares, and signal reports in dB SNR.',
+	    note: 'Use display colors only as a personal aid. Their meaning depends on your WSJT-X highlighting and worked-before/log settings.'
+	  },
+	  {
+	    title: 'Call CQ or answer a CQ',
+	    text: 'Double-click a CQ in the Band Activity window to prepare a directed call, review the fields, then enable transmission when ready. To call CQ, choose an appropriate audio frequency, click <strong>CQ</strong>, and use <strong>Auto Seq</strong> if you want WSJT-X to advance the standard exchange.',
+	    note: '<strong>Typical FT8 exchange:</strong> CQ → callsigns/grid → signal reports → RRR or RR73 → 73. A clean contact may take about 1–2 minutes, but repeats, timing errors, or congestion can take longer.'
+	  },
+	  {
+	    title: 'Confirm and save the log entry',
+	    text: 'When the exchange completes, review the prefilled log entry and confirm it. WSJT-X can save contacts in <strong>ADIF</strong> format for import into logging software or online logbooks.',
+	    note: 'Before saving, verify the other station’s callsign, grid, band, and mode. You can then import ADIF into tools such as Log4OM, Ham Radio Deluxe, or your preferred logbook service.'
+	  }
+	],
   cw: [
     {title:'Practice before going on the air',text:'CW (Morse code) takes practice. Aim for at least 10–13 WPM before trying an HF QSO. Use apps like <strong>Morse Code Ninja</strong>, <strong>LCWO.net</strong>, or a straight key connected to your rig\'s keyer input.',note:'<strong>You do not need to copy perfectly.</strong> Most operators will slow down (QRS) if you ask. Sending "QRS PSE" (please slow down) is totally normal and expected.'},
     {title:'Find a CQ station',text:'Tune across the CW segment of your target band. Listen for a repeated "CQ CQ CQ DE [callsign]" pattern. Start in the General segment (not Extra-exclusive sub-bands) to find more patient operators.'},
