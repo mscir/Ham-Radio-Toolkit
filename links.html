@@ -2115,17 +2115,25 @@ const groups = [...document.querySelectorAll(".resource-group")];
 	    });
 
     window.addEventListener("load", () => {
-      if (!searchIsEmpty() || !window.location.hash) return;
-
-      const targetGroup = document.querySelector(window.location.hash);
-
-      if (targetGroup?.classList.contains("resource-group")) {
-        openSection(targetGroup, false);
-        window.setTimeout(() => {
-          scrollToSection(targetGroup);
-        }, 80);
-      }
-    });
+		  if (!window.location.hash) return;
+		
+		  const targetGroup = document.querySelector(window.location.hash);
+		
+		  if (
+		    targetGroup &&
+		    targetGroup.matches("details.resource-group")
+		  ) {
+		    targetGroup.open = true;
+		
+		    window.setTimeout(() => {
+		      targetGroup.scrollIntoView({
+		        behavior: "auto",
+		        block: "start",
+		        inline: "nearest"
+		      });
+		    }, 80);
+		  }
+		});
 	  
 	function setTheme(theme) {
 	  const isLight = theme === "light";
