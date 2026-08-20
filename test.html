@@ -5136,6 +5136,7 @@ function showQSO(mode, btn) {
 }
 // deferred: showQSO('ssb', document.querySelector('.qso-mode-btn'));
 
+/* 
 // CQ Script Generator
 function genCQScript() {
   const call = (document.getElementById('cq-call')?.value||'').toUpperCase().trim() || 'KG5NEW';
@@ -5185,6 +5186,186 @@ function genCQScript() {
     4. Double-click any station in the decode list to call them<br>
     WSJT-X sends your callsign <strong>(${call})</strong> and grid square automatically every 15 seconds.</div>`;
   }
+  out.innerHTML = script;
+}
+*/
+// CQ Script Generator
+function genCQScript() {
+  const call = (document.getElementById('cq-call')?.value || '')
+    .toUpperCase()
+    .trim() || 'KG5NEW';
+
+  const name = document.getElementById('cq-name')?.value?.trim()
+    || '[your name]';
+
+  const qth = document.getElementById('cq-qth')?.value?.trim()
+    || '[your location]';
+
+  const mode = document.getElementById('cq-mode')?.value
+    || 'SSB / Phone (HF)';
+
+  const out = document.getElementById('cq-script-out');
+
+  if (!out) return;
+
+  const NATO = {
+    A: 'Alfa', B: 'Bravo', C: 'Charlie', D: 'Delta',
+    E: 'Echo', F: 'Foxtrot', G: 'Golf', H: 'Hotel',
+    I: 'India', J: 'Juliet', K: 'Kilo', L: 'Lima',
+    M: 'Mike', N: 'November', O: 'Oscar', P: 'Papa',
+    Q: 'Quebec', R: 'Romeo', S: 'Sierra', T: 'Tango',
+    U: 'Uniform', V: 'Victor', W: 'Whiskey', X: 'X-Ray',
+    Y: 'Yankee', Z: 'Zulu',
+    0: 'Zero', 1: 'One', 2: 'Two', 3: 'Three', 4: 'Four',
+    5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Niner'
+  };
+
+  const phonetic = [...call].map((char) => NATO[char] || char).join(' ');
+  const cwName = name.toUpperCase();
+  const cwQth = qth.toUpperCase();
+
+  const heading = (text) => `
+    <div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">
+      ${text}
+    </div>
+  `;
+
+  const phoneLine = (color, text) => `
+    <div style="color:${color};font-size:14px;line-height:2">
+      ${text}
+    </div>
+  `;
+
+  const cwLine = (color, text) => `
+    <div style="color:${color};font-size:16px;line-height:2;font-family:'Share Tech Mono',monospace">
+      ${text}
+    </div>
+  `;
+
+  const block = (headingText, content, bottomMargin = true) => `
+    <div style="margin-bottom:${bottomMargin ? '12px' : '0'}">
+      ${heading(headingText)}
+      ${content}
+    </div>
+  `;
+
+  let script = '';
+
+  if (mode.includes('SSB') || mode.includes('Phone')) {
+    script = `
+      ${block(
+        '📢 Calling CQ:',
+        phoneLine(
+          'var(--accent)',
+          `"${'<strong>CQ, CQ, CQ</strong>'}, this is <strong>${phonetic}</strong>, <strong>${phonetic}</strong>, calling CQ and listening."`
+        )
+      )}
+
+      ${block(
+        '📞 When someone answers:',
+        phoneLine(
+          'var(--good)',
+          `"W1ABC, this is <strong>${call}</strong>. You are <strong>[RS report]</strong> here in <strong>${qth}</strong>. My name is <strong>${name}</strong>. How do you copy? Back to you."`
+        ) +
+        `<div style="font-size:11px;color:var(--text-dim);margin-top:4px">
+          Use an honest RS report, such as 5-5, 5-7, or 5-9.
+        </div>`
+      )}
+
+      ${block(
+        '🤝 Signing off:',
+        phoneLine(
+          'var(--amber)',
+          `"Thanks for the QSO, W1ABC. 73 from <strong>${call}</strong>."`
+        ),
+        false
+      )}
+    `;
+  } else if (mode.includes('FM Repeater')) {
+    script = `
+      ${block(
+        '📻 Monitoring call:',
+        phoneLine(
+          'var(--accent)',
+          `"<strong>${call}</strong> monitoring."`
+        )
+      )}
+
+      ${block(
+        '📞 Calling a specific station:',
+        phoneLine(
+          'var(--good)',
+          `"<strong>W1ABC</strong>, this is <strong>${call}</strong>."`
+        ) +
+        `<div style="font-size:11px;color:var(--text-dim);margin-top:4px">
+          Then pause and listen for a reply.
+        </div>`
+      )}
+
+      ${block(
+        '🤝 Signing off:',
+        phoneLine(
+          'var(--amber)',
+          `"<strong>W1ABC</strong>, this is <strong>${call}</strong> clear. Thanks for the QSO—73."`
+        ),
+        false
+      )}
+    `;
+  } else if (mode.includes('CW')) {
+    script = `
+      ${block(
+        '· — CW CQ call:',
+        cwLine('var(--accent)', `CQ CQ CQ DE ${call} ${call} K`)
+      )}
+
+      ${block(
+        '📞 Reply to a CQ:',
+        cwLine('var(--good)', `W1ABC DE ${call} ${call} KN`)
+      )}
+
+      ${block(
+        '📋 Basic exchange:',
+        cwLine(
+          'var(--amber)',
+          `W1ABC DE ${call}<br>
+           UR RST [RST] [RST]<br>
+           NAME ${cwName} ${cwName}<br>
+           QTH ${cwQth} ${cwQth}<br>
+           HW CPY? BK`
+        ) +
+        `<div style="font-size:11px;color:var(--text-dim);margin-top:4px">
+          Use an honest RST report. “599” is common in contesting but is not required for a casual QSO.
+        </div>`
+      )}
+
+      ${block(
+        '🤝 Sign off:',
+        cwLine(
+          'var(--text-dim)',
+          `TNX FER QSO W1ABC<br>73 DE ${call} SK`
+        ),
+        false
+      )}
+    `;
+  } else {
+    script = `
+      <div style="color:var(--text-dim);font-size:13px;line-height:1.8">
+        <strong style="color:var(--heading)">FT8 is a structured computer-assisted mode.</strong>
+        WSJT-X prepares and sends the standard exchange, but you still configure and monitor your station.
+        <br><br>
+        1. Set the radio to <strong>USB</strong> or <strong>DATA/USB-D</strong> mode as required by its manual.<br>
+        2. Synchronize your computer clock with a reliable time source.<br>
+        3. Set clean transmit audio; avoid or minimize ALC action according to the radio manual.<br>
+        4. Start at low power and use only the clean RF power needed for the contact.<br>
+        5. Select the standard FT8 dial frequency for your band and check for a clear transmit audio frequency.<br>
+        6. Double-click a CQ, review the generated messages, then click <strong>Enable TX</strong> when ready.<br>
+        7. Review and confirm the log entry when the exchange completes.
+        <br><br>
+        WSJT-X sends your callsign <strong>(${call})</strong> and grid square automatically during the standard exchange.
+      </div>
+    `;
+  }
+
   out.innerHTML = script;
 }
 
