@@ -520,6 +520,7 @@ body{
 .step-body{}
 .step-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--heading);margin-bottom:4px}
 .step-text{font-size:15px;color:var(--text);line-height:1.7}
+.step-text-after { margin-top: 10px;}
 .step-text strong{color:var(--heading);font-weight:500}
 .step-example{
   background:rgba(0,212,255,.06);border-left:2px solid var(--accent);
@@ -4870,8 +4871,9 @@ function updateSolarAgeBadge() {
 const QSO_DATA = {
   ssb: [
   {
-    title: 'Check your equipment',
-    text: 'Confirm that your antenna system is appropriate for the band, your radio is set to the correct sideband, and your transmit audio is clean. Start with a modest power level suitable for your rig, antenna, license privileges, and conditions; increase only if necessary.<br>Use <strong>USB</strong> on 20m, 17m, 15m, 12m, and 10m. Use <strong>LSB</strong> on 40m, 80m, and 160m.<br>Note: The usual HF convention is “40m and below = LSB; 20m and above = USB.” Always operate only where your license privileges allow.'
+  title: 'Check your equipment',
+   text: 'Confirm that your antenna system is appropriate for the band, your radio is set to the correct sideband, and your transmit audio is clean. Start with a modest power level suitable for your rig, antenna, license privileges, and conditions; increase only if necessary.<br>Use <strong>USB</strong> on 20m, 17m, 15m, 12m, and 10m. Use <strong>LSB</strong> on 40m, 80m, and 160m.',
+   note: 'The usual HF convention is “40m and below = LSB; 20m and above = USB.” Always operate only where your license privileges allow.'
   },
   {
     title: 'Listen before transmitting',
@@ -5022,7 +5024,7 @@ function showQSO(mode, btn) {
         <div class="step-title">${s.title}</div>
         ${s.text?`<div class="step-text">${s.text}</div>`:''}
         ${s.example?`<div class="step-example">${s.example}</div>`:''}
-		${s.textAfter ? `<div class="step-text">${s.textAfter}</div>` : ''}
+		${s.textAfter ? `<div class="step-text step-text-after">${s.textAfter}</div>` : ''}
         ${s.note?`<div class="step-note"><strong>Note:</strong> ${s.note}</div>`:''}
       </div>
     </div>`;
