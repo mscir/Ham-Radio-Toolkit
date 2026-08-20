@@ -5136,59 +5136,6 @@ function showQSO(mode, btn) {
 }
 // deferred: showQSO('ssb', document.querySelector('.qso-mode-btn'));
 
-/* 
-// CQ Script Generator
-function genCQScript() {
-  const call = (document.getElementById('cq-call')?.value||'').toUpperCase().trim() || 'KG5NEW';
-  const name = document.getElementById('cq-name')?.value?.trim() || '[your name]';
-  const qth  = document.getElementById('cq-qth')?.value?.trim()  || '[your location]';
-  const mode = document.getElementById('cq-mode')?.value || 'SSB / Phone (HF)';
-  const out  = document.getElementById('cq-script-out');
-  if (!out) return;
-
-  // Build phonetic callsign
-  const NATO = {A:'Alfa',B:'Bravo',C:'Charlie',D:'Delta',E:'Echo',F:'Foxtrot',G:'Golf',H:'Hotel',
-    I:'India',J:'Juliet',K:'Kilo',L:'Lima',M:'Mike',N:'November',O:'Oscar',P:'Papa',Q:'Quebec',
-    R:'Romeo',S:'Sierra',T:'Tango',U:'Uniform',V:'Victor',W:'Whiskey',X:'X-Ray',Y:'Yankee',Z:'Zulu',
-    '0':'Zero','1':'One','2':'Two','3':'Three','4':'Four','5':'Five','6':'Six','7':'Seven','8':'Eight','9':'Niner'};
-  const phonetic = [...call].map(c=>NATO[c]||c).join(' ');
-
-  let script = '';
-  if (mode.includes('SSB') || mode.includes('Phone')) {
-    script = `<div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">📢 Calling CQ (say 3 times then your call):</div>
-    <div style="color:var(--accent);font-size:14px;line-height:2">"<strong>CQ CQ CQ</strong>, this is <strong>${phonetic}</strong>, <strong>${phonetic}</strong>, calling CQ and standing by."</div></div>
-    <div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">📞 When someone answers you:</div>
-    <div style="color:var(--good);font-size:14px;line-height:2">"Good day, you're <strong>5 and 9</strong> here in <strong>${qth}</strong>. My name is <strong>${name}</strong>, the name is <strong>${name}</strong>. How do you copy? <strong>${call}</strong> back to you."</div></div>
-    <div><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">🤝 Signing off:</div>
-    <div style="color:var(--amber);font-size:14px;line-height:2">"Thanks for the QSO, 73, this is <strong>${phonetic}</strong>, <strong>${call}</strong> signing clear."</div></div>`;
-  } else if (mode.includes('FM Repeater')) {
-    script = `<div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">📻 Monitoring call:</div>
-    <div style="color:var(--accent);font-size:14px;line-height:2">"<strong>${call}</strong>, monitoring."</div></div>
-    <div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">📞 Calling a specific station:</div>
-    <div style="color:var(--good);font-size:14px;line-height:2">"<strong>W1ABC</strong>, this is <strong>${call}</strong>, you on?"</div></div>
-    <div><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">🤝 Signing off:</div>
-    <div style="color:var(--amber);font-size:14px;line-height:2">"<strong>${call}</strong> clear." &nbsp;or&nbsp; "<strong>${call}</strong> and W1ABC, 73, <strong>${call}</strong> clear."</div></div>`;
-  } else if (mode.includes('CW')) {
-    script = `<div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">· — CW CQ call:</div>
-    <div style="color:var(--accent);font-size:16px;line-height:2;font-family:'Share Tech Mono',monospace">CQ CQ CQ DE ${call} ${call} K</div></div>
-    <div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">📞 Reply to a CQ:</div>
-    <div style="color:var(--good);font-size:16px;line-height:2;font-family:'Share Tech Mono',monospace">W1ABC DE ${call} ${call} KN</div></div>
-    <div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">📋 Basic exchange:</div>
-    <div style="color:var(--amber);font-size:16px;line-height:2;font-family:'Share Tech Mono',monospace">W1ABC DE ${call} UR 599 599 QTH ${qth.toUpperCase()} NAME ${name.toUpperCase()} ${name.toUpperCase()} HW? AR W1ABC DE ${call} KN</div></div>
-    <div><div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">🤝 Sign off:</div>
-    <div style="color:var(--text-dim);font-size:16px;line-height:2;font-family:'Share Tech Mono',monospace">TU 73 W1ABC DE ${call} SK</div></div>`;
-  } else {
-    script = `<div style="color:var(--text-dim);font-size:13px;line-height:1.8">
-    FT8 is fully automated — WSJT-X handles all the exchange text. Your only job is:<br>
-    1. Set your radio to <strong>USB</strong> mode on the FT8 frequency for your band<br>
-    2. Set power to 25–50W<br>
-    3. Open WSJT-X and click <strong>Enable TX</strong><br>
-    4. Double-click any station in the decode list to call them<br>
-    WSJT-X sends your callsign <strong>(${call})</strong> and grid square automatically every 15 seconds.</div>`;
-  }
-  out.innerHTML = script;
-}
-*/
 // CQ Script Generator
 function genCQScript() {
   const call = (document.getElementById('cq-call')?.value || '')
@@ -5379,16 +5326,57 @@ function translateRST() {
   if (raw.length < 2) { out.style.display='none'; return; }
   out.style.display='';
 
-  const R_TEXT = ['','Unreadable','Barely readable','Readable with difficulty','Readable with slight effort','Perfectly readable'];
-  const S_TEXT = ['','Faint, barely perceptible','Very weak signals','Weak signals','Fair signals','Fairly good signals',
-    'Good signals','Moderately strong signals','Strong signals','Extremely strong signals'];
-  const T_TEXT = ['','Extremely rough AC','Very rough AC','Rough, rectified AC','Rough note, some ripple',
-    'Filtered tone, considerable ripple','Slight buzz','Near-perfect DC, slight ripple trace',
-    'Good DC tone, barely noticeable ripple','Perfect pure DC tone'];
+  const R_TEXT = [
+	  '',
+	  'Unreadable',
+	  'Barely readable; occasional words distinguishable',
+	  'Readable with considerable difficulty',
+	  'Readable with practically no difficulty',
+	  'Perfectly readable'
+	];
+	
+	const S_TEXT = [
+	  '',
+	  'Faint signals, barely perceptible',
+	  'Very weak signals',
+	  'Weak signals',
+	  'Fair signals',
+	  'Fairly good signals',
+	  'Good signals',
+	  'Moderately strong signals',
+	  'Strong signals',
+	  'Extremely strong signals'
+	];
+	
+	const T_TEXT = [
+	  '',
+	  'Very rough AC, broad tone',
+	  'Very rough AC, harsh and broad',
+	  'Rough AC tone, rectified but not filtered',
+	  'Rough note; some filtering',
+	  'Filtered tone; strong ripple modulation',
+	  'Filtered tone; definite ripple modulation',
+	  'Near-pure tone; trace of ripple',
+	  'Near-perfect tone; slight trace of ripple',
+	  'Pure tone; no ripple or modulation'
+	];
 
   const r = parseInt(raw[0])||0;
   const s = parseInt(raw[1])||0;
   const t = raw.length >= 3 ? parseInt(raw[2])||0 : null;
+	
+   const validR = r >= 1 && r <= 5;
+	const validS = s >= 1 && s <= 9;
+	const validT = t === null || (t >= 1 && t <= 9);
+	
+	if (!validR || !validS || !validT) {
+	  cards.innerHTML = '';
+	  summary.innerHTML = `
+	    <strong style="color:var(--poor)">Enter a valid report:</strong>
+	    R must be 1–5, S must be 1–9, and the optional CW tone value must be 1–9.
+	  `;
+	  return;
+	}
 
   const rCol = r>=4?'var(--good)':r>=3?'var(--amber)':'var(--poor)';
   const sCol = s>=7?'var(--good)':s>=5?'var(--amber)':'var(--poor)';
@@ -5410,12 +5398,20 @@ function translateRST() {
       <div style="font-size:28px;font-weight:700;color:${tCol};font-family:'Share Tech Mono',monospace">${t}</div>
       <div style="font-size:12px;color:var(--text);margin-top:4px">${T_TEXT[t]||'Invalid'}</div>
     </div>`:''}`;
-
-  const overall = r>=4&&s>=7 ? '<span style="color:var(--good)">✅ Good contact — they can hear you well and copy easily.</span>'
-                : r>=3&&s>=5 ? '<span style="color:var(--amber)">⚠ Marginal contact — readable but signals could be stronger.</span>'
-                : '<span style="color:var(--poor)">❌ Poor contact — consider a better antenna, more power, or try a different band.</span>';
-  summary.innerHTML = `<strong style="color:var(--text)">What ${raw} means to you:</strong> ${overall}
-    ${r===5&&s===9?'<br><span style="font-size:12px;color:var(--text-dim)">Note: 59 is often given as a formality in casual QSOs and contests regardless of actual signal quality.</span>':''}`;
+const overall =
+  	r >= 4 && s >= 7
+    ? '<span style="color:var(--good)">✅ Strong, easy copy. The other station is hearing you well.</span>'
+    : r >= 3 && s >= 5
+      ? '<span style="color:var(--amber)">⚠ Usable but variable copy. Slow down, repeat important details, and monitor for fading.</span>'
+      : '<span style="color:var(--poor)">❌ Difficult copy. Try again later, change bands or frequency, reduce noise, improve antenna position, or use an appropriate mode for weak signals.</span>';
+summary.innerHTML = `
+  <strong style="color:var(--text)">What ${raw} means to you:</strong>
+  ${overall}
+  ${r === 5 && s === 9
+    ? '<br><span style="font-size:12px;color:var(--text-dim)">Note: 59 means perfectly readable and extremely strong. In contests, 59 or 599 is often used as a standard exchange; outside contests, an honest report is more useful.</span>'
+    : ''
+  }
+`;
 }
 
 // ===========================================
