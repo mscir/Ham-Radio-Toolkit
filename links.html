@@ -166,7 +166,18 @@
     .resource-group[open] {
       border-color: rgba(0, 212, 255, 0.45);
     }
-
+	  
+	.sr-only {
+	  position: absolute;
+	  width: 1px;
+	  height: 1px;
+	  padding: 0;
+	  margin: -1px;
+	  overflow: hidden;
+	  clip: rect(0, 0, 0, 0);
+	  white-space: nowrap;
+	  border: 0;
+	}
     .resource-group summary {
       display: flex;
       align-items: center;
@@ -532,6 +543,7 @@ html[data-theme="light"] mark.search-match {
     </p>
 
     <section class="resource-search" aria-labelledby="resource-search-label">
+		<h2 id="resource-search-label" class="sr-only">Search Resources</h2>
   <label id="resource-search-label" for="resource-search-input">
     Search links and topics
   </label>
