@@ -3315,19 +3315,6 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary packet segment. Avoid treating it as a general FT8, PSK31, or CW activity area.'
   },
 ]},
-/*
-  '20m': { label:'20m — 14.0–14.35 MHz', rows:[
-    {freq:'14.000–14.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW sub-band. Premier DX CW territory worldwide.'},
-    {freq:'14.025–14.150',mode:'CW / Data',tags:['cw','data'],notes:'CW general. FT8 on 14.074. PSK31/RTTY around 14.080–14.099.'},
-    {freq:'14.074',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> The most active FT8 frequency globally. Always busy.'},
-    {freq:'14.100',mode:'NCDXF Beacon',tags:['cw'],notes:'International beacon network — listen for propagation beacons from worldwide stations.'},
-    {freq:'14.150–14.175',mode:'Phone (Extra only)',tags:['phone'],notes:'Extra-exclusive phone sub-band. Lower QRM, popular for DX phone.'},
-    {freq:'14.225',mode:'SSTV',tags:['image'],notes:'<span class="calling-badge">SSTV CALLING</span> Primary 20m SSTV calling frequency.'},
-    {freq:'14.230',mode:'SSTV',tags:['image'],notes:'Secondary SSTV calling.'},
-    {freq:'14.225–14.350',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> The busiest HF phone segment on Earth. DX, nets, rag-chews. 14.313 Maritime Mobile Net.'},
-    {freq:'14.286',mode:'AM',tags:['phone'],notes:'AM calling on 20m.'},
-    {freq:'14.300',mode:'Maritime Net',tags:['phone'],notes:'Intercontinental Traffic Net / MarMobile.'},
-  ]}, */
 '20m': { label:'20m — 14.0–14.350 MHz', rows:[
   {
     freq:'14.000–14.025',
@@ -3408,14 +3395,6 @@ const BAND_ACTIVITY = {
     notes:'Maritime Mobile Service Net activity frequency. Keep clear for maritime-mobile, emergency, and traffic traffic.'
   },
 ]},
-/*
-  '17m': { label:'17m — 18.068–18.168 MHz', rows:[
-    {freq:'18.068–18.110',mode:'CW / Data',tags:['cw','data'],notes:'CW lower segment. FT8 on 18.100. Relatively uncrowded — great for DX.'},
-    {freq:'18.100',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 17m FT8. Active, especially on good solar days.'},
-    {freq:'18.110–18.168',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Phone only. 17m has no Novice/Tech segment so it\'s often less QRM.'},
-    {freq:'18.130',mode:'SSTV',tags:['image'],notes:'17m SSTV calling.'},
-    {freq:'18.160',mode:'Global HF Net',tags:['phone'],notes:'Global HF Net morning check-in net.'},
-  ]}, */
 '17m': { label:'17m — 18.068–18.168 MHz', rows:[
   {
     freq:'18.068–18.095',
@@ -6602,6 +6581,7 @@ const BP_ENTRIES = [
   {freq:'14.236',        desc:'Digital Voice', tags:['Digital']},
   {freq:'14.285',        desc:'QRP SSB calling frequency', tags:['SSB','QRP']},
   {freq:'14.286',        desc:'AM calling frequency', tags:['AM']},
+  {freq:'14.300',        desc:'Maritime Mobile Service Net', tags:['Maritime','Net']},
   // 17m
   {freq:'18.100–18.105', desc:'RTTY/Data', tags:['RTTY','Digital']},
   {freq:'18.105–18.110', desc:'Automatically controlled data stations', tags:['Digital']},
