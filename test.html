@@ -2575,7 +2575,12 @@ take it with a grain of salt!</div>
   <div class="panel-header">
     <div class="panel-badge">▸ ARRL OPERATING MANUAL · 12TH EDITION</div>
     <div class="panel-title">Considerate Operator's <span>Band Plan</span></div>
-    <div class="panel-desc">Gentlemen's agreement frequencies — where operators conventionally gather by mode and activity. These are not FCC rules; they are community conventions that keep the bands organized and reduce interference. Source: ARRL Operating Manual for Radio Amateurs, 12th Ed., p.1.17.</div>
+    <div class="panel-desc"><strong>Operating conventions, not exclusive assignments:</strong>
+	  These frequencies show commonly recognized U.S. amateur-radio activities and
+	  calling areas. They are voluntary community practices—not FCC rules—and do
+	  not override your license privileges, current band plans, local coordination,
+	  or good operating practice. Listen first, avoid interference, and move after
+	  making contact when practical.</div>
   </div>
 
   <!-- Filter bar -->
@@ -6642,7 +6647,7 @@ let bpActiveFilters = new Set(['All']);
 
 function initBandPlan() {
   // Build filter buttons
-  const allTags = ['All','|','AM','Beacon','CW','Digital','DX','Experimental','FM','QRP','Repeater','RTTY','Satellite','Simplex','SSB','SSTV'];
+  const allTags = ['All','|','AM','Beacon','CW','Digital','DX','Experimental','FM','Maritime','QRP','Repeater','RTTY','Satellite','Simplex','SSB','SSTV'];
   const container = document.getElementById('bp-filter-btns');
   if (!container) return;
   allTags.forEach(tag => {
@@ -6693,12 +6698,6 @@ function renderBpTable() {
     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-dim);padding:20px">No entries match the selected filters.</td></tr>`;
   }
 }
-
-// deferred: initBandPlan();
-
-// deferred: initQCodes();
-// deferred: initCW();
-
 
 // ===========================================
 // THEME TOGGLE
