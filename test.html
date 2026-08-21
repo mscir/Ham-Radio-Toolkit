@@ -1765,8 +1765,13 @@ frequency.</div>
       </div>
     </div>
   </div>
-  <div class="section-label">▸ How to Use a Repeater Step by Step</div>
-  <div class="rep-procedure">
+    <details class="rep-details" open>
+    <summary>
+      <span>How to Use a Repeater — Step by Step</span>
+      <span class="details-hint">Show / hide</span>
+    </summary>
+    <div class="rep-details-body">
+      <div class="rep-procedure">
     <div class="rep-step"><div class="rs-num">1</div><div class="rs-body"><div class="rs-title">Program the repeater into your radio</div><div class="rs-text">Enter the <strong>output frequency</strong> (what you tune to), set the correct <strong>offset direction and amount</strong>, and program the <strong>CTCSS/DCS tone</strong> as required. Most handhelds let you download repeater files from RepeaterBook.</div></div></div>
     <div class="rep-step"><div class="rs-num">2</div><div class="rs-body"><div class="rs-title">Listen first — is the repeater in use?</div><div class="rs-text">Monitor
 		 the output frequency for at least 30 seconds. If a QSO is in progress, 
@@ -1803,8 +1808,10 @@ frequency.</div>
 allows other stations to break in. Long key-ups can time out the 
 repeater and drop you.</div></div></div>
     <div class="rep-step"><div class="rs-num">6</div><div class="rs-body"><div class="rs-title">Sign off properly</div><div class="rs-text">End with both callsigns and "clear" or "out": <strong style="color:var(--accent)">"KG5NEW clear."</strong> or <strong style="color:var(--accent)">"KG5NEW and W1ABC, 73."</strong> FCC requires ID at end of contact and every 10 minutes during.</div></div></div>
+    </div>
   </div>
-
+</details>
+	
   <!-- REPEATERBOOK LIVE SEARCH -->
   <div class="section-label" style="margin-top:20px">▸ Repeater Finder — Live Search via RepeaterBook</div>
   <div style="font-size:13px;color:var(--text-dim);margin-bottom:12px;line-height:1.7">
@@ -1967,15 +1974,28 @@ repeater and drop you.</div></div></div>
     </div>
   </details>
 	
-  <!-- NET FINDER -->
-  <div class="section-label" style="margin-top:20px">▸ Net Finder — Scheduled Nets by Band</div>
-  <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Nets are scheduled on-air meetings where operators check in. A great way to make your first contacts and meet local hams. All times UTC.</div>
-  <div class="ref-tabs" style="margin-bottom:12px" id="net-tabs">
-    <button class="ref-tab active" onclick="showNets('hf',this)">HF Nets</button>
-    <button class="ref-tab" onclick="showNets('vhf',this)">VHF/UHF Nets</button>
-    <button class="ref-tab" onclick="showNets('emcomm',this)">Emergency Nets</button>
-  </div>
-  <div id="net-content"></div>
+   <!-- NET FINDER -->
+  <details class="rep-details">
+    <summary>
+      <span>Find a Net — HF, VHF/UHF &amp; Emergency Nets</span>
+      <span class="details-hint">Show / hide</span>
+    </summary>
+
+    <div class="rep-details-body">
+      <div style="font-size:12px;color:var(--text-dim);margin:14px 0 10px;line-height:1.7">
+        Nets are scheduled on-air meetings where operators check in. They are a
+        great way to make first contacts and meet local hams. All times are UTC.
+      </div>
+
+      <div class="ref-tabs" style="margin-bottom:12px" id="net-tabs">
+        <button class="ref-tab active" onclick="showNets('hf',this)">HF Nets</button>
+        <button class="ref-tab" onclick="showNets('vhf',this)">VHF/UHF Nets</button>
+        <button class="ref-tab" onclick="showNets('emcomm',this)">Emergency Nets</button>
+      </div>
+
+      <div id="net-content"></div>
+    </div>
+  </details>
 
   <!-- CALLING FREQUENCIES & EMERGENCY COMMUNICATIONS -->
   <div style="margin-top:20px;padding:12px 14px;background:rgba(255,60,60,.05);border:1px solid rgba(255,60,60,.18);border-radius:var(--r);font-size:12px;color:var(--text-dim);line-height:1.7">
