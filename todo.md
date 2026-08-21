@@ -1,6 +1,6 @@
 STEP 1: 
 <br>verify all pages
-<br>next step verify: *** Band Plan
+<br>next step verify: *** CW Practice
 <br>
 <br>STEP 2
 <br>after all pages have been verified
