@@ -1977,31 +1977,101 @@ repeater and drop you.</div></div></div>
   </div>
   <div id="net-content"></div>
 
-  <!-- EMERGENCY NET FREQUENCIES -->
-  <div class="section-label" style="margin-top:20px">▸ Emergency &amp; Calling Frequencies</div>
-  <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">National and regional simplex calling frequencies. Program these into your radio now — before you need them.</div>
-  <table class="priv-table" style="font-size:12px;margin-bottom:14px">
-    <thead><tr><th>Frequency</th><th>Band</th><th>Purpose</th><th>Notes</th></tr></thead>
-    <tbody>
-      <tr><td style="color:var(--poor);font-weight:700">146.520 MHz</td><td>2m FM</td><td>National 2m simplex calling</td><td>Most important to know — always monitor this</td></tr>
-      <tr><td style="color:var(--poor);font-weight:700">446.000 MHz</td><td>70cm FM</td><td>National 70cm simplex calling</td><td>UHF counterpart to 146.52</td></tr>
-      <tr><td style="color:var(--amber);font-weight:700">156.800 MHz</td><td>Marine</td><td>Marine distress Ch 16</td><td>International distress — not amateur but good to know</td></tr>
-      <tr><td style="color:var(--accent)">7.200 MHz</td><td>40m LSB</td><td>Phone calling / EmComm</td><td>ARES/RACES often meet here; secondary 7.185</td></tr>
-      <tr><td style="color:var(--accent)">14.300 MHz</td><td>20m USB</td><td>Maritime Mobile / EmComm</td><td>International maritime mobile net</td></tr>
-      <tr><td style="color:var(--accent)">14.325 MHz</td><td>20m USB</td><td>Hurricane Watch Net</td><td>Active during tropical storms</td></tr>
-      <tr><td style="color:var(--accent)">7.268 MHz</td><td>40m LSB</td><td>Hurricane Watch Net</td><td>40m alternate for Hurricane Watch</td></tr>
-      <tr><td style="color:var(--accent)">3.950 MHz</td><td>75m LSB</td><td>ARES/EmComm regional</td><td>Regional emergency comms — varies by area</td></tr>
-      <tr><td style="color:var(--accent)">3.985 MHz</td><td>75m LSB</td><td>SKYWARN</td><td>National SKYWARN frequency</td></tr>
-      <tr><td style="color:var(--accent)">10.100 MHz</td><td>30m CW</td><td>FEMA EmComm</td><td>CW/Digital only band</td></tr>
-      <tr><td style="color:var(--accent)">52.525 MHz</td><td>6m FM</td><td>National 6m simplex calling</td><td>FM simplex — useful during sporadic-E</td></tr>
-      <tr><td style="color:var(--accent)">223.500 MHz</td><td>1.25m FM</td><td>National 1.25m simplex calling</td><td>Less common but good for EmComm</td></tr>
-      <tr><td style="color:var(--good)">121.500 MHz</td><td>Aircraft</td><td>Aviation distress</td><td>International aviation emergency — not amateur</td></tr>
-    </tbody>
-  </table>
-  <div style="font-size:12px;color:var(--text-dim);line-height:1.7;padding:10px 14px;background:rgba(255,60,60,.05);border:1px solid rgba(255,60,60,.15);border-radius:var(--r)">
-    <strong style="color:var(--poor)">In a real emergency:</strong> 146.520 MHz FM simplex is your first call. 
-    If no reply, try your local repeater. For life-threatening emergencies, call 911 first — amateur radio is a backup when infrastructure fails, not a substitute for emergency services.
+  <!-- CALLING FREQUENCIES & EMERGENCY COMMUNICATIONS -->
+  <div style="margin-top:20px;padding:12px 14px;background:rgba(255,60,60,.05);border:1px solid rgba(255,60,60,.18);border-radius:var(--r);font-size:12px;color:var(--text-dim);line-height:1.7">
+    <strong style="color:var(--poor)">In an immediate emergency:</strong>
+    Call 911 first whenever a phone is available. If normal communications
+    are unavailable, use amateur frequencies and repeaters you are authorized
+    to use. Start with a known local repeater or
+    <strong style="color:var(--text)">146.520 MHz FM simplex</strong>, then
+    clearly state the emergency, your location, and the help needed.
   </div>
+
+  <details class="rep-details">
+    <summary>
+      <span>Calling Frequencies &amp; Emergency-Communications Notes</span>
+      <span class="details-hint">Show / hide</span>
+    </summary>
+
+    <div class="rep-details-body">
+      <div style="font-size:12px;color:var(--text-dim);line-height:1.75">
+
+        <p style="margin-top:14px">
+          These are commonly recognized amateur FM simplex calling frequencies.
+          A calling frequency is a place to make contact; after contact, move
+          to another appropriate simplex frequency when practical so the calling
+          frequency remains available.
+        </p>
+
+        <div style="overflow-x:auto;margin:12px 0 16px">
+          <table class="priv-table" style="font-size:12px;margin:0;min-width:580px">
+            <thead>
+              <tr>
+                <th>Frequency</th>
+                <th>Band / Mode</th>
+                <th>Common use</th>
+                <th>Beginner note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color:var(--accent);font-weight:700">52.525 MHz</td>
+                <td>6 m FM simplex</td>
+                <td>Calling frequency</td>
+                <td>Useful when 6 m FM propagation is open</td>
+              </tr>
+              <tr>
+                <td style="color:var(--accent);font-weight:700">146.520 MHz</td>
+                <td>2 m FM simplex</td>
+                <td>National simplex calling</td>
+                <td>Monitor when practical; move after making contact</td>
+              </tr>
+              <tr>
+                <td style="color:var(--accent);font-weight:700">223.500 MHz</td>
+                <td>1.25 m FM simplex</td>
+                <td>Calling frequency</td>
+                <td>Activity varies by region</td>
+              </tr>
+              <tr>
+                <td style="color:var(--accent);font-weight:700">446.000 MHz</td>
+                <td>70 cm FM simplex</td>
+                <td>National simplex calling</td>
+                <td>UHF counterpart to 146.520 MHz</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin:14px 0;padding:12px 14px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.20);border-radius:var(--r)">
+          <strong style="color:var(--accent)">Local emergency and weather nets:</strong>
+          ARES, RACES, SKYWARN, club, and public-service frequencies are usually
+          local or regional. Get the correct frequencies, repeaters, tones,
+          net times, and activation procedures from your local amateur-radio club,
+          emergency coordinator, or National Weather Service office. Do not assume
+          that an HF frequency listed online is active or appropriate in your area.
+        </div>
+
+        <div style="margin:14px 0;padding:12px 14px;background:rgba(255,190,50,.06);border:1px solid rgba(255,190,50,.22);border-radius:var(--r)">
+          <strong style="color:var(--amber)">Emergency operating basics:</strong>
+          Listen first. In a real emergency, state
+          <strong style="color:var(--text)">“Emergency”</strong>, give your
+          location, describe what happened, say what help is needed, and listen
+          for a response. Keep transmissions brief, accurate, and focused on
+          essential information.
+        </div>
+
+        <div style="margin:14px 0 4px;padding:12px 14px;background:rgba(255,70,70,.06);border:1px solid rgba(255,70,70,.20);border-radius:var(--r)">
+          <strong style="color:var(--poor)">Non-amateur services:</strong>
+          Marine Channel 16 (156.800 MHz) and aviation emergency frequency
+          121.500 MHz are not amateur-radio channels. Receive-only awareness may
+          be useful, but do not transmit there unless you are authorized under the
+          rules governing those services. The immediate life-safety exception is
+          for situations where normal communications are unavailable.
+        </div>
+
+      </div>
+    </div>
+  </details>
 </div><!-- end panel-repeaters -->
 
 <!-- PANEL 7: DIGITAL MODE SELECTOR -->
