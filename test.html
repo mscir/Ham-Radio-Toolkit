@@ -549,6 +549,13 @@ body{
 .tone-pill{font-family:'Share Tech Mono',monospace;font-size:11px;background:rgba(0,212,255,.08);color:var(--accent);border:1px solid rgba(0,212,255,.2);padding:2px 6px;border-radius:2px}
 .rep-procedure{display:flex;flex-direction:column;gap:8px}
 .rep-step{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;gap:12px}
+.rep-details { margin-top: 20px; border: 1px solid var(--border); border-radius: var(--r); background: rgba(0, 0, 0, .16); overflow: hidden;}
+.rep-details > summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 15px; cursor: pointer; color: var(--heading); font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: .08em; list-style: none;}
+.rep-details > summary::-webkit-details-marker {  display: none;}
+.rep-details > summary::before { content: '▸'; color: var(--accent); margin-right: 8px; transition: transform .18s ease;}
+.rep-details[open] > summary::before { transform: rotate(90deg);}
+.details-hint { color: var(--text-dim); font-family: inherit; font-size: 10px; font-weight: 400; letter-spacing: .08em; white-space: nowrap;}
+.rep-details-body { padding: 0 15px 15px; border-top: 1px solid var(--border);}
 .rs-num{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--accent);opacity:.4;min-width:24px;margin-top:1px}
 .rs-body{}
 .rs-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--heading);margin-bottom:3px}
@@ -1868,6 +1875,98 @@ repeater and drop you.</div></div></div>
     <div style="font-size:12px;color:var(--text-dim);margin-top:8px;line-height:1.7" id="rep-results-footer"></div>
   </div>
 
+  <!-- NODES, LINKED REPEATERS & REFLECTORS -->
+  <details class="rep-details">
+    <summary>
+      <span>Nodes, Linked Repeaters &amp; Reflectors</span>
+      <span class="details-hint">Show / hide</span>
+    </summary>
+
+    <div class="rep-details-body">
+      <div style="font-size:12px;color:var(--text-dim);line-height:1.75">
+
+        <p>
+          Some repeaters and personal hotspots can use the internet to connect
+          with other amateur-radio stations, repeaters, and shared networks.
+          These gateways are commonly called
+          <strong style="color:var(--text)">nodes</strong>.
+        </p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:14px 0">
+          <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+            <div style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:5px">
+              NODE
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.65">
+              A gateway that connects a local radio, simplex frequency, repeater,
+              or hotspot to an internet-linked amateur-radio network.
+            </div>
+          </div>
+
+          <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+            <div style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:5px">
+              LINKED REPEATER
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.65">
+              A local repeater connected to another repeater, node, or network.
+              It may be linked permanently, on a schedule, or temporarily.
+            </div>
+          </div>
+
+          <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+            <div style="color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:5px">
+              REFLECTOR / HUB
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.65">
+              A shared meeting point that multiple nodes can join, allowing a
+              regional, national, or worldwide conversation or net.
+            </div>
+          </div>
+        </div>
+
+        <div style="margin:14px 0;padding:12px 14px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.20);border-radius:var(--r)">
+          <strong style="color:var(--accent)">Common systems:</strong>
+          <span style="color:var(--text-dim)">
+            AllStarLink and EchoLink are internet-linked amateur-radio systems.
+            IRLP also uses nodes and reflectors. Digital voice systems such as
+            WIRES-X, D-STAR, DMR, and P25 have their own rooms, talkgroups,
+            reflectors, or similar network connections.
+          </span>
+        </div>
+
+        <div style="margin:14px 0;padding:12px 14px;background:rgba(255,190,50,.06);border:1px solid rgba(255,190,50,.22);border-radius:var(--r)">
+          <strong style="color:var(--amber)">Before connecting from a repeater:</strong>
+          Listen first. Check whether the repeater is busy or already linked.
+          Follow only the local repeater owner's published instructions. If
+          user-controlled linking is permitted, identify with your callsign and
+          briefly announce what you intend to connect to.
+        </div>
+
+        <div style="margin:14px 0;padding:12px 14px;background:rgba(255,70,70,.06);border:1px solid rgba(255,70,70,.20);border-radius:var(--r)">
+          <strong style="color:var(--poor)">Important:</strong>
+          Node numbers, DTMF commands, permission levels, timeout rules, and
+          linking policies are local—not universal. Do not use an online command
+          sequence unless the local repeater or node owner explicitly publishes it.
+          Never disconnect or change a connection that someone else established.
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-family:'Barlow Condensed',sans-serif;color:var(--heading);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:6px">
+            Linked-system etiquette
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);line-height:1.75">
+            Identify before transmitting. Leave an extra pause after unkeying:
+            linked systems can have a short internet delay, and the pause lets
+            another operator break in. When you finish a connection you started,
+            announce that you are disconnecting and use the local system's
+            published disconnect procedure.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </details>
+	
   <!-- NET FINDER -->
   <div class="section-label" style="margin-top:20px">▸ Net Finder — Scheduled Nets by Band</div>
   <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Nets are scheduled on-air meetings where operators check in. A great way to make your first contacts and meet local hams. All times UTC.</div>
