@@ -1453,7 +1453,7 @@ body{
     <span id="lc-saved-badge" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(57,255,20,.1);color:var(--good);border:1px solid rgba(57,255,20,.2)">✓ Saved</span>
   </div>
   <div class="mode-btns" id="priv-mode-btns"></div>
-  <div id="priv-table-area"><div class="priv-group-hdr">▸ HF Phone Segments Only</div>
+  <div id="priv-table-area"><div class="priv-group-hdr">▸ Extra-Class HF Phone / Image Segments</div>
     <table class="priv-table"><thead><tr><th>Band</th><th>Frequency Range</th><th>Max Power</th><th>Notes</th></tr></thead><tbody><tr>
         <td class="priv-band">80m</td>
         <td class="priv-freq">3.600–4.000 MHz</td>
@@ -1494,12 +1494,10 @@ body{
         <td class="priv-freq">NOT PERMITTED</td>
         <td class="priv-power">—</td>
         <td class="priv-note">⚠ 30m is CW/Data only</td>
-      </tr><tr>
-        <td class="priv-band">60m</td>
-        <td class="priv-freq">NOT PERMITTED</td>
-        <td class="priv-power">—</td>
-        <td class="priv-note">⚠ 60m channels do not allow image</td>
-      </tr></tbody></table><div class="priv-group-hdr">▸ VHF/UHF/µwave</div>
+      </tr>
+	</tbody>
+</table>
+<div class="priv-group-hdr">▸ VHF/UHF/µwave</div>
     <table class="priv-table"><thead><tr><th>Band</th><th>Frequency Range</th><th>Max Power</th><th>Notes</th></tr></thead><tbody><tr>
         <td class="priv-band">6m+</td>
         <td class="priv-freq">50.1 MHz and above</td>
@@ -1523,18 +1521,19 @@ body{
     <button class="calc-btn" onclick="setPrivFreq(1.900)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">160m</button>
     <button class="calc-btn" onclick="setPrivFreq(3.850)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">80m SSB</button>
     <button class="calc-btn" onclick="setPrivFreq(7.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">40m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(7.200)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">40m SSB</button>
-    <button class="calc-btn" onclick="setPrivFreq(10.136)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">30m FT8</button>
+    <button class="calc-btn" onclick="setPrivFreq(7.200)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">40m Phone</button>
+    <button class="calc-btn" onclick="setPrivFreq(5.357)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">60m WRC Band</button>
+	<button class="calc-btn" onclick="setPrivFreq(10.136)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">30m FT8</button>
     <button class="calc-btn" onclick="setPrivFreq(14.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">20m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(14.250)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">20m SSB</button>
+    <button class="calc-btn" onclick="setPrivFreq(14.250)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">20m Phone</button>
     <button class="calc-btn" onclick="setPrivFreq(18.100)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">17m FT8</button>
     <button class="calc-btn" onclick="setPrivFreq(21.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">15m FT8</button>
     <button class="calc-btn" onclick="setPrivFreq(24.915)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">12m FT8</button>
     <button class="calc-btn" onclick="setPrivFreq(28.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">10m FT8</button>
     <button class="calc-btn" onclick="setPrivFreq(50.313)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">6m FT8</button>
     <button class="calc-btn" onclick="setPrivFreq(146.520)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">2m FM</button>
-    <button class="calc-btn" onclick="setPrivFreq(446.000)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">70cm FM</button>
-    <button class="calc-btn" onclick="setPrivFreq(15.000)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">15 MHz (WWV)</button>
+    <button class="calc-btn" onclick="setPrivFreq(446.000)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">70cm FM Simplex</button>
+    <button class="calc-btn" onclick="setPrivFreq(15.000)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">15 MHz WWV — Not Amateur</button>
   </div>
   <div id="priv-freq-result" style="background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;min-height:60px;font-size:13px;line-height:1.8;color:var(--text-dim)">
     Enter a frequency or click a preset above.
@@ -6238,20 +6237,76 @@ function setLicenseClass(cls) {
 // ALL bands with per-class availability
 // classes: array of which license classes can use this segment
 const PRIV_BANDS_ALL = [
-{ band:'2200m', lo:0.1357, hi:0.1378, power:'1 W EIRP',  modes:'CW, Phone, Image, RTTY/Data',  notes:'⚠ UTC notification required before operation',  classes:['general','extra'] },
-{ band:'630m', lo:0.472, hi:0.479, power:'5 W EIRP',  modes:'CW, Phone, Image, RTTY/Data',  notes:'⚠ UTC notification required; geographic restrictions may apply',  classes:['general','extra'] },
-  { band:'160m',  lo:1.800,  hi:2.000,  power:'1,500 W PEP', modes:'CW, SSB, Digital, Image',     notes:'',                                          classes:['general','extra'] },
-{ band:'80m', lo:3.525, hi:3.600, power:'200 W PEP',  modes:'CW',  notes:'Technician CW-only segment',  classes:['tech'] },
+{
+  band:'2200m',
+  lo:0.1357,
+  hi:0.1378,
+  power:'1 W EIRP',
+  modes:'Authorized emissions only',
+  notes:'⚠ FCC notification and geographic restrictions apply; verify current §97.303 rules before transmitting',
+  classes:['general','extra']
+},
+{
+  band:'630m',
+  lo:0.472,
+  hi:0.479,
+  power:'5 W EIRP',
+  modes:'Authorized emissions only',
+  notes:'⚠ FCC notification and geographic restrictions apply; verify current §97.303 rules before transmitting',
+  classes:['general','extra']
+},
+{ band:'160m',  lo:1.800,  hi:2.000,  power:'1,500 W PEP', modes:'CW, SSB, Digital, Image',     notes:'',       classes:['general','extra'] },
+{ band:'80m',   lo:3.525,  hi:3.600,  power:'200 W PEP',    modes:'CW only', notes:'Technician HF CW privilege', classes:['tech']},
 { band:'80m', lo:3.525, hi:3.600, power:'1,500 W PEP',  modes:'CW, RTTY/Data',  notes:'General CW/Data segment',  classes:['general'] },
 { band:'80m', lo:3.800, hi:4.000, power:'1,500 W PEP',  modes:'CW, Phone, Image',  notes:'General phone/image segment',  classes:['general'] },
 { band:'80m', lo:3.500, hi:3.600, power:'1,500 W PEP',  modes:'CW, RTTY/Data',  notes:'Extra CW/Data segment',  classes:['extra'] },
 { band:'80m', lo:3.600, hi:4.000, power:'1,500 W PEP',  modes:'CW, Phone, Image',  notes:'Extra phone/image segment',  classes:['extra'] },
-  { band:'60m',   lo:5.3305, hi:5.3315, power:'100 W ERP',   modes:'USB, CW, Digital',            notes:'⚠ Channel 5332 kHz — secondary service',    classes:['general','extra'] },
-  { band:'60m',   lo:5.3465, hi:5.3475, power:'100 W ERP',   modes:'USB, CW, Digital',            notes:'⚠ Channel 5348 kHz — secondary service',    classes:['general','extra'] },
-  { band:'60m',   lo:5.3565, hi:5.3575, power:'100 W ERP',   modes:'USB, CW, Digital',            notes:'⚠ Channel 5358.5 kHz — secondary service',  classes:['general','extra'] },
-  { band:'60m',   lo:5.3715, hi:5.3725, power:'100 W ERP',   modes:'USB, CW, Digital',            notes:'⚠ Channel 5373 kHz — secondary service',    classes:['general','extra'] },
-  { band:'60m',   lo:5.4035, hi:5.4045, power:'100 W ERP',   modes:'USB, CW, Digital',            notes:'⚠ Channel 5405 kHz — secondary service',    classes:['general','extra'] },
-//  { band:'60m',   lo:5.3515, hi:5.3665, power:'9.15 W ERP',  modes:'USB, CW, Digital',            notes:'⚠ New 2026 segment — secondary service',    classes:['general','extra'] },
+{ 
+  band:'60m', 
+  lo:5.3305, 
+  hi:5.3335, 
+  power:'100 W ERP', 
+  modes:'USB, CW, RTTY/Data', 
+  notes:'⚠ Center frequency 5332 kHz · secondary service · max 2.8 kHz bandwidth', 
+  classes:['general','extra'] 
+},
+{ 
+  band:'60m', 
+  lo:5.3465, 
+  hi:5.3495, 
+  power:'100 W ERP', 
+  modes:'USB, CW, RTTY/Data', 
+  notes:'⚠ Center frequency 5348 kHz · secondary service · max 2.8 kHz bandwidth', 
+  classes:['general','extra'] 
+},
+{ 
+  band:'60m', 
+  lo:5.3515, 
+  hi:5.3665, 
+  power:'9.15 W ERP', 
+  modes:'Phone, CW, RTTY/Data', 
+  notes:'⚠ Secondary allocation · max 2.8 kHz bandwidth · do not cause harmful interference', 
+  classes:['general','extra'] 
+},
+{ 
+  band:'60m', 
+  lo:5.3715, 
+  hi:5.3745, 
+  power:'100 W ERP', 
+  modes:'USB, CW, RTTY/Data', 
+  notes:'⚠ Center frequency 5373 kHz · secondary service · max 2.8 kHz bandwidth', 
+  classes:['general','extra'] 
+},
+{ 
+  band:'60m', 
+  lo:5.4035, 
+  hi:5.4065, 
+  power:'100 W ERP', 
+  modes:'USB, CW, RTTY/Data', 
+  notes:'⚠ Center frequency 5405 kHz · secondary service · max 2.8 kHz bandwidth', 
+  classes:['general','extra'] 
+},
+{ band:'60m',   lo:5.3515, hi:5.3665, power:'9.15 W ERP',  modes:'USB, CW, Digital',            notes:'⚠ New 2026 segment — secondary service',    classes:['general','extra'] },
 { band:'40m', lo:7.025, hi:7.125, power:'200 W PEP',  modes:'CW',  notes:'Technician CW-only segment',  classes:['tech'] },
 { band:'40m', lo:7.025, hi:7.125, power:'1,500 W PEP',  modes:'CW, RTTY/Data',  notes:'General CW/Data segment',  classes:['general'] },
 { band:'40m', lo:7.175, hi:7.300, power:'1,500 W PEP',  modes:'CW, Phone, Image',  notes:'General phone/image segment',  classes:['general'] },
@@ -6332,29 +6387,65 @@ function checkPrivFreq() {
   if (isNaN(freq)) { out.innerHTML = '<span style="color:var(--poor)">❌ Please enter a valid number in MHz.</span>'; return; }
   if (freq > 50000) { out.innerHTML = '<span style="color:var(--poor)">❌ Value too large — enter frequency in MHz (e.g. 14.250, not Hz or kHz).</span>'; return; }
 
-  // Auto-detect kHz entry (values < 1 are probably in kHz or a typo)
-  // Values like 146.52 are MHz; values like 14250 could be kHz — hint if > 30 and < 500
-  let note = '';
-  if (freq > 1300 && freq < 50000) {
-    note = `<div style="font-size:12px;color:var(--amber);margin-top:6px">💡 Did you mean ${(freq/1000).toFixed(3)} MHz? Enter frequencies in MHz.</div>`;
-    freq = freq / 1000;
-  }
+  	// Accept a likely kHz entry such as 14250 or 5332 and convert it to MHz.
+	// Normal entries such as 14.250, 146.520, and 446.000 are already MHz.
+	let note = '';
+	
+	if (freq > 1300 && freq < 50000) {
+	  const originalFreq = freq;
+	
+	  freq = freq / 1000;
+	
+	  note = `
+	    <div style="font-size:12px;color:var(--amber);margin-top:6px">
+	      💡 Interpreted <strong>${originalFreq}</strong> as
+	      <strong>${freq.toFixed(3)} MHz</strong>.
+	    </div>
+	  `;
+	}
 
   const matches = getPrivBands().filter(b => freq >= b.lo && freq <= b.hi);
 
-  if (matches.length === 0) {
-    const lcNames2 = {tech:'Technician',general:'General',extra:'Extra Class'};
-    const lcName2 = lcNames2[currentLicenseClass] || 'Extra Class';
-    // Check if freq is in a band but not allowed for this class
-    const allMatches = PRIV_BANDS_ALL.filter(b => freq >= b.lo && freq <= b.hi);
-    if (allMatches.length > 0) {
-      const neededClass = allMatches[0].classes.includes('extra') ? 'Extra' : allMatches[0].classes.includes('general') ? 'General' : 'Technician';
-      out.innerHTML = `<span style="color:var(--amber)">⚠ <strong>${freq} MHz</strong> is in a US amateur band but <strong>NOT available to ${lcName2}</strong> licensees.<br>This frequency requires a <strong>${neededClass} class license</strong> or higher.</span>${note}`;
-    } else {
-      out.innerHTML = `<span style="color:var(--poor)">❌ <strong>${raw} MHz</strong> is NOT in any US amateur band. Not legal to transmit here on any license class.</span>${note}`;
-    }
-    return;
+if (matches.length === 0) {
+  const lcNames2 = {
+    tech: 'Technician',
+    general: 'General',
+    extra: 'Extra Class'
+  };
+
+  const lcName2 = lcNames2[currentLicenseClass] || 'Extra Class';
+
+  const allMatches = PRIV_BANDS_ALL.filter(
+    b => freq >= b.lo && freq <= b.hi
+  );
+
+  if (allMatches.length > 0) {
+    const neededClass =
+      allMatches[0].classes.includes('extra') ? 'Extra' :
+      allMatches[0].classes.includes('general') ? 'General' :
+      'Technician';
+
+    out.innerHTML = `
+      <span style="color:var(--amber)">
+        ⚠ <strong>${freq} MHz</strong> is within a listed U.S. amateur allocation
+        but is <strong>not included in the listed ${lcName2} frequency privileges.</strong>
+        <br>
+        This segment requires a <strong>${neededClass} class license</strong> or higher.
+      </span>
+      ${note}
+    `;
+  } else {
+    out.innerHTML = `
+      <span style="color:var(--poor)">
+        ❌ <strong>${raw} MHz</strong> is not within a listed U.S. amateur allocation.
+        Do not transmit there under U.S. Amateur Radio Service privileges.
+      </span>
+      ${note}
+    `;
   }
+
+  return;
+}
 
   // Highlight matching rows
   getPrivBands().forEach((b, i) => {
@@ -6367,7 +6458,11 @@ function checkPrivFreq() {
   // Build result
   const lcNames = {tech:'Technician',general:'General',extra:'Extra Class'};
   const lcName = lcNames[currentLicenseClass] || 'Extra Class';
-  let html = `<span style="color:var(--good)">✅ <strong>${freq} MHz</strong> is legal for ${lcName}.</span><br>`;
+  let html = `<span style="color:var(--good)">✅ <strong>${freq} MHz</strong> is within the listed ${lcName} frequency privileges.</span><br>
+<span style="font-size:12px;color:var(--text-dim)">
+  Confirm that your emission type, occupied bandwidth, power, location, and
+  any band-specific restrictions are also permitted before transmitting.
+</span>`;
   matches.forEach(m => {
     html += `<div style="margin-top:8px;padding:8px 12px;background:rgba(0,0,0,.2);border-radius:3px;border-left:3px solid var(--accent)">`;
     html += `<strong style="color:var(--heading)">${m.band} band</strong> &nbsp;`;
