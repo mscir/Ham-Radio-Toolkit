@@ -6427,7 +6427,7 @@ if (matches.length === 0) {
 
     out.innerHTML = `
       <span style="color:var(--amber)">
-        ⚠ <strong>${freq} MHz</strong> is within a listed U.S. amateur allocation
+        ⚠ <strong>${freq.toFixed(3)} MHz</strong> is within a listed U.S. amateur allocation
         but is <strong>not included in the listed ${lcName2} frequency privileges.</strong>
         <br>
         This segment requires a <strong>${neededClass} class license</strong> or higher.
@@ -6458,7 +6458,7 @@ if (matches.length === 0) {
   // Build result
   const lcNames = {tech:'Technician',general:'General',extra:'Extra Class'};
   const lcName = lcNames[currentLicenseClass] || 'Extra Class';
-  let html = `<span style="color:var(--good)">✅ <strong>${freq} MHz</strong> is within the listed ${lcName} frequency privileges.</span><br>
+  let html = `<span style="color:var(--good)">✅ <strong>${freq.toFixed(3)} MHz</strong> is within the listed ${lcName} frequency privileges.</span><br>
 <span style="font-size:12px;color:var(--text-dim)">
   Confirm that your emission type, occupied bandwidth, power, location, and
   any band-specific restrictions are also permitted before transmitting.
