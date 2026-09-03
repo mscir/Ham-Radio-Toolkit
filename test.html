@@ -6659,6 +6659,282 @@ const FCC_97307_EMISSION_STANDARDS = {
     persistentNotice: 'This tool evaluates frequency and emission authorization from the provided information. It does not replace the operator’s responsibility to comply with all applicable FCC rules.'
   }
 };
+
+/* ===========================================
+   FCC PART 97 REFERENCE DATA — §97.303
+   Frequency sharing and special restrictions
+=========================================== */
+
+const FCC_97303_FREQUENCY_SHARING = {
+  source: '47 CFR §97.303',
+  sourceDate: '2026-08-20',
+  jurisdiction: 'United States / ITU Region 2',
+
+  generalRules: [
+    {
+      id: 'secondary-service',
+      rule: 'A secondary-service amateur station must not cause harmful interference to, and must accept interference from, primary-service stations.',
+      source: '97.303 introductory paragraph'
+    },
+    {
+      id: 'adjacent-region-equality',
+      rule: 'Near adjacent ITU Regions or sub-Regions, operate so as not to cause harmful interference to a service of the same or higher category.',
+      source: '97.303(a)'
+    }
+  ],
+
+  interferenceSharing: [
+    {
+      id: 'government-radiolocation',
+      appliesToBands: ['70cm', '33cm', '23cm', '5cm', '3cm'],
+      rule: 'Must not cause harmful interference to, and must accept interference from, United States Government radiolocation stations.',
+      source: '97.303(b)'
+    },
+    {
+      id: 'government-other-nation-radiolocation',
+      frequencyRangesGHz: [
+        { low: 76, high: 81 },
+        { low: 136, high: 141 },
+        { low: 241, high: 248 }
+      ],
+      rule: 'Must not cause harmful interference to, and must accept interference from, radiolocation stations authorized by the United States Government, FCC, or other nations.',
+      source: '97.303(c)'
+    },
+    {
+      id: 'other-nation-radiolocation',
+      frequencyRangesMHz: [
+        { low: 430, high: 450 },
+        { low: 3300, high: 3400 },
+        { low: 5650, high: 5850 },
+        { low: 24050, high: 24250 }
+      ],
+      appliesToBands: ['23cm', '13cm'],
+      rule: 'Must not cause harmful interference to, and must accept interference from, other-nation radiolocation stations.',
+      source: '97.303(d)'
+    },
+    {
+      id: 'ism-reception',
+      appliesToBands: ['33cm', '1.2cm', '2.5mm'],
+      frequencyRangesMHz: [
+        { low: 2400, high: 2450 },
+        { low: 5725, high: 5875 },
+        { low: 244000, high: 246000 }
+      ],
+      rule: 'Receiving stations must accept interference from industrial, scientific, and medical equipment.',
+      source: '97.303(e)'
+    }
+  ],
+
+  fixedLocationRequirements: [
+    {
+      id: '2200m-630m-fixed-location',
+      appliesToBands: ['2200m', '630m'],
+      fixedLocationOnly: true,
+      plcSeparationKm: 1,
+      plcSeparationMeasurement: 'Measure horizontally from the station antenna to the closest point on the PLC-bearing transmission line.',
+      source: '97.303(g)(1)'
+    }
+  ],
+
+  notificationRequirements: [
+    {
+      id: '2200m-630m-utc-notification',
+      appliesToBands: ['2200m', '630m'],
+      notify: 'Utilities Telecom Council (UTC)',
+      requiredInformation: [
+        'Call sign',
+        'Intended band or bands',
+        'Coordinates of antenna fixed location'
+      ],
+      waitingPeriodDays: 30,
+      condition: 'Operation may begin after 30 days unless UTC reports that the fixed location is within 1 km of PLC systems operating on the same or overlapping frequencies.',
+      source: '97.303(g)(2)'
+    },
+    {
+      id: '219-220-public-database-notification',
+      appliesToBands: ['1.25m-219-220'],
+      notify: 'American Radio Relay League, Inc. (ARRL)',
+      requiredInformation: [
+        'Specific geographic location of the station'
+      ],
+      purpose: 'Location is incorporated into a publicly available database.',
+      waitingPeriodDays: 30,
+      source: '97.303(l)(3)'
+    },
+    {
+      id: '219-220-amts-640km-notification',
+      appliesToBands: ['1.25m-219-220'],
+      condition: 'Station location is within 640 km of an AMTS coast station using 217-218 MHz and 219-220 MHz.',
+      notify: 'Applicable AMTS coast-station licensee',
+      requiredInformation: [
+        'Specific geographic location of the amateur station'
+      ],
+      waitingPeriodDays: 30,
+      source: '97.303(l)(4)'
+    },
+    {
+      id: '219-220-amts-80km-approval',
+      appliesToBands: ['1.25m-219-220'],
+      condition: 'Station location is within 80 km of an AMTS coast station using 217-218 MHz and 219-220 MHz.',
+      requirement: 'Written approval from the applicable AMTS coast-station licensee is required before transmitting.',
+      source: '97.303(l)(5)'
+    }
+  ],
+
+  bandRestrictions: [
+    {
+      id: '2200m-sharing',
+      band: '2200m',
+      rule: 'Must not cause harmful interference to, and must accept interference from, specified United States Government and other-nation fixed, maritime mobile, and radionavigation services.',
+      interferenceResponse: 'Take all necessary measures to eliminate harmful interference, including temporary or permanent termination of transmissions.',
+      source: ['97.303(g)(3)', '97.303(g)(5)']
+    },
+    {
+      id: '630m-sharing',
+      band: '630m',
+      rule: 'Must not cause harmful interference to, and must accept interference from, specified FCC and other-nation maritime mobile and aeronautical radionavigation services.',
+      interferenceResponse: 'Take all necessary measures to eliminate harmful interference, including temporary or permanent termination of transmissions.',
+      source: ['97.303(g)(4)', '97.303(g)(5)']
+    },
+    {
+      id: '60m-secondary-sharing',
+      band: '60m',
+      rule: 'Must not cause harmful interference to, and must accept interference from, United States, other-nation fixed-service stations, and other-nation mobile stations except aeronautical mobile.',
+      source: '97.303(h)(1)-(2)'
+    },
+    {
+      id: '60m-allowed-frequencies',
+      band: '60m',
+      allocationMHz: { low: 5.3305, high: 5.4064 },
+      allowedRangesMHz: [
+        { low: 5.3515, high: 5.3665 }
+      ],
+      discreteChannels: [
+        {
+          centerMHz: 5.3320,
+          phoneDataRttyCarrierMHz: 5.3305,
+          cwCarrierMHz: 5.3320
+        },
+        {
+          centerMHz: 5.3480,
+          phoneDataRttyCarrierMHz: 5.3465,
+          cwCarrierMHz: 5.3480
+        },
+        {
+          centerMHz: 5.3730,
+          phoneDataRttyCarrierMHz: 5.3715,
+          cwCarrierMHz: 5.3730
+        },
+        {
+          centerMHz: 5.4050,
+          phoneDataRttyCarrierMHz: 5.4035,
+          cwCarrierMHz: 5.4050
+        }
+      ],
+      maxOccupiedBandwidthKHz: 2.8,
+      discreteChannelEmissionDesignators: {
+        phone: '2K80J3E',
+        data: '2K80J2D',
+        rtty: '60H0J2B',
+        cw: '150HA1A'
+      },
+      source: '97.303(h)(3)'
+    },
+    {
+      id: '40m-7200-7300-sharing',
+      frequencyMHz: { low: 7.2, high: 7.3 },
+      rule: 'Must not cause harmful interference to, and must accept interference from, international broadcast stations intended for Region 1 or Region 3.',
+      source: '97.303(i)'
+    },
+    {
+      id: '30m-secondary-sharing',
+      band: '30m',
+      rule: 'Must not cause harmful interference to, and must accept interference from, other-nation fixed-service stations.',
+      interferenceResponse: 'Make all necessary adjustments, including termination of transmissions, if harmful interference is caused.',
+      source: '97.303(j)'
+    },
+    {
+      id: '219-220-special-purpose',
+      frequencyMHz: { low: 219, high: 220 },
+      allowedPurpose: 'Forwarding stations in fixed point-to-point digital message-forwarding systems, including intercity packet backbone networks.',
+      prohibitedPurpose: 'All other purposes.',
+      sharingRule: 'Must not cause harmful interference to, and must accept interference from, specified AMTS, 218-219 MHz Service, 220 MHz Service, television channels 11 and 13, and certain other-nation services.',
+      source: ['97.303(l)(1)', '97.303(l)(2)']
+    },
+    {
+      id: '70cm-line-a',
+      frequencyMHz: { low: 420, high: 430 },
+      prohibition: 'No amateur transmission north of Line A.',
+      reference: 'See §97.3(a) for the definition of Line A.',
+      source: '97.303(m)(1)'
+    },
+    {
+      id: '70cm-buffalo-cleveland-detroit',
+      frequencyMHz: { low: 420, high: 430 },
+      condition: 'Within 80.5 km of Buffalo, Cleveland, or Detroit.',
+      rule: 'Must not cause harmful interference to, and must accept interference from, specified FCC land-mobile stations.',
+      reference: 'See §2.106, footnote US230 for specific frequencies and coordinates.',
+      source: '97.303(m)(2)'
+    },
+    {
+      id: '70cm-other-nation-sharing',
+      frequencyRangesMHz: [
+        { low: 420, high: 430 },
+        { low: 440, high: 450 }
+      ],
+      rule: 'Must not cause harmful interference to, and must accept interference from, other-nation fixed and mobile services except aeronautical mobile.',
+      source: '97.303(m)(3)'
+    },
+    {
+      id: '33cm-texas-new-mexico-prohibition',
+      band: '33cm',
+      prohibition: 'No amateur transmission from the specified bounded portions of Texas and New Mexico, or from outside the United States and its Region 2 insular areas.',
+      boundaries: {
+        southLatitudeNorth: '31°41′',
+        northLatitudeNorth: '34°30′',
+        eastLongitudeWest: '104°11′',
+        westLongitudeWest: '107°30′'
+      },
+      source: '97.303(n)(2)'
+    },
+    {
+      id: '33cm-colorado-wyoming-protected-segments',
+      band: '33cm',
+      condition: 'Within specified bounded portions of Colorado and Wyoming.',
+      boundaries: {
+        southLatitudeNorth: '39°',
+        northLatitudeNorth: '42°',
+        eastLongitudeWest: '103°',
+        westLongitudeWest: '108°'
+      },
+      prohibitedRangesMHz: [
+        { low: 902.4, high: 902.6 },
+        { low: 904.3, high: 904.7 },
+        { low: 925.3, high: 925.7 },
+        { low: 927.3, high: 927.7 }
+      ],
+      source: '97.303(n)(3)'
+    }
+  ],
+
+  checkerGuidance: {
+    alwaysShowForBands: {
+      '2200m': 'Fixed location, PLC separation, UTC notification, and waiting-period requirements apply.',
+      '630m': 'Fixed location, PLC separation, UTC notification, and waiting-period requirements apply.',
+      '60m': 'Secondary allocation: do not cause interference and accept interference from authorized primary users.',
+      '30m': 'Secondary allocation: do not cause interference and accept interference from other-nation fixed-service stations.',
+      '1.25m-219-220': 'Special-purpose, notification, and possible AMTS-distance restrictions apply.',
+      '70cm': 'Location-specific restrictions may apply, including the Line A prohibition on 420-430 MHz.',
+      '33cm': 'Location-specific prohibitions and protected segments may apply.'
+    },
+    needsMoreInformationWhen: [
+      'The rule depends on geographic coordinates or proximity to a protected station or area.',
+      'A required notification, waiting period, approval, or station-purpose condition cannot be verified from the entered data.',
+      'The complete Table of Frequency Allocations must be consulted for the particular operation.'
+    ],
+    persistentNotice: 'This tool summarizes selected Part 97 requirements. The FCC Table of Frequency Allocations contains the complete, legally binding frequency-sharing requirements.'
+  }
+};
 	
 /* ===========================================
    FREQUENCY PRIVILEGES — RULES ENGINE
