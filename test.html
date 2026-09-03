@@ -6176,6 +6176,82 @@ function renderGoalRec(id) {
 // deferred: initGoals();
 
 /* ===========================================
+   FCC PART 97 REFERENCE DATA — §97.301
+   U.S. / ITU Region 2 frequency privileges
+=========================================== */
+
+const FCC_97301_REGION2 = {
+  source: '47 CFR §97.301',
+  sourceDate: '2026-08-20',
+  jurisdiction: 'United States / ITU Region 2',
+
+  allClasses: [
+    { band: '6m', lowMHz: 50.000, highMHz: 54.000, sharing: ['97.303(a)'] },
+    { band: '2m', lowMHz: 144.000, highMHz: 148.000, sharing: ['97.303(a)', '97.303(k)'] },
+    { band: '1.25m', lowMHz: 219.000, highMHz: 220.000, sharing: ['97.303(l)'] },
+    { band: '1.25m', lowMHz: 222.000, highMHz: 225.000, sharing: ['97.303(a)'] },
+    { band: '70cm', lowMHz: 420.000, highMHz: 450.000, sharing: ['97.303(a)', '97.303(b)', '97.303(m)'] },
+    { band: '33cm', lowMHz: 902.000, highMHz: 928.000, sharing: ['97.303(a)', '97.303(b)', '97.303(e)', '97.303(n)'] },
+    { band: '23cm', lowMHz: 1240.000, highMHz: 1300.000, sharing: ['97.303(b)', '97.303(d)', '97.303(o)'] },
+    { band: '13cm', lowMHz: 2300.000, highMHz: 2310.000, sharing: ['97.303(d)', '97.303(p)'] },
+    { band: '13cm', lowMHz: 2390.000, highMHz: 2450.000, sharing: ['97.303(d)', '97.303(e)', '97.303(p)'] },
+    { band: '5cm', lowMHz: 5650.000, highMHz: 5925.000, sharing: ['97.303(a)', '97.303(b)', '97.303(e)', '97.303(r)'] },
+    { band: '3cm', lowMHz: 10000.000, highMHz: 10500.000, sharing: ['97.303(a)', '97.303(b)', '97.303(k)'] },
+    { band: '1.2cm', lowMHz: 24000.000, highMHz: 24250.000, sharing: ['97.303(b)', '97.303(d)', '97.303(e)'] },
+    { band: '6mm', lowMHz: 47000.000, highMHz: 47200.000, sharing: [] },
+    { band: '4mm', lowMHz: 76000.000, highMHz: 81000.000, sharing: ['97.303(c)', '97.303(f)', '97.303(s)'] },
+    { band: '2.5mm', lowMHz: 122250.000, highMHz: 123000.000, sharing: ['97.303(e)', '97.303(t)'] },
+    { band: '2mm', lowMHz: 134000.000, highMHz: 141000.000, sharing: ['97.303(c)', '97.303(f)'] },
+    { band: '1mm', lowMHz: 241000.000, highMHz: 250000.000, sharing: ['97.303(c)', '97.303(e)', '97.303(f)'] },
+    { band: 'submm', lowMHz: 275000.000, highMHz: null, sharing: ['97.303(f)'] }
+  ],
+
+  extra: [
+    { band: '2200m', lowMHz: 0.1357, highMHz: 0.1378, sharing: ['97.303(a)', '97.303(g)'] },
+    { band: '160m', lowMHz: 1.800, highMHz: 2.000, sharing: ['97.303(a)'] },
+    { band: '630m', lowMHz: 0.472, highMHz: 0.479, sharing: ['97.303(g)'] },
+    { band: '80m', lowMHz: 3.500, highMHz: 3.600, sharing: ['97.303(a)'] },
+    { band: '75m', lowMHz: 3.600, highMHz: 4.000, sharing: ['97.303(a)'] },
+    { band: '60m', lowMHz: 5.3515, highMHz: 5.3665, sharing: ['97.303(h)'] },
+    { band: '40m', lowMHz: 7.000, highMHz: 7.300, sharing: ['97.303(i)'] },
+    { band: '30m', lowMHz: 10.100, highMHz: 10.150, sharing: ['97.303(j)'] },
+    { band: '20m', lowMHz: 14.000, highMHz: 14.350, sharing: [] },
+    { band: '17m', lowMHz: 18.068, highMHz: 18.168, sharing: [] },
+    { band: '15m', lowMHz: 21.000, highMHz: 21.450, sharing: [] },
+    { band: '12m', lowMHz: 24.890, highMHz: 24.990, sharing: [] },
+    { band: '10m', lowMHz: 28.000, highMHz: 29.700, sharing: [] }
+  ],
+
+  general: [
+    { band: '2200m', lowMHz: 0.1357, highMHz: 0.1378, sharing: ['97.303(a)', '97.303(g)'] },
+    { band: '160m', lowMHz: 1.800, highMHz: 2.000, sharing: ['97.303(a)'] },
+    { band: '630m', lowMHz: 0.472, highMHz: 0.479, sharing: ['97.303(g)'] },
+    { band: '80m', lowMHz: 3.525, highMHz: 3.600, sharing: ['97.303(a)'] },
+    { band: '75m', lowMHz: 3.800, highMHz: 4.000, sharing: ['97.303(a)'] },
+    { band: '60m', lowMHz: 5.3515, highMHz: 5.3665, sharing: ['97.303(h)'] },
+    { band: '40m', lowMHz: 7.025, highMHz: 7.125, sharing: ['97.303(i)'] },
+    { band: '40m', lowMHz: 7.175, highMHz: 7.300, sharing: ['97.303(i)'] },
+    { band: '30m', lowMHz: 10.100, highMHz: 10.150, sharing: ['97.303(j)'] },
+    { band: '20m', lowMHz: 14.025, highMHz: 14.150, sharing: [] },
+    { band: '20m', lowMHz: 14.225, highMHz: 14.350, sharing: [] },
+    { band: '17m', lowMHz: 18.068, highMHz: 18.168, sharing: [] },
+    { band: '15m', lowMHz: 21.025, highMHz: 21.200, sharing: [] },
+    { band: '15m', lowMHz: 21.275, highMHz: 21.450, sharing: [] },
+    { band: '12m', lowMHz: 24.890, highMHz: 24.990, sharing: [] },
+    { band: '10m', lowMHz: 28.000, highMHz: 29.700, sharing: [] }
+  ],
+
+  technician: [
+    { band: '80m', lowMHz: 3.525, highMHz: 3.600, sharing: ['97.303(a)'] },
+    { band: '40m', lowMHz: 7.025, highMHz: 7.125, sharing: ['97.303(i)'] },
+    { band: '15m', lowMHz: 21.025, highMHz: 21.200, sharing: [] },
+    { band: '10m', lowMHz: 28.000, highMHz: 28.500, sharing: [] },
+    { band: '1.25m', lowMHz: 222.000, highMHz: 225.000, sharing: ['97.303(a)'] },
+    { band: '23cm', lowMHz: 1270.000, highMHz: 1295.000, sharing: ['97.303(d)', '97.303(o)'] }
+  ]
+};
+	
+/* ===========================================
    FREQUENCY PRIVILEGES — RULES ENGINE
    Stage 1: FCC-derived authorization evaluator.
    Does not yet replace the live panel UI.
