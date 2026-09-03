@@ -6433,6 +6433,232 @@ const FCC_97305_EMISSIONS = {
     { band: '13cm', range: 'entire', modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'SS', 'Test', 'Pulse'], standards: ['97.307(f)(7)', '97.307(f)(8)', '97.307(f)(12)'] }
   ]
 };	
+
+/* ===========================================
+   FCC PART 97 REFERENCE DATA — §97.307
+   Emission standards and operating conditions
+=========================================== */
+
+const FCC_97307_EMISSION_STANDARDS = {
+  source: '47 CFR §97.307',
+  sourceDate: '2026-08-20',
+  jurisdiction: 'United States / ITU Region 2',
+
+  generalRequirements: [
+    {
+      id: 'necessary-bandwidth',
+      rule: 'Use no more bandwidth than necessary for the information rate and emission type.',
+      source: '97.307(a)'
+    },
+    {
+      id: 'stay-in-authorized-segment',
+      rule: 'Modulation emissions must remain within the band or segment available to the control operator.',
+      source: '97.307(b)'
+    },
+    {
+      id: 'avoid-splatter-keyclicks',
+      rule: 'Emissions outside necessary bandwidth must not cause splatter or keyclick interference on adjacent frequencies.',
+      source: '97.307(b)'
+    },
+    {
+      id: 'reduce-spurious-emissions',
+      rule: 'Reduce spurious emissions to the greatest extent practicable; harmful interference must be corrected using good engineering practice.',
+      source: '97.307(c)'
+    }
+  ],
+
+  spuriousEmissionStandards: [
+    {
+      id: 'below-30mhz-post-2003',
+      frequency: { lowMHz: 0, highMHz: 30, highInclusive: false },
+      appliesTo: 'Transmitters installed after 2003-01-01',
+      requirement: 'Mean spurious emissions at least 43 dB below mean fundamental power.',
+      attenuationDb: 43,
+      source: '97.307(d)'
+    },
+    {
+      id: 'below-30mhz-pre-2003',
+      frequency: { lowMHz: 0, highMHz: 30, highInclusive: false },
+      appliesTo: 'Transmitters installed on or before 2003-01-01',
+      requirement: 'Spurious emissions no more than 50 mW and at least 40 dB below mean fundamental power.',
+      maxSpuriousMilliwatts: 50,
+      attenuationDb: 40,
+      source: '97.307(d)'
+    },
+    {
+      id: 'below-30mhz-pre-2003-under-5w',
+      frequency: { lowMHz: 0, highMHz: 30, highInclusive: false },
+      appliesTo: 'Pre-2003 transmitter with mean power below 5 W',
+      requirement: 'At least 30 dB attenuation.',
+      attenuationDb: 30,
+      source: '97.307(d)'
+    },
+    {
+      id: '30-to-225mhz',
+      frequency: { lowMHz: 30, highMHz: 225, highInclusive: true },
+      appliesTo: 'All non-exempt transmitters',
+      requirement: 'Mean spurious emissions at least 60 dB below mean fundamental power.',
+      attenuationDb: 60,
+      source: '97.307(e)'
+    },
+    {
+      id: '30-to-225mhz-25w-or-less',
+      frequency: { lowMHz: 30, highMHz: 225, highInclusive: true },
+      appliesTo: 'Transmitter mean power of 25 W or less',
+      requirement: 'At least 40 dB below the fundamental; normally no more than 25 µW, but not required below 10 µW.',
+      attenuationDb: 40,
+      maxSpuriousMicrowatts: 25,
+      minimumRequiredReductionMicrowatts: 10,
+      source: '97.307(e)'
+    }
+  ],
+
+  standards: [
+    {
+      id: 'f1-angle-modulation',
+      appliesTo: ['angle-modulated'],
+      maxModulationIndex: 1,
+      condition: 'At the highest modulation frequency.',
+      source: '97.307(f)(1)'
+    },
+    {
+      id: 'f2-general-non-phone',
+      appliesTo: ['non-phone', 'independent-sideband', 'multiplexed-image-phone'],
+      rule: 'Non-phone bandwidth may not exceed communications-quality phone bandwidth of the same modulation type. Independent-sideband and multiplexed image/phone bandwidth may not exceed communications-quality A3E bandwidth.',
+      source: '97.307(f)(2)'
+    },
+    {
+      id: 'f3-hf-rtty-data',
+      appliesTo: ['RTTY', 'Data'],
+      appliesToBands: ['80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m'],
+      requiredDigitalCode: 'Specified digital code listed in §97.309(a)',
+      maxBandwidthKHz: 2.8,
+      source: '97.307(f)(3)'
+    },
+    {
+      id: 'f3-2200m-630m-rtty-data',
+      appliesTo: ['RTTY', 'Data'],
+      appliesToBands: ['2200m', '630m'],
+      requiredDigitalCode: 'Specified digital code listed in §97.309(a)',
+      maxSymbolRateBaud: 300,
+      maxFskShiftKHz: 1,
+      source: '97.307(f)(3)'
+    },
+    {
+      id: 'f5-6m-rtty-data',
+      appliesTo: ['RTTY', 'Data', 'Multiplexed'],
+      appliesToBands: ['6m'],
+      allowedDigitalCodes: [
+        'Specified digital code listed in §97.309(a)',
+        'Unspecified digital code permitted under §97.309(b)'
+      ],
+      maxSymbolRateKBaud: 19.6,
+      maxBandwidthKHz: 20,
+      source: '97.307(f)(5)'
+    },
+    {
+      id: 'f6-222mhz-and-70cm-rtty-data',
+      appliesTo: ['RTTY', 'Data', 'Multiplexed'],
+      appliesToBands: ['1.25m-222-225', '70cm'],
+      allowedDigitalCodes: [
+        'Specified digital code listed in §97.309(a)',
+        'Unspecified digital code permitted under §97.309(b)'
+      ],
+      maxSymbolRateKBaud: 56,
+      maxBandwidthKHz: 100,
+      source: '97.307(f)(6)'
+    },
+    {
+      id: 'f7-higher-uhf-microwave-rtty-data',
+      appliesTo: ['RTTY', 'Data', 'Multiplexed'],
+      appliesToBands: ['33cm', '23cm', '13cm', '5cm', '3cm', '1.2cm', '6mm', '4mm', '2.5mm', '2mm', '1mm'],
+      allowedDigitalCodes: [
+        'Specified digital code listed in §97.309(a)',
+        'Unspecified digital code permitted under §97.309(b)'
+      ],
+      source: '97.307(f)(7)'
+    },
+    {
+      id: 'f8-additional-rtty-data-designators',
+      appliesTo: ['RTTY', 'Data'],
+      permittedDesignatorPatterns: {
+        firstSymbol: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'R'],
+        secondSymbol: ['1', '2', '7', '9', 'X'],
+        thirdSymbol: ['D', 'W']
+      },
+      source: '97.307(f)(8)'
+    },
+    {
+      id: 'f9-tech-novice-cw',
+      appliesToLicenses: ['technician', 'novice'],
+      appliesTo: ['CW'],
+      permittedCW: 'International Morse code only.',
+      source: '97.307(f)(9)'
+    },
+    {
+      id: 'f10-tech-novice-10m-phone',
+      appliesToLicenses: ['technician', 'novice'],
+      appliesToBands: ['10m'],
+      appliesTo: ['Phone'],
+      permittedPhoneEmissionDesignators: ['J3E', 'R3E'],
+      source: '97.307(f)(10)'
+    },
+    {
+      id: 'f11-40m-phone-image-location',
+      appliesToBands: ['40m'],
+      frequencyMHz: { low: 7.075, high: 7.1 },
+      appliesTo: ['Phone', 'Image'],
+      allowedLocations: [
+        'ITU Region 1',
+        'ITU Region 3',
+        'ITU Region 2 west of 130° West longitude',
+        'ITU Region 2 south of 20° North latitude'
+      ],
+      region2Condition: {
+        permittedIfWestOfLongitude: -130,
+        permittedIfSouthOfLatitude: 20,
+        otherwise: 'Not authorized'
+      },
+      source: '97.307(f)(11)'
+    },
+    {
+      id: 'f12-f8e',
+      appliesTo: ['F8E'],
+      rule: 'F8E emission is permitted where referenced by §97.305.',
+      source: '97.307(f)(12)'
+    },
+    {
+      id: 'f13-219-220-data',
+      appliesToBands: ['1.25m-219-220'],
+      appliesTo: ['Data'],
+      allowedDigitalCodes: [
+        'Unspecified digital code permitted under §97.309(b)'
+      ],
+      maxBandwidthKHz: 100,
+      source: '97.307(f)(13)'
+    },
+    {
+      id: 'f14-60m',
+      appliesToBands: ['60m'],
+      appliesTo: ['CW', 'Phone', 'RTTY', 'Data'],
+      maxBandwidthKHz: 2.8,
+      rttyDataRequirements: [
+        'RTTY and data must meet §97.309 digital-code specifications.',
+        'Limit transmission length to avoid harmful interference to United States Government stations.'
+      ],
+      source: '97.307(f)(14)'
+    }
+  ],
+
+  checkerGuidance: {
+    needsMoreInformationWhen: [
+      'A location-dependent condition applies.',
+      'The user must select an exact 60 m frequency or allocation segment.',
+      'The selected frequency is affected by a power, bandwidth, sharing, notification, or station-specific rule outside this file.'
+    ],
+    persistentNotice: 'This tool evaluates frequency and emission authorization from the provided information. It does not replace the operator’s responsibility to comply with all applicable FCC rules.'
+  }
+};
 	
 /* ===========================================
    FREQUENCY PRIVILEGES — RULES ENGINE
