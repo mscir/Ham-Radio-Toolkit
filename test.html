@@ -6250,6 +6250,119 @@ const FCC_97301_REGION2 = {
     { band: '23cm', lowMHz: 1270.000, highMHz: 1295.000, sharing: ['97.303(d)', '97.303(o)'] }
   ]
 };
+
+/* ===========================================
+   FCC PART 97 REFERENCE DATA — §97.313
+   Transmitter power standards
+=========================================== */
+
+const FCC_97313_POWER_REFERENCE = {
+  source: '47 CFR §97.313',
+  retrieved: '2026-08-23',
+  amendment: '91 FR 1431, Jan. 14, 2026',
+
+  generalRule: {
+    minimumNecessaryPower: true,
+    defaultMaximum: '1,500 W PEP'
+  },
+
+  limits: [
+    {
+      id: 'default-amateur-power',
+      appliesTo: 'Unless a more specific rule applies',
+      transmitterPower: '1,500 W PEP',
+      source: '97.313(b)'
+    },
+    {
+      id: '30m',
+      band: '30m',
+      lowMHz: 10.100,
+      highMHz: 10.150,
+      transmitterPower: '200 W PEP',
+      source: '97.313(c)(1)'
+    },
+    {
+      id: 'tech-novice-hf',
+      appliesTo: 'Technician or Novice control operator',
+      transmitterPower: '200 W PEP',
+      segments: [
+        '3.525–3.600 MHz',
+        '7.025–7.125 MHz',
+        '21.025–21.200 MHz',
+        '28.000–28.500 MHz'
+      ],
+      source: '97.313(c)(2)'
+    },
+    {
+      id: '70cm-us270',
+      band: '70cm',
+      transmitterPower: '50 W PEP',
+      condition: 'Only in locations specified by §2.106(c)(270)(i); exceptions require FCC authorization',
+      source: '97.313(f)'
+    },
+    {
+      id: '33cm-white-sands',
+      band: '33cm',
+      transmitterPower: '50 W PEP',
+      condition: 'Within 241 km of the specified White Sands Missile Range boundaries',
+      source: '97.313(g)'
+    },
+    {
+      id: '219-220mhz',
+      band: '1.25m',
+      lowMHz: 219.000,
+      highMHz: 220.000,
+      transmitterPower: '50 W PEP',
+      source: '97.313(h)'
+    },
+    {
+      id: '60m-discrete-frequencies',
+      band: '60m',
+      frequenciesMHz: [5.332, 5.348, 5.373, 5.405],
+      radiatedPower: '100 W ERP',
+      source: '97.313(i)'
+    },
+    {
+      id: '60m-contiguous-segment',
+      band: '60m',
+      lowMHz: 5.3515,
+      highMHz: 5.3665,
+      radiatedPower: '9.15 W ERP',
+      source: '97.313(i)'
+    },
+    {
+      id: '2200m',
+      band: '2200m',
+      lowMHz: 0.1357,
+      highMHz: 0.1378,
+      transmitterPower: '1,500 W PEP',
+      radiatedPower: '1 W EIRP',
+      source: '97.313(k)'
+    },
+    {
+      id: '630m',
+      band: '630m',
+      lowMHz: 0.472,
+      highMHz: 0.479,
+      transmitterPower: '500 W PEP',
+      radiatedPower: '5 W EIRP',
+      exception: 'Alaska stations within 800 km of the Russian Federation: 1 W EIRP maximum',
+      source: '97.313(l)'
+    },
+    {
+      id: '4mm',
+      band: '4mm',
+      lowGHz: 76,
+      highGHz: 81,
+      radiatedPower: '316 W peak EIRP',
+      source: '97.313(m)'
+    }
+  ]
+};
+
+/* ===========================================
+   FREQUENCY PRIVILEGES — RULES ENGINE
+=========================================== */
 	
 /* ===========================================
    FREQUENCY PRIVILEGES — RULES ENGINE
