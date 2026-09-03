@@ -7217,6 +7217,46 @@ function privCollectConditions(mhz, bands) {
     }
   });
 
+    /*
+    Include generic sharing rules that are stored separately from
+    bandRestrictions. Some, including 70 cm, require station/location
+    details that this first-stage checker does not collect.
+  */
+  (sharing.interferenceSharing || []).forEach(rule => {
+    const directBandMatch =
+      rule.appliesToBands?.some(band => bands.includes(band));
+
+    const frequencyRangeMatch =
+      (rule.frequencyRangesMHz || []).some(range =>
+        privNumberInRange(mhz, range.low, range.high)
+      );
+
+    const gigahertzRangeMatch =
+      (rule.frequencyRangesGHz || []).some(range =>
+        privNumberInRange(mhz / 1000, range.low, range.high)
+      );
+
+    if (!directBandMatch && !frequencyRangeMatch && !gigahertzRangeMatch) {
+      return;
+    }
+
+    /*
+      §97.303 sharing requirements affect operating authorization,
+      but the first checker cannot determine every station type,
+      location, or allocation-table condition. Treat them as an
+      explicit operating condition rather than an unconditional yes.
+    */
+    addCondition(
+      rule.rule,
+      rule.source,
+      Boolean(
+        rule.appliesToBands?.includes('70cm') ||
+        rule.appliesToBands?.includes('33cm') ||
+        rule.appliesToBands?.includes('23cm')
+      )
+    );
+  });
+
   (sharing.fixedLocationRequirements || []).forEach(rule => {
     if (!rule.appliesToBands?.some(band => bands.includes(band))) return;
 
