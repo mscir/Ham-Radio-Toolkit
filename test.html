@@ -7663,6 +7663,223 @@ function evaluatePrivilegeAuthorization({
 
   return baseResult;
 }
+
+/* ===========================================
+   FREQUENCY PRIVILEGES — CHECKER UI
+   Connects the visible checker to the rules engine.
+=========================================== */
+
+let currentPrivCheckerMode = 'data';
+
+function setPrivCheckerMode(mode) {
+  if (!PRIV_CHECKER_MODES[mode]) return;
+
+  currentPrivCheckerMode = mode;
+
+  document
+    .querySelectorAll('#priv-checker-mode-btns [data-priv-mode]')
+    .forEach(button => {
+      button.classList.toggle(
+        'active',
+        button.dataset.privMode === mode
+      );
+    });
+
+  const input = document.getElementById('priv-freq-input');
+
+  if (input?.value.trim()) {
+    checkPrivAuthorization();
+  }
+}
+
+function setPrivCheckerPreset(frequency, mode) {
+  const input = document.getElementById('priv-freq-input');
+
+  if (!input) return;
+
+  input.value = frequency;
+  setPrivCheckerMode(mode);
+  checkPrivAuthorization();
+}
+
+function privCheckerEscape(text) {
+  return String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function privCheckerStatusStyle(status) {
+  const styles = {
+    authorized: {
+      icon: '✓',
+      color: 'var(--good)',
+      border: 'rgba(57,255,20,.45)',
+      background: 'rgba(57,255,20,.06)'
+    },
+    'authorized-with-conditions': {
+      icon: '⚠',
+      color: 'var(--amber)',
+      border: 'rgba(255,179,71,.45)',
+      background: 'rgba(255,179,71,.06)'
+    },
+    'needs-more-information': {
+      icon: '?',
+      color: 'var(--accent)',
+      border: 'rgba(0,212,255,.50)',
+      background: 'rgba(0,212,255,.07)'
+    },
+    'not-authorized': {
+      icon: '✕',
+      color: 'var(--poor)',
+      border: 'rgba(255,60,60,.48)',
+      background: 'rgba(255,60,60,.06)'
+    }
+  };
+
+  return styles[status] || styles['not-authorized'];
+}
+
+function privCheckerFormatMHz(value) {
+  if (!Number.isFinite(value)) return '';
+
+  if (value < 1) {
+    return `${(value * 1000).toFixed(1)} kHz`;
+  }
+
+  return `${value.toFixed(value < 100 ? 3 : 3)} MHz`;
+}
+
+function privCheckerResultList(items, title, color) {
+  if (!items?.length) return '';
+
+  const rows = items
+    .map(item => {
+      const source = item.source
+        ? ` <span style="color:var(--text-dim)">(${privCheckerEscape(item.source)})</span>`
+        : '';
+
+      return `<li>${privCheckerEscape(item.text)}${source}</li>`;
+    })
+    .join('');
+
+  return `
+    <div style="margin-top:10px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:${color};margin-bottom:3px">
+        ${privCheckerEscape(title)}
+      </div>
+      <ul style="margin:0;padding-left:18px;color:var(--text-dim);font-size:12px;line-height:1.55">
+        ${rows}
+      </ul>
+    </div>
+  `;
+}
+
+function renderPrivAuthorizationResult(result) {
+  const output = document.getElementById('priv-freq-result');
+
+  if (!output) return;
+
+  const style = privCheckerStatusStyle(result.status);
+
+  output.style.borderColor = style.border;
+  output.style.background = style.background;
+  output.style.color = 'var(--text)';
+
+  const frequency = Number.isFinite(result.frequencyMHz)
+    ? privCheckerFormatMHz(result.frequencyMHz)
+    : '';
+
+  const bands = result.bandNames?.length
+    ? result.bandNames.join(' / ')
+    : '';
+
+  const power = result.power?.display
+    ? `
+      <div style="margin-top:8px;font-size:12px">
+        <span style="color:var(--text-dim)">Maximum power:</span>
+        <strong style="color:var(--good);font-family:'Share Tech Mono',monospace">
+          ${privCheckerEscape(result.power.display)}
+        </strong>
+        <span style="color:var(--text-dim)">(${privCheckerEscape(result.power.source || '')})</span>
+      </div>
+    `
+    : '';
+
+  const conversionNote = result.convertedFromKHz
+    ? `
+      <div style="margin-top:7px;font-size:11px;color:var(--amber)">
+        Interpreted <strong>${privCheckerEscape(result.rawInput)}</strong> as
+        <strong>${privCheckerEscape(frequency)}</strong>.
+      </div>
+    `
+    : '';
+
+  output.innerHTML = `
+    <div style="display:flex;gap:9px;align-items:flex-start">
+      <span style="display:inline-flex;align-items:center;justify-content:center;flex:0 0 21px;height:21px;border-radius:50%;background:${style.background};border:1px solid ${style.border};color:${style.color};font-family:'Share Tech Mono',monospace;font-weight:700">
+        ${style.icon}
+      </span>
+
+      <div style="min-width:0;flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:${style.color}">
+          ${privCheckerEscape(result.statusLabel)}
+        </div>
+
+        <div style="margin-top:2px;color:var(--text);line-height:1.55">
+          ${privCheckerEscape(result.message)}
+        </div>
+
+        ${
+          frequency
+            ? `
+              <div style="margin-top:7px;font-size:12px;color:var(--text-dim)">
+                <span style="color:var(--text)">Frequency:</span>
+                <span style="font-family:'Share Tech Mono',monospace;color:var(--accent)">${privCheckerEscape(frequency)}</span>
+                &nbsp;·&nbsp;
+                <span style="color:var(--text)">Mode:</span>
+                <span style="color:var(--heading)">${privCheckerEscape(result.modeLabel)}</span>
+                &nbsp;·&nbsp;
+                <span style="color:var(--text)">License:</span>
+                <span style="color:var(--heading)">${privCheckerEscape(result.licenseLabel)}</span>
+                ${
+                  bands
+                    ? `
+                      &nbsp;·&nbsp;
+                      <span style="color:var(--text)">Band:</span>
+                      <span style="color:var(--heading)">${privCheckerEscape(bands)}</span>
+                    `
+                    : ''
+                }
+              </div>
+            `
+            : ''
+        }
+
+        ${power}
+        ${privCheckerResultList(result.conditions, 'Conditions', 'var(--amber)')}
+        ${privCheckerResultList(result.needsMoreInformation, 'Verify before transmitting', 'var(--accent)')}
+        ${conversionNote}
+      </div>
+    </div>
+  `;
+}
+
+function checkPrivAuthorization() {
+  const input = document.getElementById('priv-freq-input');
+
+  if (!input) return;
+
+  const result = evaluatePrivilegeAuthorization({
+    frequency: input.value,
+    mode: currentPrivCheckerMode,
+    licenseClass: currentLicenseClass
+  });
+
+  renderPrivAuthorizationResult(result);
+}
 	
 // ===========================================
 // LICENSE CLASS SYSTEM
@@ -7708,7 +7925,7 @@ function setLicenseClass(cls) {
   const pdesc = document.getElementById('priv-panel-desc');
   if (pdesc) pdesc.textContent = `Legal frequency ranges and power limits for ${name} licensees by mode. Data from ARRL.org and FCC 47 CFR Part 97.`;
   const fclabel = document.getElementById('freq-checker-label');
-  if (fclabel) fclabel.textContent = `▸ Frequency Checker — Is This Legal for ${name}?`;
+  if (fclabel) fclabel.textContent = `▸ Check Frequency and Mode Authorization — ${name}`;
   const brlabel = document.getElementById('band-ref-label');
   if (brlabel) brlabel.textContent = `▸ Complete ${name} Band Reference`;
 
@@ -10203,7 +10420,7 @@ if (typeof initGoals === 'function') {
     const pdesc = document.getElementById('priv-panel-desc');
     if (pdesc) pdesc.textContent = `Legal frequency ranges and power limits for ${name} licensees by mode. Data from ARRL.org and FCC 47 CFR Part 97.`;
     const fclabel = document.getElementById('freq-checker-label');
-    if (fclabel) fclabel.textContent = `▸ Frequency Checker — Is This Legal for ${name}?`;
+    if (fclabel) fclabel.textContent = `▸ Check Frequency and Mode Authorization — ${name}`;
     const brlabel = document.getElementById('band-ref-label');
     if (brlabel) brlabel.textContent = `▸ Complete ${name} Band Reference`;
   }
