@@ -4343,41 +4343,6 @@ const PRIV_MODES = {
   ],
 };
 
-function initPrivileges() {
-  const btns = document.getElementById('priv-mode-btns');
-  btns.innerHTML = '';
-  Object.keys(PRIV_MODES).forEach(mode => {
-    const b = document.createElement('button');
-    b.className = 'mode-btn';
-    b.textContent = mode;
-    b.onclick = () => {
-      document.querySelectorAll('#priv-mode-btns .mode-btn').forEach(x => x.classList.remove('active'));
-      renderPrivTable(mode);
-    };
-    btns.appendChild(b);
-  });
-}
-
-function renderPrivTable(mode) {
-  const groups = PRIV_MODES[mode];
-  let html = '';
-  groups.forEach(g => {
-    html += `<div class="priv-group-hdr">▸ ${g.group}</div>
-    <table class="priv-table"><thead><tr><th>Band</th><th>Frequency Range</th><th>Max Power</th><th>Notes</th></tr></thead><tbody>`;
-    g.rows.forEach(r => {
-      html += `<tr>
-        <td class="priv-band">${r.band}</td>
-        <td class="priv-freq">${r.freq}</td>
-        <td class="priv-power">${r.power}</td>
-        <td class="priv-note">${r.note}</td>
-      </tr>`;
-    });
-    html += `</tbody></table>`;
-  });
-  document.getElementById('priv-table-area').innerHTML = html;
-}
-// deferred: initPrivileges();
-
 // ===========================================
 // POWER CALCULATORS
 // ===========================================
@@ -7870,16 +7835,270 @@ function renderPrivAuthorizationResult(result) {
 
 function checkPrivAuthorization() {
   const input = document.getElementById('priv-freq-input');
-
   if (!input) return;
-
   const result = evaluatePrivilegeAuthorization({
     frequency: input.value,
     mode: currentPrivCheckerMode,
     licenseClass: currentLicenseClass
   });
-
   renderPrivAuthorizationResult(result);
+}
+
+/* ===========================================
+   FREQUENCY PRIVILEGES — COMPACT SUMMARY TABLE
+   Builds selected-mode summary rows from FCC data.
+=========================================== */
+
+let currentPrivSummaryMode = 'data';
+
+function privSummaryModeKeyFromLabel(label) {
+  const keyMap = {
+    'CW': 'cw',
+    'Phone (SSB/FM/AM)': 'phone',
+    'RTTY / Data': 'data',
+    'Image (SSTV/FAX)': 'image'
+  };
+
+  return keyMap[label] || 'data';
+}
+
+function privSummaryLabelFromModeKey(modeKey) {
+  return PRIV_CHECKER_MODES[modeKey]?.label || 'RTTY / Data';
+}
+
+function privSummaryFormatRange(lowMHz, highMHz) {
+  if (!Number.isFinite(lowMHz)) return '—';
+
+  if (lowMHz < 1) {
+    const lowKHz = (lowMHz * 1000).toFixed(1);
+    const highKHz = (highMHz * 1000).toFixed(1);
+    return `${lowKHz}–${highKHz} kHz`;
+  }
+
+  return `${lowMHz.toFixed(3).replace(/\.?0+$/, '')}–${highMHz.toFixed(3).replace(/\.?0+$/, '')} MHz`;
+}
+
+function privSummaryAllowedForMode(segment, modeKey) {
+  const band = segment.band;
+
+  /*
+    CW is authorized on a frequency already available to the control
+    operator, subject to other Part 97 restrictions.
+  */
+  if (modeKey === 'cw') {
+    return true;
+  }
+
+  const emission = PRIV_CHECKER_MODES[modeKey]?.emission;
+
+  return (FCC_97305_EMISSIONS?.segments || []).some(rule => {
+    if (rule.band !== band) return false;
+    if (!rule.modes?.includes(emission)) return false;
+
+    if (rule.range === 'entire') return true;
+
+    if (Array.isArray(rule.rangesMHz)) {
+      return rule.rangesMHz.some(range =>
+        segment.lowMHz >= range.low &&
+        segment.highMHz <= range.high
+      );
+    }
+
+    if (typeof rule.lowMHz === 'number') {
+      return (
+        segment.lowMHz >= rule.lowMHz &&
+        segment.highMHz <= rule.highMHz
+      );
+    }
+
+    return false;
+  });
+}
+
+function privSummaryConditions(segment, modeKey, licenseClass) {
+  const notes = [];
+  const band = segment.band;
+
+  if (band === '30m') {
+    notes.push('Secondary; 200 W PEP; no Phone/Image');
+  }
+
+  if (band === '60m') {
+    notes.push('Secondary; max 2.8 kHz');
+  }
+
+  if (band === '2200m' || band === '630m') {
+    notes.push('Fixed location, notification, and sharing requirements');
+  }
+
+  if (band === '70cm') {
+    notes.push('Location and sharing restrictions may apply');
+  }
+
+  if (band === '33cm') {
+    notes.push('Location-specific restrictions may apply');
+  }
+
+  if (
+    modeKey === 'data' &&
+    ['80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m'].includes(band)
+  ) {
+    notes.push('2.8 kHz max; permitted §97.309 digital code');
+  }
+
+  if (modeKey === 'data' && band === '6m') {
+    notes.push('Up to 20 kHz bandwidth; applicable digital-code rules');
+  }
+
+  if (modeKey === 'data' && ['1.25m', '70cm'].includes(band)) {
+    notes.push('Up to 100 kHz bandwidth; applicable digital-code rules');
+  }
+
+  if (
+    licenseClass === 'tech' &&
+    ['80m', '40m', '15m', '10m'].includes(band)
+  ) {
+    notes.push('Technician HF power limit: 200 W PEP');
+  }
+
+  return [...new Set(notes)].join(' · ') || '—';
+}
+
+function privSummaryPower(segment, licenseClass) {
+  const power = privFindPowerRule(
+    (segment.lowMHz + segment.highMHz) / 2,
+    [segment.band],
+    licenseClass
+  );
+
+  return power?.display || '1,500 W PEP';
+}
+
+function privGetSummarySegments(licenseClass) {
+  const fccClassKey = PRIV_LICENSE_TO_FCC_KEY[licenseClass];
+  const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
+  const allClassSegments = FCC_97301_REGION2?.allClasses || [];
+
+  /*
+    Deduplicate identical underlying allocation records only. We retain
+    separate segments of the same band when their frequency ranges differ.
+  */
+  const seen = new Set();
+
+  return [...classSegments, ...allClassSegments].filter(segment => {
+    const key = `${segment.band}|${segment.lowMHz}|${segment.highMHz}`;
+
+    if (seen.has(key)) return false;
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
+  const area = document.getElementById('priv-table-area');
+
+  if (!area) return;
+
+  currentPrivSummaryMode = modeKey;
+
+  const label = privSummaryLabelFromModeKey(modeKey);
+  const segments = privGetSummarySegments(currentLicenseClass)
+    .filter(segment => privSummaryAllowedForMode(segment, modeKey))
+    .sort((a, b) => a.lowMHz - b.lowMHz);
+
+  if (!segments.length) {
+    area.innerHTML = `
+      <div class="priv-group-hdr">▸ ${privCheckerEscape(label)} privileges</div>
+      <div style="padding:16px 12px;color:var(--text-dim);font-size:13px">
+        No listed ${privCheckerEscape(label)} segments were found for the selected license class.
+      </div>
+    `;
+    return;
+  }
+
+  const rows = segments.map(segment => {
+    const range = privSummaryFormatRange(
+      segment.lowMHz,
+      segment.highMHz
+    );
+
+    const power = privSummaryPower(segment, currentLicenseClass);
+    const notes = privSummaryConditions(
+      segment,
+      modeKey,
+      currentLicenseClass
+    );
+
+    return `
+      <tr>
+        <td class="priv-band">${privCheckerEscape(segment.band)}</td>
+        <td class="priv-freq">${privCheckerEscape(range)}</td>
+        <td class="priv-power">${privCheckerEscape(power)}</td>
+        <td class="priv-note">${privCheckerEscape(notes)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  area.innerHTML = `
+    <div class="priv-group-hdr">
+      ▸ ${privCheckerEscape(label)} privileges — ${privCheckerEscape(PRIV_LICENSE_LABELS[currentLicenseClass])}
+    </div>
+
+    <table class="priv-table">
+      <thead>
+        <tr>
+          <th>Band</th>
+          <th>Frequency range</th>
+          <th>Max power</th>
+          <th>Key condition</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+/* new */
+function initPrivileges() {
+  const buttons = document.getElementById('priv-mode-btns');
+
+  if (!buttons) return;
+
+  buttons.innerHTML = '';
+
+  const modes = [
+    { key: 'cw', label: 'CW' },
+    { key: 'phone', label: 'Phone' },
+    { key: 'data', label: 'RTTY / Data' },
+    { key: 'image', label: 'Image' }
+  ];
+
+  modes.forEach(mode => {
+    const button = document.createElement('button');
+
+    button.type = 'button';
+    button.className = 'mode-btn';
+    button.textContent = mode.label;
+    button.dataset.privSummaryMode = mode.key;
+
+    button.classList.toggle(
+      'active',
+      mode.key === currentPrivSummaryMode
+    );
+
+    button.onclick = () => {
+      document
+        .querySelectorAll('#priv-mode-btns .mode-btn')
+        .forEach(item => item.classList.remove('active'));
+
+      button.classList.add('active');
+      renderPrivCompactSummary(mode.key);
+    };
+
+    buttons.appendChild(button);
+  });
+
+  renderPrivCompactSummary(currentPrivSummaryMode);
 }
 	
 // ===========================================
