@@ -4349,8 +4349,7 @@ function initPrivileges() {
     b.className = 'mode-btn';
     b.textContent = mode;
     b.onclick = () => {
-      document.querySelectorAll('.mode-btn').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
+      document.querySelectorAll('#priv-mode-btns .mode-btn').forEach(x => x.classList.remove('active'));
       renderPrivTable(mode);
     };
     btns.appendChild(b);
