@@ -7040,7 +7040,18 @@ function privFindClassFrequencySegments(mhz, licenseClass) {
     return [];
   }
 
-  return FCC_97301_REGION2[fccClassKey].filter(segment =>
+  /*
+    §97.301 has two kinds of records:
+    - Class-specific HF / LF-MF privileges in technician, general, and extra.
+    - VHF/UHF/microwave privileges in allClasses.
+
+    A selected license class can use a frequency if it appears in either
+    its class-specific list or the allClasses list.
+  */
+  const classSpecificSegments = FCC_97301_REGION2[fccClassKey];
+  const allClassSegments = FCC_97301_REGION2.allClasses || [];
+
+  return [...classSpecificSegments, ...allClassSegments].filter(segment =>
     privNumberInRange(mhz, segment.lowMHz, segment.highMHz)
   );
 }
