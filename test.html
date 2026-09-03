@@ -7897,7 +7897,11 @@ function privGetSummarySegments(licenseClass, modeKey = currentPrivSummaryMode) 
 
   const addRow = (base, lowMHz, highMHz, extra = {}) => {
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) return;
-    if (highMHz < lowMHz) return;
+	/*
+	  A matching endpoint is not a usable frequency segment for the
+	  compact table. Only render a positive-width overlap.
+	*/
+	if (highMHz <= lowMHz) return;
 
     const key = [
       base.band,
@@ -7999,14 +8003,14 @@ function privSummaryConditions(segment, modeKey, licenseClass) {
   if (band === '2200m' || band === '630m') {
     notes.push('Fixed location, notification, and sharing requirements');
   }
-
-  if (band === '70cm') {
-    notes.push('Location and sharing restrictions may apply');
-  }
-
-  if (band === '33cm') {
-    notes.push('Location-specific restrictions may apply');
-  }
+	
+   if (band === '70cm') {
+	  notes.push('Location/sharing restrictions; 50 W PEP limit may apply in specified areas');
+	}
+	
+	if (band === '33cm') {
+	  notes.push('Location restrictions; 50 W PEP limit may apply near White Sands');
+	}
 
   if (
     modeKey === 'data' &&
@@ -8023,24 +8027,65 @@ function privSummaryConditions(segment, modeKey, licenseClass) {
     notes.push('Up to 100 kHz bandwidth; applicable digital-code rules');
   }
 
-  if (
-    licenseClass === 'tech' &&
-    ['80m', '40m', '15m', '10m'].includes(band)
-  ) {
-    notes.push('Technician HF power limit: 200 W PEP');
-  }
+  const technicianHfSegments = [
+  [3.525, 3.600],
+  [7.025, 7.125],
+  [21.025, 21.200],
+  [28.000, 28.500]
+];
+
+const isTechnicianHfPowerSegment =
+	  licenseClass === 'tech' &&
+	  technicianHfSegments.some(([low, high]) =>
+	    segment.lowMHz >= low && segment.highMHz <= high
+	  );
+	
+	if (isTechnicianHfPowerSegment) {
+	  notes.push('Technician HF maximum: 200 W PEP');
+	}
 
   return [...new Set(notes)].join(' · ') || '—';
 }
 
 function privSummaryPower(segment, licenseClass) {
-  const power = privFindPowerRule(
-    (segment.lowMHz + segment.highMHz) / 2,
+  const midpoint = (segment.lowMHz + segment.highMHz) / 2;
+
+  /*
+    The Technician/Novice 200 W limit applies only to the four
+    specifically listed HF segments in §97.313(c)(2), not to all
+    Technician VHF/UHF/microwave privileges.
+  */
+  const technicianHfSegments = [
+    [3.525, 3.600],
+    [7.025, 7.125],
+    [21.025, 21.200],
+    [28.000, 28.500]
+  ];
+
+  const isTechnicianHfPowerSegment =
+    licenseClass === 'tech' &&
+    technicianHfSegments.some(([low, high]) =>
+      segment.lowMHz >= low && segment.highMHz <= high
+    );
+
+  if (isTechnicianHfPowerSegment) {
+    return '200 W PEP';
+  }
+
+  /*
+    Keep the default power ceiling for 70 cm and 33 cm in the summary.
+    Their 50 W rules are geographical exceptions, reported in notes
+    rather than treated as universal limits.
+  */
+  if (segment.band === '70cm' || segment.band === '33cm') {
+    return '1,500 W PEP';
+  }
+
+  return privFindPowerRule(
+    midpoint,
     [segment.band],
     licenseClass
-  );
-
-  return power?.display || '1,500 W PEP';
+  )?.display || '1,500 W PEP';
 }
 
 
