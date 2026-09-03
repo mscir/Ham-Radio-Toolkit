@@ -7417,6 +7417,42 @@ function evaluatePrivilegeAuthorization({
   }
 
   const bandNames = privGetBandNames(frequencySegments);
+     /*
+    60 m has both a contiguous 5.3515–5.3665 MHz segment and
+    four discrete channels with mode-specific carrier-frequency rules.
+    The first UI version asks only for frequency and broad mode, not
+    emission designator or center/carrier reference. If the entered
+    frequency falls in the broader 60 m allocation but outside the
+    contiguous segment, return a conservative result.
+  */
+  const is60m = bandNames.includes('60m');
+
+  if (
+    is60m &&
+    (
+      normalized.mhz < 5.3515 ||
+      normalized.mhz > 5.3665
+    )
+  ) {
+    baseResult.bandNames = bandNames;
+    baseResult.frequencySegments = frequencySegments;
+    baseResult.status = 'needs-more-information';
+    baseResult.statusLabel = 'Needs more information';
+    baseResult.message =
+      '60 m has mode-specific discrete-channel carrier rules. ' +
+      'Choose the exact authorized channel/carrier reference and verify ' +
+      'the applicable emission designator and 2.8 kHz bandwidth limit.';
+    baseResult.conditions = [{
+      text: '60 m discrete channels use mode-specific carrier-frequency and emission-designator requirements.',
+      source: '97.303(h)(3); 97.307(f)(14)'
+    }];
+    baseResult.needsMoreInformation = [{
+      text: 'The current checker does not yet collect enough detail to validate this discrete 60 m channel operation.',
+      source: '97.303(h)(3)'
+    }];
+    baseResult.notice = PRIV_ENGINE_NOTICE;
+    return baseResult;
+  }
   const emissionRules = privFindEmissionRules(
     normalized.mhz,
     bandNames,
