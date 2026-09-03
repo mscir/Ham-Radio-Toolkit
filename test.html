@@ -1518,37 +1518,39 @@ body{
   emission, power, and sharing requirements.
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px">
-  <div style="flex:1;min-width:200px">
-    <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">
-      Frequency (MHz)
+<div style="margin-bottom:12px">
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end">
+    <div style="flex:0 1 440px;min-width:200px">
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">
+        Frequency (MHz)
+      </div>
+
+      <input
+        id="priv-freq-input"
+        class="calc-input"
+        type="text"
+        inputmode="decimal"
+        autocomplete="off"
+        placeholder="e.g. 14.074 or 146.520"
+        style="width:100%;margin:0"
+        onkeydown="if(event.key==='Enter')checkPrivAuthorization()"
+      >
     </div>
 
-    <input
-      id="priv-freq-input"
-      class="calc-input"
-      type="text"
-      inputmode="decimal"
-      autocomplete="off"
-      placeholder="e.g. 14.074 or 146.520"
-      style="width:100%;margin:0"
-      onkeydown="if(event.key==='Enter')checkPrivAuthorization()"
+    <button
+      class="calc-btn"
+      type="button"
+      onclick="checkPrivAuthorization()"
+      style="width:auto;padding:8px 20px;margin:0"
     >
-
-    <div style="margin-top:4px;font-size:11px;color:var(--text-dim)">
-      Enter MHz. Example: <span style="font-family:'Share Tech Mono',monospace">14074</span>
-      is interpreted as <span style="font-family:'Share Tech Mono',monospace">14.074 MHz</span>.
-    </div>
+      Check
+    </button>
   </div>
 
-  <button
-    class="calc-btn"
-    type="button"
-    onclick="checkPrivAuthorization()"
-    style="width:auto;padding:8px 20px;margin:0"
-  >
-    Check
-  </button>
+  <div style="margin-top:4px;font-size:11px;color:var(--text-dim)">
+    Enter MHz. Example: <span style="font-family:'Share Tech Mono',monospace">14074</span>
+    is interpreted as <span style="font-family:'Share Tech Mono',monospace">14.074 MHz</span>.
+  </div>
 </div>
 
 <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px">
