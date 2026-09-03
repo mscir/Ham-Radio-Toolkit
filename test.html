@@ -6175,6 +6175,502 @@ function renderGoalRec(id) {
 }
 // deferred: initGoals();
 
+/* ===========================================
+   FREQUENCY PRIVILEGES — RULES ENGINE
+   Stage 1: FCC-derived authorization evaluator.
+   Does not yet replace the live panel UI.
+   Depends on:
+   FCC_97301_REGION2
+   FCC_97305_EMISSIONS
+   FCC_97307_EMISSION_STANDARDS
+   FCC_97313_POWER_REFERENCE
+   FCC_97303_FREQUENCY_SHARING
+=========================================== */
+
+const PRIV_CHECKER_MODES = {
+  cw: {
+    label: 'CW',
+    emission: 'CW'
+  },
+  phone: {
+    label: 'Phone',
+    emission: 'Phone'
+  },
+  data: {
+    label: 'RTTY / Data',
+    emission: 'RTTY'
+  },
+  image: {
+    label: 'Image',
+    emission: 'Image'
+  }
+};
+
+const PRIV_LICENSE_TO_FCC_KEY = {
+  tech: 'technician',
+  general: 'general',
+  extra: 'extra'
+};
+
+const PRIV_LICENSE_LABELS = {
+  tech: 'Technician',
+  general: 'General',
+  extra: 'Amateur Extra'
+};
+
+const PRIV_ENGINE_NOTICE =
+  'This tool evaluates the entered frequency and mode using selected Part 97 rules. ' +
+  'It does not replace the control operator’s responsibility to comply with all applicable FCC rules.';
+
+function privNumberInRange(value, low, high) {
+  return value >= low && (high === null || high === undefined || value <= high);
+}
+
+function privNormalizeMHz(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) {
+    return {
+      valid: false,
+      raw,
+      mhz: null,
+      convertedFromKHz: false
+    };
+  }
+
+  let number = Number(raw);
+
+  if (!Number.isFinite(number) || number <= 0) {
+    return {
+      valid: false,
+      raw,
+      mhz: null,
+      convertedFromKHz: false
+    };
+  }
+
+  let convertedFromKHz = false;
+
+  /*
+    1.8, 14.074, 146.520, and 902 are interpreted as MHz.
+    Values over 1,300 are treated as likely kHz only when doing so
+    produces a frequency below 50 MHz, such as 14074 -> 14.074 MHz.
+  */
+  if (number > 1300 && number < 50000) {
+    number = number / 1000;
+    convertedFromKHz = true;
+  }
+
+  return {
+    valid: true,
+    raw,
+    mhz: number,
+    convertedFromKHz
+  };
+}
+
+function privFindClassFrequencySegments(mhz, licenseClass) {
+  const fccClassKey = PRIV_LICENSE_TO_FCC_KEY[licenseClass];
+
+  if (!fccClassKey || !FCC_97301_REGION2?.[fccClassKey]) {
+    return [];
+  }
+
+  return FCC_97301_REGION2[fccClassKey].filter(segment =>
+    privNumberInRange(mhz, segment.lowMHz, segment.highMHz)
+  );
+}
+
+function privFindAnyFrequencySegments(mhz) {
+  const groupNames = ['technician', 'general', 'extra', 'allClasses'];
+  const found = [];
+
+  groupNames.forEach(groupName => {
+    const segments = FCC_97301_REGION2?.[groupName] || [];
+
+    segments.forEach(segment => {
+      if (privNumberInRange(mhz, segment.lowMHz, segment.highMHz)) {
+        found.push({
+          ...segment,
+          sourceGroup: groupName
+        });
+      }
+    });
+  });
+
+  return found;
+}
+
+function privGetBandNames(segments) {
+  return [...new Set(segments.map(segment => segment.band))];
+}
+
+function privFindEmissionRules(mhz, bands, modeKey) {
+  const mode = PRIV_CHECKER_MODES[modeKey];
+  if (!mode || !FCC_97305_EMISSIONS?.segments) {
+    return [];
+  }
+
+  /*
+    §97.305(a): CW is allowed on a frequency otherwise authorized
+    to the operator, except where another Part 97 restriction applies.
+    The table does not need a separate CW row for each band.
+  */
+  if (modeKey === 'cw') {
+    return [{
+      band: bands[0] || '',
+      modes: ['CW'],
+      derivedFrom: '97.305(a)',
+      derivedCWRule: true
+    }];
+  }
+
+  return FCC_97305_EMISSIONS.segments.filter(rule => {
+    if (!bands.includes(rule.band)) return false;
+    if (!rule.modes?.includes(mode.emission)) return false;
+
+    if (rule.range === 'entire') return true;
+
+    if (Array.isArray(rule.rangesMHz)) {
+      return rule.rangesMHz.some(range =>
+        privNumberInRange(mhz, range.low, range.high)
+      );
+    }
+
+    if (Array.isArray(rule.frequenciesMHz)) {
+      return rule.frequenciesMHz.some(freq =>
+        Math.abs(mhz - freq) < 0.00001
+      );
+    }
+
+    if (typeof rule.lowMHz === 'number') {
+      return privNumberInRange(mhz, rule.lowMHz, rule.highMHz);
+    }
+
+    return false;
+  });
+}
+
+function privFindPowerRule(mhz, bands, licenseClass) {
+  const defaultPower =
+    FCC_97313_POWER_REFERENCE?.generalRule?.defaultMaximum || '1,500 W PEP';
+
+  const result = {
+    display: defaultPower,
+    source: '97.313(b)',
+    conditions: []
+  };
+
+  const specificRules = FCC_97313_POWER_REFERENCE?.limits || [];
+
+  specificRules.forEach(rule => {
+    const sameBand = !rule.band || bands.includes(rule.band);
+    const inRange =
+      (typeof rule.lowMHz !== 'number' && !Array.isArray(rule.frequenciesMHz)) ||
+      privNumberInRange(mhz, rule.lowMHz, rule.highMHz) ||
+      rule.frequenciesMHz?.some(freq => Math.abs(mhz - freq) < 0.00001);
+
+    if (!sameBand || !inRange) return;
+
+    if (rule.id === 'tech-novice-hf' && licenseClass !== 'tech') {
+      return;
+    }
+
+    if (rule.radiatedPower && rule.transmitterPower) {
+      result.display = `${rule.transmitterPower}; ${rule.radiatedPower}`;
+    } else {
+      result.display = rule.radiatedPower || rule.transmitterPower || result.display;
+    }
+
+    result.source = rule.source || result.source;
+
+    if (rule.condition) result.conditions.push(rule.condition);
+    if (rule.exception) result.conditions.push(rule.exception);
+  });
+
+  return result;
+}
+
+function privCollectConditions(mhz, bands) {
+  const conditions = [];
+  const needsMoreInformation = [];
+
+  const sharing = FCC_97303_FREQUENCY_SHARING;
+  if (!sharing) {
+    return { conditions, needsMoreInformation };
+  }
+
+  const addCondition = (text, source, needsInfo = false) => {
+    if (!text) return;
+
+    const item = { text, source: source || '' };
+
+    if (needsInfo) {
+      needsMoreInformation.push(item);
+    } else {
+      conditions.push(item);
+    }
+  };
+
+  (sharing.bandRestrictions || []).forEach(rule => {
+    const bandMatch = rule.band && bands.includes(rule.band);
+    const frequencyMatch =
+      rule.frequencyMHz &&
+      privNumberInRange(mhz, rule.frequencyMHz.low, rule.frequencyMHz.high);
+    const rangeMatch = (rule.frequencyRangesMHz || []).some(range =>
+      privNumberInRange(mhz, range.low, range.high)
+    );
+
+    if (!bandMatch && !frequencyMatch && !rangeMatch) return;
+
+    const locationDependent =
+      Boolean(rule.condition) ||
+      Boolean(rule.prohibition) ||
+      Boolean(rule.prohibitedRangesMHz);
+
+    addCondition(
+      rule.rule || rule.prohibition || rule.allowedPurpose || rule.sharingRule,
+      Array.isArray(rule.source) ? rule.source.join(', ') : rule.source,
+      locationDependent
+    );
+
+    if (rule.interferenceResponse) {
+      addCondition(
+        rule.interferenceResponse,
+        Array.isArray(rule.source) ? rule.source.join(', ') : rule.source
+      );
+    }
+  });
+
+  (sharing.fixedLocationRequirements || []).forEach(rule => {
+    if (!rule.appliesToBands?.some(band => bands.includes(band))) return;
+
+    addCondition(
+      'Fixed-location operation and PLC-separation requirements apply.',
+      rule.source,
+      true
+    );
+  });
+
+  (sharing.notificationRequirements || []).forEach(rule => {
+    if (!rule.appliesToBands?.some(band => bands.includes(band))) return;
+
+    addCondition(
+      rule.requirement ||
+        `Notification to ${rule.notify} and any applicable waiting period may be required.`,
+      rule.source,
+      true
+    );
+  });
+
+  return { conditions, needsMoreInformation };
+}
+
+function privCollectEmissionConditions(mhz, bands, modeKey, licenseClass) {
+  const conditions = [];
+  const needsMoreInformation = [];
+  const standards = FCC_97307_EMISSION_STANDARDS;
+
+  if (!standards) {
+    return { conditions, needsMoreInformation };
+  }
+
+  const mode = PRIV_CHECKER_MODES[modeKey];
+
+  (standards.standards || []).forEach(rule => {
+    const bandMatch =
+      !rule.appliesToBands ||
+      rule.appliesToBands.some(band =>
+        bands.includes(band) ||
+        (band === '1.25m-222-225' && bands.includes('1.25m')) ||
+        (band === '1.25m-219-220' && bands.includes('1.25m'))
+      );
+
+    const modeMatch =
+      !rule.appliesTo ||
+      rule.appliesTo.includes(mode?.emission) ||
+      (modeKey === 'data' && rule.appliesTo.includes('Data')) ||
+      (modeKey === 'cw' && rule.appliesTo.includes('CW'));
+
+    const licenseMatch =
+      !rule.appliesToLicenses ||
+      rule.appliesToLicenses.includes(
+        licenseClass === 'tech' ? 'technician' : licenseClass
+      );
+
+    const frequencyMatch =
+      !rule.frequencyMHz ||
+      privNumberInRange(
+        mhz,
+        rule.frequencyMHz.low,
+        rule.frequencyMHz.high
+      );
+
+    if (!bandMatch || !modeMatch || !licenseMatch || !frequencyMatch) return;
+
+    if (rule.maxBandwidthKHz) {
+      conditions.push({
+        text: `Maximum occupied bandwidth: ${rule.maxBandwidthKHz} kHz.`,
+        source: rule.source
+      });
+    }
+
+    if (rule.requiredDigitalCode) {
+      conditions.push({
+        text: `RTTY/data operation must use a permitted digital code under §97.309.`,
+        source: rule.source
+      });
+    }
+
+    if (rule.rttyDataRequirements) {
+      rule.rttyDataRequirements.forEach(text => {
+        conditions.push({ text, source: rule.source });
+      });
+    }
+
+    if (rule.allowedLocations || rule.region2Condition) {
+      needsMoreInformation.push({
+        text: 'This frequency/mode combination has location-dependent restrictions.',
+        source: rule.source
+      });
+    }
+  });
+
+  return { conditions, needsMoreInformation };
+}
+
+function evaluatePrivilegeAuthorization({
+  frequency,
+  mode = 'data',
+  licenseClass = 'extra'
+} = {}) {
+  const normalized = privNormalizeMHz(frequency);
+
+  const baseResult = {
+    status: 'not-authorized',
+    statusLabel: 'Not authorized',
+    frequencyMHz: normalized.mhz,
+    mode,
+    modeLabel: PRIV_CHECKER_MODES[mode]?.label || mode,
+    licenseClass,
+    licenseLabel: PRIV_LICENSE_LABELS[licenseClass] || licenseClass,
+    message: '',
+    bandNames: [],
+    frequencySegments: [],
+    emissionRules: [],
+    power: null,
+    conditions: [],
+    needsMoreInformation: [],
+    notice: PRIV_ENGINE_NOTICE,
+    convertedFromKHz: normalized.convertedFromKHz,
+    rawInput: normalized.raw
+  };
+
+  if (!normalized.valid) {
+    baseResult.message = 'Enter a valid positive frequency in MHz.';
+    return baseResult;
+  }
+
+  if (!PRIV_CHECKER_MODES[mode]) {
+    baseResult.message = 'Choose CW, Phone, RTTY / Data, or Image.';
+    return baseResult;
+  }
+
+  if (!PRIV_LICENSE_TO_FCC_KEY[licenseClass]) {
+    baseResult.message = 'Choose a valid license class.';
+    return baseResult;
+  }
+
+  const frequencySegments = privFindClassFrequencySegments(
+    normalized.mhz,
+    licenseClass
+  );
+
+  if (!frequencySegments.length) {
+    const otherSegments = privFindAnyFrequencySegments(normalized.mhz);
+
+    if (otherSegments.length) {
+      baseResult.message =
+        `${normalized.mhz.toFixed(4)} MHz appears in a U.S. amateur allocation, ` +
+        `but is not authorized for the selected ${baseResult.licenseLabel} privilege range.`;
+    } else {
+      baseResult.message =
+        `${normalized.mhz.toFixed(4)} MHz is not in the Part 97 frequency ranges included in this tool.`;
+    }
+
+    return baseResult;
+  }
+
+  const bandNames = privGetBandNames(frequencySegments);
+  const emissionRules = privFindEmissionRules(
+    normalized.mhz,
+    bandNames,
+    mode
+  );
+
+  baseResult.bandNames = bandNames;
+  baseResult.frequencySegments = frequencySegments;
+  baseResult.emissionRules = emissionRules;
+
+  if (!emissionRules.length) {
+    baseResult.message =
+      `${baseResult.modeLabel} is not authorized at ` +
+      `${normalized.mhz.toFixed(4)} MHz for the selected operating privilege.`;
+
+    return baseResult;
+  }
+
+  baseResult.power = privFindPowerRule(
+    normalized.mhz,
+    bandNames,
+    licenseClass
+  );
+
+  const sharingResult = privCollectConditions(normalized.mhz, bandNames);
+  const emissionResult = privCollectEmissionConditions(
+    normalized.mhz,
+    bandNames,
+    mode,
+    licenseClass
+  );
+
+  baseResult.conditions = [
+    ...sharingResult.conditions,
+    ...emissionResult.conditions,
+    ...baseResult.power.conditions.map(text => ({
+      text,
+      source: baseResult.power.source
+    }))
+  ];
+
+  baseResult.needsMoreInformation = [
+    ...sharingResult.needsMoreInformation,
+    ...emissionResult.needsMoreInformation
+  ];
+
+  if (baseResult.needsMoreInformation.length) {
+    baseResult.status = 'needs-more-information';
+    baseResult.statusLabel = 'Needs more information';
+    baseResult.message =
+      `${baseResult.modeLabel} is within the selected ${baseResult.licenseLabel} ` +
+      `frequency privilege, but location, notification, station-purpose, ` +
+      `or other details must be verified before transmitting.`;
+  } else if (baseResult.conditions.length) {
+    baseResult.status = 'authorized-with-conditions';
+    baseResult.statusLabel = 'Authorized with conditions';
+    baseResult.message =
+      `${baseResult.modeLabel} is authorized at ${normalized.mhz.toFixed(4)} MHz ` +
+      `for the selected ${baseResult.licenseLabel} privilege, subject to the listed conditions.`;
+  } else {
+    baseResult.status = 'authorized';
+    baseResult.statusLabel = 'Authorized';
+    baseResult.message =
+      `${baseResult.modeLabel} is authorized at ${normalized.mhz.toFixed(4)} MHz ` +
+      `for the selected ${baseResult.licenseLabel} privilege.`;
+  }
+
+  return baseResult;
+}
+	
 // ===========================================
 // LICENSE CLASS SYSTEM
 // ===========================================
