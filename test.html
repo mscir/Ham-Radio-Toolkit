@@ -7056,6 +7056,26 @@ function privFindClassFrequencySegments(mhz, licenseClass) {
   );
 }
 
+function privFind60mDiscreteChannel(mhz) {
+  const rule = (FCC_97303_FREQUENCY_SHARING?.bandRestrictions || [])
+    .find(item => item.id === '60m-allowed-frequencies');
+
+  if (!rule?.discreteChannels) {
+    return null;
+  }
+
+  /*
+    Accept the legally distinct reference frequencies for each discrete
+    60 m channel:
+    - CW carrier: channel center frequency
+    - Phone, RTTY, and data carrier: lower carrier frequency
+  */
+  return rule.discreteChannels.find(channel =>
+    Math.abs(mhz - channel.centerMHz) < 0.00001 ||
+    Math.abs(mhz - channel.phoneDataRttyCarrierMHz) < 0.00001
+  ) || null;
+}
+
 function privFindAnyFrequencySegments(mhz) {
   const groupNames = ['technician', 'general', 'extra', 'allClasses'];
   const found = [];
@@ -7396,10 +7416,32 @@ function evaluatePrivilegeAuthorization({
     return baseResult;
   }
 
-  const frequencySegments = privFindClassFrequencySegments(
+    let frequencySegments = privFindClassFrequencySegments(
     normalized.mhz,
     licenseClass
   );
+
+  /*
+    60 m has four discrete channels in addition to the contiguous
+    5.3515–5.3665 MHz segment. The §97.301 data model records the
+    contiguous privilege; §97.303 supplies the exact discrete channels.
+  */
+  const discrete60mChannel = privFind60mDiscreteChannel(normalized.mhz);
+
+  if (
+    !frequencySegments.length &&
+    discrete60mChannel &&
+    ['general', 'extra'].includes(licenseClass)
+  ) {
+    frequencySegments = [{
+      band: '60m',
+      lowMHz: normalized.mhz,
+      highMHz: normalized.mhz,
+      sharing: ['97.303(h)'],
+      discreteChannel: true,
+      channel: discrete60mChannel
+    }];
+  }
 
   if (!frequencySegments.length) {
     const otherSegments = privFindAnyFrequencySegments(normalized.mhz);
