@@ -6361,6 +6361,80 @@ const FCC_97313_POWER_REFERENCE = {
 };
 
 /* ===========================================
+   FCC PART 97 REFERENCE DATA — §97.305
+   Authorized emission types
+=========================================== */
+
+const FCC_97305_EMISSIONS = {
+  source: '47 CFR §97.305',
+  sourceDate: '2026-08-20',
+
+  cwRule: {
+    allowedOnAnyAuthorizedFrequency: true,
+    source: '97.305(a)'
+  },
+
+  segments: [
+    { band: '2200m', range: 'entire', modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '2200m', range: 'entire', modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '630m', range: 'entire', modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '630m', range: 'entire', modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '160m', range: 'entire', modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '160m', range: 'entire', modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '80m', range: 'entire', modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)', '97.307(f)(9)'] },
+    { band: '75m', range: 'entire', modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    {
+      band: '60m',
+      frequenciesMHz: [5.332, 5.348, 5.373, 5.405],
+      rangesMHz: [{ low: 5.3515, high: 5.3665 }],
+      modes: ['Phone', 'RTTY', 'Data'],
+      standards: ['97.307(f)(14)']
+    },
+
+    { band: '40m', lowMHz: 7.000, highMHz: 7.100, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)', '97.307(f)(9)'] },
+    { band: '40m', lowMHz: 7.075, highMHz: 7.100, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)', '97.307(f)(9)', '97.307(f)(11)'] },
+    { band: '40m', lowMHz: 7.100, highMHz: 7.125, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)', '97.307(f)(9)'] },
+    { band: '40m', lowMHz: 7.125, highMHz: 7.300, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '30m', range: 'entire', modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+
+    { band: '20m', lowMHz: 14.000, highMHz: 14.150, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '20m', lowMHz: 14.150, highMHz: 14.350, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '17m', lowMHz: 18.068, highMHz: 18.110, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '17m', lowMHz: 18.110, highMHz: 18.168, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '15m', lowMHz: 21.000, highMHz: 21.200, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)', '97.307(f)(9)'] },
+    { band: '15m', lowMHz: 21.200, highMHz: 21.450, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '12m', lowMHz: 24.890, highMHz: 24.930, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '12m', lowMHz: 24.930, highMHz: 24.990, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+
+    { band: '10m', lowMHz: 28.000, highMHz: 28.300, modes: ['RTTY', 'Data'], standards: ['97.307(f)(3)'] },
+    { band: '10m', lowMHz: 28.300, highMHz: 28.500, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)', '97.307(f)(10)'] },
+    { band: '10m', lowMHz: 28.500, highMHz: 29.000, modes: ['Phone', 'Image'], standards: ['97.307(f)(1)', '97.307(f)(2)'] },
+    { band: '10m', lowMHz: 29.000, highMHz: 29.700, modes: ['Phone', 'Image'], standards: ['97.307(f)(2)'] },
+
+    { band: '6m', lowMHz: 50.100, highMHz: 51.000, modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data'], standards: ['97.307(f)(2)', '97.307(f)(5)'] },
+    { band: '6m', lowMHz: 51.000, highMHz: 54.000, modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'Test'], standards: ['97.307(f)(2)', '97.307(f)(5)', '97.307(f)(8)'] },
+
+    { band: '2m', lowMHz: 144.100, highMHz: 148.000, modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'Test'], standards: ['97.307(f)(2)', '97.307(f)(5)', '97.307(f)(8)'] },
+
+    { band: '1.25m', lowMHz: 219.000, highMHz: 220.000, modes: ['Data'], standards: ['97.307(f)(13)'] },
+    { band: '1.25m', lowMHz: 222.000, highMHz: 225.000, modes: ['RTTY', 'Data', 'Test', 'MCW', 'Phone', 'SS', 'Image'], standards: ['97.307(f)(2)', '97.307(f)(6)', '97.307(f)(8)'] },
+
+    { band: '70cm', range: 'entire', modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'SS', 'Test'], standards: ['97.307(f)(6)', '97.307(f)(8)'] },
+    { band: '33cm', range: 'entire', modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'SS', 'Test', 'Pulse'], standards: ['97.307(f)(7)', '97.307(f)(8)', '97.307(f)(12)'] },
+    { band: '23cm', range: 'entire', modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'SS', 'Test'], standards: ['97.307(f)(7)', '97.307(f)(8)', '97.307(f)(12)'] },
+    { band: '13cm', range: 'entire', modes: ['MCW', 'Phone', 'Image', 'RTTY', 'Data', 'SS', 'Test', 'Pulse'], standards: ['97.307(f)(7)', '97.307(f)(8)', '97.307(f)(12)'] }
+  ]
+};	
+	
+/* ===========================================
    FREQUENCY PRIVILEGES — RULES ENGINE
 =========================================== */
 	
