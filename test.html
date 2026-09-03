@@ -7879,42 +7879,111 @@ function privSummaryFormatRange(lowMHz, highMHz) {
 }
 
 function privSummaryAllowedForMode(segment, modeKey) {
-  const band = segment.band;
+  /*
+    Kept as a compatibility helper for any future call site.
+    The compact summary now uses privGetSummarySegments() to build
+    exact privilege/emission intersections before rendering.
+  */
+  return Boolean(segment?.summaryMode === modeKey);
+}
+
+function privGetSummarySegments(licenseClass, modeKey = currentPrivSummaryMode) {
+  const fccClassKey = PRIV_LICENSE_TO_FCC_KEY[licenseClass];
+  const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
+  const allClassSegments = FCC_97301_REGION2?.allClasses || [];
+  const baseSegments = [...classSegments, ...allClassSegments];
+  const rows = [];
+  const seen = new Set();
+
+  const addRow = (base, lowMHz, highMHz, extra = {}) => {
+    if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) return;
+    if (highMHz < lowMHz) return;
+
+    const key = [
+      base.band,
+      lowMHz,
+      highMHz,
+      modeKey,
+      extra.locationDependent ? 'location' : '',
+      extra.discrete60m ? 'discrete60m' : ''
+    ].join('|');
+
+    if (seen.has(key)) return;
+    seen.add(key);
+
+    rows.push({
+      ...base,
+      lowMHz,
+      highMHz,
+      summaryMode: modeKey,
+      ...extra
+    });
+  };
 
   /*
-    CW is authorized on a frequency already available to the control
-    operator, subject to other Part 97 restrictions.
+    §97.305(a): CW is permitted on any frequency already authorized
+    to the control operator, subject to other Part 97 restrictions.
+    Therefore the selected license ranges themselves form CW rows.
   */
   if (modeKey === 'cw') {
-    return true;
+    baseSegments.forEach(segment => {
+      addRow(segment, segment.lowMHz, segment.highMHz);
+    });
+
+    return rows.sort((a, b) => a.lowMHz - b.lowMHz);
   }
 
   const emission = PRIV_CHECKER_MODES[modeKey]?.emission;
 
-  return (FCC_97305_EMISSIONS?.segments || []).some(rule => {
-    if (rule.band !== band) return false;
-    if (!rule.modes?.includes(emission)) return false;
+  (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
+    if (!rule.modes?.includes(emission)) return;
 
-    if (rule.range === 'entire') return true;
+    baseSegments
+      .filter(segment => segment.band === rule.band)
+      .forEach(segment => {
+        /*
+          “Entire band” mode rules cover the selected license segment.
+        */
+        if (rule.range === 'entire') {
+          addRow(segment, segment.lowMHz, segment.highMHz);
+          return;
+        }
 
-    if (Array.isArray(rule.rangesMHz)) {
-      return rule.rangesMHz.some(range =>
-        segment.lowMHz >= range.low &&
-        segment.highMHz <= range.high
-      );
-    }
+        /*
+          The 60m rule provides both a contiguous range and discrete
+          channel references. The compact table shows the contiguous
+          segment; the checker remains the source for channel detail.
+        */
+        if (Array.isArray(rule.rangesMHz)) {
+          rule.rangesMHz.forEach(range => {
+            const lowMHz = Math.max(segment.lowMHz, range.low);
+            const highMHz = Math.min(segment.highMHz, range.high);
 
-    if (typeof rule.lowMHz === 'number') {
-      return (
-        segment.lowMHz >= rule.lowMHz &&
-        segment.highMHz <= rule.highMHz
-      );
-    }
+            addRow(segment, lowMHz, highMHz, {
+              is60mContiguous: segment.band === '60m'
+            });
+          });
+        }
 
-    return false;
+        /*
+          Normal §97.305 frequency-segment rows: render the geometric
+          intersection of the selected class range and mode range.
+        */
+        if (typeof rule.lowMHz === 'number') {
+          const lowMHz = Math.max(segment.lowMHz, rule.lowMHz);
+          const highMHz = Math.min(segment.highMHz, rule.highMHz);
+
+          addRow(segment, lowMHz, highMHz, {
+            locationDependent:
+              rule.standards?.includes('97.307(f)(11)') || false
+          });
+        }
+      });
   });
-}
 
+  return rows.sort((a, b) => a.lowMHz - b.lowMHz);
+}
+	
 function privSummaryConditions(segment, modeKey, licenseClass) {
   const notes = [];
   const band = segment.band;
@@ -7974,26 +8043,7 @@ function privSummaryPower(segment, licenseClass) {
   return power?.display || '1,500 W PEP';
 }
 
-function privGetSummarySegments(licenseClass) {
-  const fccClassKey = PRIV_LICENSE_TO_FCC_KEY[licenseClass];
-  const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
-  const allClassSegments = FCC_97301_REGION2?.allClasses || [];
 
-  /*
-    Deduplicate identical underlying allocation records only. We retain
-    separate segments of the same band when their frequency ranges differ.
-  */
-  const seen = new Set();
-
-  return [...classSegments, ...allClassSegments].filter(segment => {
-    const key = `${segment.band}|${segment.lowMHz}|${segment.highMHz}`;
-
-    if (seen.has(key)) return false;
-
-    seen.add(key);
-    return true;
-  });
-}
 
 function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
   const area = document.getElementById('priv-table-area');
@@ -8003,9 +8053,7 @@ function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
   currentPrivSummaryMode = modeKey;
 
   const label = privSummaryLabelFromModeKey(modeKey);
-  const segments = privGetSummarySegments(currentLicenseClass)
-    .filter(segment => privSummaryAllowedForMode(segment, modeKey))
-    .sort((a, b) => a.lowMHz - b.lowMHz);
+  const segments = privGetSummarySegments(currentLicenseClass, modeKey);
 
   if (!segments.length) {
     area.innerHTML = `
