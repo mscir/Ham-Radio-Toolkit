@@ -1507,37 +1507,136 @@ body{
 
   <div class="divider"></div>
 
-  <!-- ── FREQUENCY CHECKER ── -->
-  <div class="section-label" id="freq-checker-label">▸ Frequency Checker — Is This Legal for Extra Class?</div>
-  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px">
-    <div style="flex:1;min-width:200px">
-      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">Frequency (MHz)</div>
-      <input id="priv-freq-input" class="calc-input" type="text" placeholder="e.g. 14.250 or 146.52" style="width:100%;margin:0"
-        oninput="checkPrivFreq()" onkeydown="if(event.key==='Enter')checkPrivFreq()">
+  <!-- ── FREQUENCY + MODE AUTHORIZATION CHECKER ── -->
+<div class="section-label" id="freq-checker-label">
+  ▸ Check Frequency and Mode Authorization
+</div>
+
+<div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.6">
+  Enter a transmit frequency and choose an operating mode. The result uses the
+  selected U.S. license class above and summarizes relevant Part 97 frequency,
+  emission, power, and sharing requirements.
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px">
+  <div style="flex:1;min-width:200px">
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">
+      Frequency (MHz)
     </div>
-    <button class="calc-btn" onclick="checkPrivFreq()" style="width:auto;padding:8px 20px;margin:0">Check</button>
+
+    <input
+      id="priv-freq-input"
+      class="calc-input"
+      type="text"
+      inputmode="decimal"
+      autocomplete="off"
+      placeholder="e.g. 14.074 or 146.520"
+      style="width:100%;margin:0"
+      onkeydown="if(event.key==='Enter')checkPrivAuthorization()"
+    >
+
+    <div style="margin-top:4px;font-size:11px;color:var(--text-dim)">
+      Enter MHz. Example: <span style="font-family:'Share Tech Mono',monospace">14074</span>
+      is interpreted as <span style="font-family:'Share Tech Mono',monospace">14.074 MHz</span>.
+    </div>
   </div>
-  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="priv-presets">
-    <button class="calc-btn" onclick="setPrivFreq(1.900)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">160m</button>
-    <button class="calc-btn" onclick="setPrivFreq(3.850)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">80m SSB</button>
-    <button class="calc-btn" onclick="setPrivFreq(7.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">40m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(7.200)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">40m Phone</button>
-    <button class="calc-btn" onclick="setPrivFreq(5.357)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">60m WRC Band</button>
-	<button class="calc-btn" onclick="setPrivFreq(10.136)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">30m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(14.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">20m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(14.250)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">20m Phone</button>
-    <button class="calc-btn" onclick="setPrivFreq(18.100)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">17m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(21.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">15m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(24.915)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">12m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(28.074)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">10m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(50.313)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">6m FT8</button>
-    <button class="calc-btn" onclick="setPrivFreq(146.520)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">2m FM</button>
-    <button class="calc-btn" onclick="setPrivFreq(446.000)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">70cm FM Simplex</button>
-    <button class="calc-btn" onclick="setPrivFreq(15.000)" style="width:auto;padding:5px 10px;font-size:12px;margin:0">15 MHz WWV — Not Amateur</button>
+
+  <button
+    class="calc-btn"
+    type="button"
+    onclick="checkPrivAuthorization()"
+    style="width:auto;padding:8px 20px;margin:0"
+  >
+    Check
+  </button>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px">
+  <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)">
+    Mode:
+  </span>
+
+  <div class="mode-btns" id="priv-checker-mode-btns" style="margin:0">
+    <button
+      class="mode-btn"
+      type="button"
+      data-priv-mode="cw"
+      onclick="setPrivCheckerMode('cw')"
+      style="padding:6px 12px"
+    >
+      CW
+    </button>
+
+    <button
+      class="mode-btn"
+      type="button"
+      data-priv-mode="phone"
+      onclick="setPrivCheckerMode('phone')"
+      style="padding:6px 12px"
+    >
+      Phone
+    </button>
+
+    <button
+      class="mode-btn active"
+      type="button"
+      data-priv-mode="data"
+      onclick="setPrivCheckerMode('data')"
+      style="padding:6px 12px"
+    >
+      RTTY / Data
+    </button>
+
+    <button
+      class="mode-btn"
+      type="button"
+      data-priv-mode="image"
+      onclick="setPrivCheckerMode('image')"
+      style="padding:6px 12px"
+    >
+      Image
+    </button>
   </div>
-  <div id="priv-freq-result" style="background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;min-height:60px;font-size:13px;line-height:1.8;color:var(--text-dim)">
-    Enter a frequency or click a preset above.
-  </div>
+</div>
+
+<div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px">
+  Quick examples
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="priv-presets">
+  <button
+    class="calc-btn"
+    type="button"
+    onclick="setPrivCheckerPreset(14.074, 'data')"
+    style="width:auto;padding:5px 10px;font-size:12px;margin:0"
+  >
+    20m FT8
+  </button>
+
+  <button
+    class="calc-btn"
+    type="button"
+    onclick="setPrivCheckerPreset(146.520, 'phone')"
+    style="width:auto;padding:5px 10px;font-size:12px;margin:0"
+  >
+    2m FM Simplex
+  </button>
+</div>
+
+<div
+  id="priv-freq-result"
+  style="background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;min-height:60px;font-size:13px;line-height:1.8;color:var(--text-dim)"
+  aria-live="polite"
+>
+  Enter a frequency, choose a mode, then click <strong>Check</strong>.
+</div>
+
+<div style="margin-top:9px;font-size:11px;color:var(--text-dim);line-height:1.55">
+  <strong style="color:var(--text)">Important:</strong>
+  This tool evaluates the entered frequency and mode using selected Part 97 rules.
+  It does not replace the control operator’s responsibility to comply with all
+  applicable FCC rules.
+</div>
 
   <div class="divider"></div>
 
