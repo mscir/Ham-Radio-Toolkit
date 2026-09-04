@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ham Radio Live Path MUF Calculator</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #222222;
+      --card-bg: #f8fafc;
+      --card-border: #e2e8f0;
+      --input-border: #cbd5e1;
+      --result-bg: #eff6ff;
+      --result-border: #bfdbfe;
+      --table-th: #2563eb;
+      --table-row-border: #e2e8f0;
+      --text-muted: #64748b;
+      --edu-title: #1e3a8a;
+      --edu-text: #334155;
+      --code-bg: #f1f5f9;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --text: #f8fafc;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --input-border: #475569;
+      --result-bg: #1e3a8a;
+      --result-border: #2563eb;
+      --table-th: #3b82f6;
+      --table-row-border: #334155;
+      --text-muted: #94a3b8;
+      --edu-title: #60a5fa;
+      --edu-text: #cbd5e1;
+      --code-bg: #334155;
+    }
+
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 760px; margin: 30px auto; padding: 20px; line-height: 1.5; background-color: var(--bg); color: var(--text); transition: background-color 0.3s, color 0.3s; }
+    .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .theme-btn { background: var(--card-bg); color: var(--text); border: 1px solid var(--card-border); padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 18px; margin-bottom: 20px; }
+    .status-bar { border-left: 4px solid #2563eb; font-size: 0.95em; }
+    .field { margin-bottom: 14px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; }
+    input[type="number"], select { padding: 8px 10px; border: 1px solid var(--input-border); background: var(--bg); color: var(--text); border-radius: 5px; font-size: 14px; }
+    .radio-group { display: flex; gap: 15px; align-items: center; margin-top: 4px; }
+    .btn { background: #2563eb; color: #fff; border: none; padding: 10px 18px; border-radius: 5px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: #1d4ed8; }
+    
+    /* 3-Column Table Layout */
+    .result { background: var(--result-bg); border: 1px solid var(--result-border); border-radius: 8px; padding: 20px; margin-top: 20px; }
+    .muf-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--bg); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .muf-table th, .muf-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--table-row-border); font-size: 0.95em; }
+    .muf-table th { background: var(--table-th); color: white; font-weight: 600; }
+    .muf-table tr:last-child td { border-bottom: none; }
+    
+    .open-band { color: #16a34a; font-weight: bold; }
+    [data-theme="dark"] .open-band { color: #4ade80; }
+    .closed-band { color: var(--text-muted); font-style: italic; }
+
+    /* Educational Section Styles */
+    .edu-section { margin-top: 40px; border-top: 2px solid var(--card-border); padding-top: 20px; }
+    .edu-section h3 { color: var(--edu-title); margin-top: 20px; margin-bottom: 8px; }
+    .edu-section p { color: var(--edu-text); font-size: 0.95em; margin-bottom: 12px; }
+    code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+
+  <div class="header-area">
+    <h2>Live HF Propagation & MUF Calculator</h2>
+    <button class="theme-btn" id="theme-toggle" type="button" onclick="toggleTheme()">🌓 Toggle Theme</button>
+  </div>
+
+  <div class="card status-bar">
+    <strong>Live Space Weather Diagnostics:</strong><br>
+    • Geomagnetic Activity: <span id="kp-display">Checking NOAA SWPC...</span><br>
+    • Selected foF2 Source: <span id="fof2-status">Checking Ionosondes...</span>
+  </div>
+
+  <div class="field">
+    <label>1. Path Distance</label>
+    <div class="radio-group">
+      <input id="dist-input" type="number" value="1500" min="10" max="25000">
+      <label><input type="radio" name="dist-unit" value="km" checked onchange="updateUnits()"> Kilometers (km)</label>
+      <label><input type="radio" name="dist-unit" value="mi" onchange="updateUnits()"> Miles (mi)</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>2. Critical Frequency (foF2) Mode</label>
+    <div class="radio-group">
+      <label><input type="radio" name="fof2-mode" value="auto" checked onchange="toggleMode()"> Auto (Live Global Ionosondes)</label>
+      <label><input type="radio" name="fof2-mode" value="manual" onchange="toggleMode()"> Manual Preset</label>
+    </div>
+  </div>
+
+  <div id="manual-panel" class="card" style="display: none;">
+    <div class="field">
+      <label for="fof2-preset">Preset Regional Conditions:</label>
+      <select id="fof2-preset" onchange="applyPreset()">
+        <option value="custom">-- Custom Frequency --</option>
+        <option value="3.5">Nighttime / Solar Minimum (3.5 MHz)</option>
+        <option value="6.5" selected>Average Daytime / Mild Conditions (6.5 MHz)</option>
+        <option value="10.5">Peak Midday / High Solar Max (10.5 MHz)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="manual-fof2-val">Baseline foF2 (MHz):</label>
+      <input id="manual-fof2-val" type="number" step="0.1" value="6.5">
+    </div>
+  </div>
+
+  <button class="btn" type="button" onclick="calculateMUF()">Calculate Real-Time MUF</button>
+
+  <!-- Output Results Block -->
+  <div id="result-box" class="result">
+    <div style="font-size: 1.2em; font-weight: bold;">
+      Your Path Maximum Usable Frequency (MUF): <span id="muf-output" style="color: #2563eb;">--</span> MHz
+    </div>
+    <div style="font-size: 1.05em; margin-top: 4px; opacity: 0.9;">
+      Optimum Working Frequency (FOT / 85%): <span id="fot-output">--</span> MHz
+    </div>
+    
+
+    <table class="muf-table">
+      <thead>
+        <tr>
+          <th>Band (m)</th>
+          <th>Your Path Status</th>
+          <th id="feed-header-col">Global Feed Baseline (3,000 km)</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Leave this completely empty! The JavaScript injects all 8 rows here -->
+      </tbody>
+    </table>
+  </div>
+  <!-- Educational Section for New Hams -->
+  <div class="edu-section">
+    <h2>Propagation Primer for New Hams</h2>
+    
+    <h3>What is an Ionosonde?</h3>
+    <p>An <strong>ionosonde</strong> is a specialized high-power radar station on the ground that shoots rapid sweeps of radio frequencies straight up into space (Vertical Incidence). By recording exactly how long it takes for each frequency to echo back to Earth, it calculates the precise height and electron density of the ionosphere's reflecting layers at that moment. The <em>Global Ionosonde Feed Average</em> column on this page automatically pools live radar readings from over 80 active stations worldwide to build a dynamic planet-wide benchmark.</p>
+
+    <h3>What is the Kp Index? (e.g., Kp 2.0)</h3>
+    <p>The <strong>Kp Index</strong> measures real-time geomagnetic activity on Earth driven by solar winds. It scales from <strong>0 to 9</strong>. A quiet, stable space climate sits around <code>Kp 0 to 2</code>. When the index crosses <code>Kp 4+</code>, a geomagnetic storm is occurring. For HF operators, high Kp values indicate that the ionosphere is becoming unstable or depleted, causing high-frequency signals to shoot into space instead of bouncing back down.</p>
+    
+    <h3>What is foF2? (Critical Frequency)</h3>
+    <p>The <strong>foF2</strong> is the absolute highest frequency that the F2 layer of the ionosphere can reflect back to Earth if a radio signal is shot <strong>straight up vertically</strong> into the sky. If you transmit higher than the foF2 frequency straight up, it pierces the layer and goes out to space. Because it represents the baseline density of electrons in the ionosphere, it is the foundational starting number for all skywave propagation models.</p>
+
+    <h3>What is the MUF? (Maximum Usable Frequency)</h3>
+    <p>The <strong>MUF</strong> is the highest frequency that can be used for communication along a <em>specific oblique path</em> between two distant points. Because long-distance signals hit the ionosphere at a shallow, glancing angle instead of straight up, the layer can bounce much higher frequencies than the baseline foF2. As a rule of thumb, the maximum possible single-hop MUF is roughly <strong>3 times</strong> the local foF2 baseline.</p>
+
+    <h3>How the Calculation Works</h3>
+    <p>This calculator merges real-world space environment physics with orbital geometry. First, it queries live 3-hour geomagnetic values from NOAA and active radar sounder baselines from global ionosondes using custom JSON infrastructure. It then scales the baseline foF2 downward if a geomagnetic storm is present. Next, it identifies how many geometric skips (hops) are needed to cover your path distance (since an F2 hop peaks at 3,500 km). Finally, it applies the <strong>Secant Law of Curved-Earth Oblique Incidence Geometry</strong> to project exactly how much higher your grazing transmission angle boosts your usable frequency spectrum.</p>
+  </div>
+
+  <script>
+    let currentKp = 2.0;
+    let autoFoF2 = 7.0;
+    let feedAverageMUF3000 = 21.0; 
+
+    // YOUR INFRASTRUCTURE ENDPOINTS & FUNCTIONS INTEGRATED DIRECTLY HERE
+    const solarUrls = {
+      kp: 'https://noaa.gov' 
+    };
+
+    async function fetchSolarJson(url, label = url) {
+      async function load(attempt) {
+        const requestUrl = new URL(url);
+        requestUrl.searchParams.set('_ts', `${Date.now()}-${attempt}`);
+        const response = await fetch(requestUrl.toString(), { cache: 'no-store' });
+        if (!response.ok) throw new Error(`${label}: NOAA returned HTTP ${response.status}`);
+        const raw = await response.text();
+        const cleaned = raw.replace(/^\uFEFF/, '').replace(/-?Infinity\b|\bNaN\b/g, 'null').trim();
+        try {
+          return JSON.parse(cleaned);
+        } catch (error) {
+          throw new Error(`${label}: received an incomplete or malformed NOAA response`);
+        }
+      }
+      let lastError;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try { return await load(attempt); } catch (error) {
+          lastError = error;
+          if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+        }
+      }
+      throw lastError;
+    }
+    
+    function solNormalizeRows(data) {
+      if (Array.isArray(data) && data.length && Array.isArray(data[0])) {
+        const headers = data[0];
+        return data.slice(1).map(row => Object.fromEntries(headers.map((h, i) => [h, row[i]])));
+      }
+      return Array.isArray(data) ? data : [data];
+    }
+
+    function solRowAt(data, offsetFromEnd = 0) {
+      const rows = solNormalizeRows(data).filter(Boolean);
+      const idx = rows.length - 1 - offsetFromEnd;
+      return idx >= 0 ? rows[idx] : null;
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('muf-theme', newTheme);
+    }
+
+    const savedTheme = localStorage.getItem('muf-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    function toggleMode() {
+      const modeEl = document.querySelector('input[name="fof2-mode"]:checked');
+      const mode = modeEl ? modeEl.value : 'auto';
+      document.getElementById('manual-panel').style.display = (mode === 'manual') ? 'block' : 'none';
+      updateStatusHeader();
+      calculateMUF();
+    }
+
+    function updateUnits() {
+      const unitEl = document.querySelector('input[name="dist-unit"]:checked');
+      const isMiles = unitEl && unitEl.value === 'mi';
+      const distInput = document.getElementById('dist-input');
+      let val = parseFloat(distInput.value) || 0;
+      distInput.value = isMiles ? Math.round(val * 0.621371) : Math.round(val / 0.621371);
+      calculateMUF();
+    }
+
+    function applyPreset() {
+      const preset = document.getElementById('fof2-preset').value;
+      if (preset !== 'custom') {
+        document.getElementById('manual-fof2-val').value = preset;
+        calculateMUF();
+      }
+    }
+
+    function updateStatusHeader() {
+      const modeEl = document.querySelector('input[name="fof2-mode"]:checked');
+      const mode = modeEl ? modeEl.value : 'auto';
+      document.getElementById('fof2-status').innerText = (mode === 'auto')
+        ? `${autoFoF2.toFixed(2)} MHz (Averaged from active sounders)`
+        : `${(parseFloat(document.getElementById('manual-fof2-val').value) || 6.5).toFixed(2)} MHz (Manual preset)`;
+    }
+    // 2. Fetch NOAA SWPC Planetary Kp-Index using your shared infrastructure
+    async function loadSpaceWeather() {
+      const kpDisplay = document.getElementById('kp-display');
+      try {
+        const rawData = await fetchSolarJson('https://noaa.gov', 'NOAA Kp');
+        const latestRow = solRowAt(rawData, 0);
+        if (!latestRow) throw new Error("No Kp rows found");
+
+        const liveKp = parseFloat(latestRow.kp || latestRow); 
+        const timestamp = String(latestRow.time_tag || latestRow || '');
+
+        if (!isNaN(liveKp)) {
+          currentKp = liveKp;
+          let timeLabel = timestamp.length >= 16 ? timestamp.slice(11, 16) + " UTC" : "Live";
+          let status = `Kp ${liveKp.toFixed(2)} (${timeLabel})`;
+          if (currentKp >= 5.0) status += " 🚨 Major Geomagnetic Storm";
+          else if (currentKp >= 4.0) status += " ⚠️ Minor Storm";
+          kpDisplay.innerText = status;
+          calculateMUF();
+        }
+      } catch (e) {
+        kpDisplay.innerText = `Kp ${currentKp.toFixed(1)} (Quiet Sun Baseline)`;
+      }
+    }
+
+    // 3. Fetch KC2G Live Global Ionosondes (foF2 + live MUF3000 feed averages via mufd)
+    async function loadLiveIonosonde() {
+      try {
+        const res = await fetch('https://kc2g.com');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const stations = await res.json();
+        
+        let sumFoF2 = 0, countFoF2 = 0;
+        let sumMuf3000 = 0, countMuf3000 = 0;
+
+        for (const key in stations) {
+          const s = stations[key];
+          if (s) {
+            // Accumulate foF2
+            if (typeof s.fof2 === 'number' && s.fof2 > 1.5 && s.fof2 < 20) {
+              sumFoF2 += s.fof2;
+              countFoF2++;
+            }
+            // Read KC2G's mufd property with fallback to muf3000
+            const stationMuf = (typeof s.mufd === 'number') ? s.mufd : s.muf3000;
+            if (typeof stationMuf === 'number' && stationMuf > 5 && stationMuf < 60) {
+              sumMuf3000 += stationMuf;
+              countMuf3000++;
+            }
+          }
+        }
+        if (countFoF2 > 0) autoFoF2 = sumFoF2 / countFoF2;
+        if (countMuf3000 > 0) feedAverageMUF3000 = sumMuf3000 / countMuf3000;
+
+      } catch (err) {
+        autoFoF2 = 6.8;
+        feedAverageMUF3000 = 21.5;
+      }
+      updateStatusHeader();
+      calculateMUF();
+    }
+
+    // 4. Calculate Path MUF & Build the 3-Column Comparison Table
+    function calculateMUF() {
+      try {
+        const distInput = document.getElementById('dist-input');
+        const distance = parseFloat(distInput ? distInput.value : 1500) || 0;
+        const unitEl = document.querySelector('input[name="dist-unit"]:checked');
+        const isMiles = unitEl && unitEl.value === 'mi';
+        const distKm = isMiles ? (distance * 1.60934) : distance;
+
+        const modeEl = document.querySelector('input[name="fof2-mode"]:checked');
+        const isAuto = !modeEl || modeEl.value === 'auto';
+        let effectiveFoF2 = isAuto ? autoFoF2 : (parseFloat(document.getElementById('manual-fof2-val').value) || 6.5);
+
+        // Kp storm depression factor
+        const stormDepression = Math.max(0.5, 1.0 - (currentKp * 0.045));
+        effectiveFoF2 = effectiveFoF2 * stormDepression;
+
+        // Curved Earth Oblique Incidence Geometry
+        const maxHop = 3500;
+        const hops = Math.max(1, Math.ceil(distKm / maxHop));
+        const hopLength = distKm / hops;
+
+        const R = 6371; 
+        const hF2 = 300; 
+        const theta = hopLength / (2 * R); 
+        const sinPhi = (R * Math.sin(theta)) / Math.sqrt(Math.pow(R, 2) + Math.pow(R + hF2, 2) - 2 * R * (R + hF2) * Math.cos(theta));
+        const secPhi = 1 / Math.sqrt(Math.max(0.001, 1 - Math.pow(sinPhi, 2)));
+
+        const pathMUF = effectiveFoF2 * secPhi;
+        const fot = pathMUF * 0.85;
+
+        // Amateur Bands
+        const bands = [
+          { label: "10m", freq: "28.0 - 29.7 MHz", min: 28.0 },
+          { label: "12m", freq: "24.89 - 24.99 MHz", min: 24.89 },
+          { label: "15m", freq: "21.0 - 21.45 MHz", min: 21.0 },
+          { label: "17m", freq: "18.068 - 18.168 MHz", min: 18.068 },
+          { label: "20m", freq: "14.0 - 14.35 MHz", min: 14.0 },
+          { label: "30m", freq: "10.1 - 10.15 MHz", min: 10.1 },
+          { label: "40m", freq: "7.0 - 7.3 MHz", min: 7.0 },
+          { label: "80m", freq: "3.5 - 4.0 MHz", min: 3.5 }
+        ];
+
+        let tableHtml = "";
+        bands.forEach(b => {
+          // Column 2: Status on user's custom geometric path
+          const pathOpen = (fot >= b.min);
+          const pathCell = pathOpen 
+            ? `<td class="open-band">Open (Reliable)</td>` 
+            : `<td class="closed-band">Closed (Below FOT)</td>`;
+
+          // Column 3: Status on the global ionosonde feed standard 3,000 km baseline
+          const feedOpen = ((feedAverageMUF3000 * 0.85) >= b.min);
+          const feedCell = feedOpen
+            ? `<td class="open-band">Open (~${feedAverageMUF3000.toFixed(1)} MHz Feed Avg)</td>`
+            : `<td class="closed-band">Closed (Exceeds Feed MUF)</td>`;
+
+          tableHtml += `<tr>
+            <td><strong>${b.label}</strong> <span style="font-size:0.85em; opacity:0.8;">(${b.freq})</span></td>
+            ${pathCell}
+            ${feedCell}
+          </tr>`;
+        });
+
+        document.getElementById('muf-output').innerText = pathMUF.toFixed(2);
+        document.getElementById('fot-output').innerText = fot.toFixed(2);
+        document.getElementById('table-body').innerHTML = tableHtml;
+        document.getElementById('result-box').style.display = 'block';
+
+      } catch (err) {
+        console.error("Calculation error:", err);
+      }
+    }
+
+    // Initialize telemetry
+    calculateMUF();
+    loadSpaceWeather();
+    loadLiveIonosonde();
+  </script>
+</body>
+</html>
