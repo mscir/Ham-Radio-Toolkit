@@ -7937,14 +7937,11 @@ function privGetSummarySegments(
 
   const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
   const allClassSegments = FCC_97301_REGION2?.allClasses || [];
-  /*
-    Build the raw pool from both:
-    - class-specific privileges, such as Technician HF ranges; and
-    - all-class VHF/UHF/microwave privileges.
-  */
   const baseSegments = [...classSegments, ...allClassSegments];
+
   const rows = [];
   const seen = new Set();
+
   function is219to220(segment) {
     return (
       segment.band === '1.25m' &&
@@ -7953,7 +7950,147 @@ function privGetSummarySegments(
     );
   }
 
-function mergeSummaryRows(rows) {
+  function ruleAllowsSelectedMode(rule) {
+    const modes = rule.modes || [];
+
+    if (modeKey === 'data') {
+      /*
+        The UI calls this mode “RTTY / Data.” The FCC table contains
+        some “RTTY, Data” rows and some Data-only rows, especially
+        219–220 MHz. Both belong in this compact data view.
+      */
+      return modes.includes('RTTY') || modes.includes('Data');
+    }
+
+    if (modeKey === 'phone') {
+      return modes.includes('Phone');
+    }
+
+    if (modeKey === 'image') {
+      return modes.includes('Image');
+    }
+
+    return false;
+  }
+
+  function addRow(base, lowMHz, highMHz, extra = {}) {
+    if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
+      return;
+    }
+
+    if (highMHz <= lowMHz) {
+      return;
+    }
+
+    /*
+      219–220 MHz is special-purpose Data-only spectrum. It must
+      never appear in CW, Phone, or Image compact summaries.
+    */
+    if (is219to220(base) && modeKey !== 'data') {
+      return;
+    }
+
+    const key = [
+      base.band,
+      lowMHz,
+      highMHz,
+      modeKey,
+      extra.locationDependent ? 'location' : '',
+      extra.is60mContiguous ? '60m-contiguous' : ''
+    ].join('|');
+
+    if (seen.has(key)) {
+      return;
+    }
+
+    seen.add(key);
+
+    rows.push({
+      ...base,
+      lowMHz,
+      highMHz,
+      summaryMode: modeKey,
+      ...extra
+    });
+  }
+
+  /*
+    §97.305(a): CW is permitted on frequencies otherwise authorized
+    to the operator, subject to other Part 97 restrictions.
+  */
+  if (modeKey === 'cw') {
+    baseSegments.forEach(segment => {
+      addRow(segment, segment.lowMHz, segment.highMHz);
+    });
+
+    return mergeSummaryRows(rows, licenseClass, modeKey);
+  }
+
+  (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
+    if (!ruleAllowsSelectedMode(rule)) {
+      return;
+    }
+
+    baseSegments
+      .filter(segment => segment.band === rule.band)
+      .forEach(segment => {
+        /*
+          “Entire band” entries apply across the operator’s
+          frequency-authorized segment.
+        */
+        if (rule.range === 'entire') {
+          addRow(segment, segment.lowMHz, segment.highMHz);
+          return;
+        }
+
+        /*
+          60m compact view includes only the contiguous segment;
+          discrete channels remain an exact-checker job.
+        */
+        if (Array.isArray(rule.rangesMHz)) {
+          rule.rangesMHz.forEach(range => {
+            addRow(
+              segment,
+              Math.max(segment.lowMHz, range.low),
+              Math.min(segment.highMHz, range.high),
+              {
+                is60mContiguous: segment.band === '60m'
+              }
+            );
+          });
+        }
+
+        /*
+          Normal §97.305 range entries: render only the intersection
+          between the frequency authorization and emission authority.
+        */
+        if (typeof rule.lowMHz === 'number') {
+          addRow(
+            segment,
+            Math.max(segment.lowMHz, rule.lowMHz),
+            Math.min(segment.highMHz, rule.highMHz),
+            {
+              locationDependent:
+                rule.standards?.includes('97.307(f)(11)') || false
+            }
+          );
+        }
+      });
+  });
+
+  return mergeSummaryRows(rows, licenseClass, modeKey);
+}
+
+
+/*
+  Compact-table cleanup:
+  1. Remove rows fully contained by broader equivalent rows.
+  2. Merge adjacent / overlapping rows only when their compact-table
+     conditions would be identical.
+  3. Preserve meaningful distinctions such as 60m contiguous space
+     and location-dependent rows.
+*/
+function mergeSummaryRows(rows, licenseClass, modeKey) {
   const sorted = [...rows].sort((a, b) => {
     if (a.band !== b.band) {
       return a.lowMHz - b.lowMHz;
@@ -7966,10 +8103,10 @@ function mergeSummaryRows(rows) {
     return b.highMHz - a.highMHz;
   });
 
-  const merged = [];
+  const cleaned = [];
 
   sorted.forEach(candidate => {
-    const containedByExisting = merged.some(existing => {
+    const containedByExisting = cleaned.some(existing => {
       const sameBand = existing.band === candidate.band;
       const sameMode = existing.summaryMode === candidate.summaryMode;
 
@@ -7979,23 +8116,89 @@ function mergeSummaryRows(rows) {
         Boolean(existing.is60mContiguous) ===
           Boolean(candidate.is60mContiguous);
 
-      const containsRange =
+      const existingContainsCandidate =
         existing.lowMHz <= candidate.lowMHz &&
         existing.highMHz >= candidate.highMHz;
 
-      return sameBand && sameMode && sameSpecialFlags && containsRange;
+      return (
+        sameBand &&
+        sameMode &&
+        sameSpecialFlags &&
+        existingContainsCandidate
+      );
     });
 
     if (!containedByExisting) {
-      merged.push(candidate);
+      cleaned.push(candidate);
     }
   });
 
-  return merged.sort((a, b) => a.lowMHz - b.lowMHz);
-}
+  const mergeable = [];
 
+  cleaned.forEach(candidate => {
+    const previous = mergeable[mergeable.length - 1];
+
+    if (!previous) {
+      mergeable.push({ ...candidate });
+      return;
+    }
+
+    const sameBand = previous.band === candidate.band;
+    const sameMode = previous.summaryMode === candidate.summaryMode;
+
+    const sameSpecialFlags =
+      Boolean(previous.locationDependent) ===
+        Boolean(candidate.locationDependent) &&
+      Boolean(previous.is60mContiguous) ===
+        Boolean(candidate.is60mContiguous);
+
+    /*
+      Use the same text-generation function the renderer uses.
+      If the notes differ, do not merge the rows: the legal
+      difference needs to remain visible in the compact table.
+    */
+    const previousNotes = privSummaryConditions(
+      previous,
+      modeKey,
+      licenseClass
+    );
+
+    const candidateNotes = privSummaryConditions(
+      candidate,
+      modeKey,
+      licenseClass
+    );
+
+    const sameNotes = previousNotes === candidateNotes;
+
+    /*
+      A tiny floating-point tolerance lets 7.100 / 7.1000000001
+      and similar endpoints merge safely.
+    */
+    const touchingOrOverlapping =
+      candidate.lowMHz <= previous.highMHz + 0.000001;
+
+    if (
+      sameBand &&
+      sameMode &&
+      sameSpecialFlags &&
+      sameNotes &&
+      touchingOrOverlapping
+    ) {
+      previous.highMHz = Math.max(
+        previous.highMHz,
+        candidate.highMHz
+      );
+      return;
+    }
+
+    mergeable.push({ ...candidate });
+  });
+
+  return mergeable.sort((a, b) => a.lowMHz - b.lowMHz);
+}
 	
-  function addRow(base, lowMHz, highMHz, extra = {}) {
+function addRow(base, lowMHz, highMHz, extra = {}) {
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
       return;
     }
