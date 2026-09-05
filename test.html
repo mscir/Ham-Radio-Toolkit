@@ -8182,12 +8182,19 @@ function privGetSummarySegments(
     to the control operator, subject to other Part 97 restrictions.
   */
   if (modeKey === 'cw') {
-    baseSegments.forEach(segment => {
-      addRow(segment, segment.lowMHz, segment.highMHz);
-    });
-
-    return mergeSummaryRows(rows, licenseClass, modeKey);
-  }
+	  baseSegments.forEach(segment => {
+	    addRow(
+	      segment,
+	      segment.lowMHz,
+	      segment.highMHz,
+	      {
+	        is60mContiguous: segment.band === '60m'
+	      }
+	    );
+	  });
+	
+	  return mergeSummaryRows(rows, licenseClass, modeKey);
+	}
 
   (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
     if (!ruleAllowsSelectedMode(rule)) {
