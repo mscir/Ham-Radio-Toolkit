@@ -7213,7 +7213,8 @@ function privFindEmissionRules(mhz, bands, modeKey) {
 
 function privFindPowerRule(mhz, bands, licenseClass) {
   const defaultPower =
-    FCC_97313_POWER_REFERENCE?.generalRule?.defaultMaximum || '1,500 W PEP';
+    FCC_97313_POWER_REFERENCE?.generalRule?.defaultMaximum ||
+    '1,500 W PEP';
 
   const result = {
     display: defaultPower,
@@ -7223,23 +7224,64 @@ function privFindPowerRule(mhz, bands, licenseClass) {
 
   const specificRules = FCC_97313_POWER_REFERENCE?.limits || [];
 
+  /*
+    §97.313(c)(2) restricts Technician/Novice power to 200 W PEP
+    only in these four specific HF segments. It must not be applied
+    to VHF/UHF/microwave privileges merely because the user is a Tech.
+  */
+  const technicianHfPowerSegments = [
+    { lowMHz: 3.525, highMHz: 3.600 },
+    { lowMHz: 7.025, highMHz: 7.125 },
+    { lowMHz: 21.025, highMHz: 21.200 },
+    { lowMHz: 28.000, highMHz: 28.500 }
+  ];
+
   specificRules.forEach(rule => {
+    /*
+      Handle the Technician/Novice rule explicitly. The data object
+      stores its segments as strings, so the generic frequency test
+      cannot safely determine whether it applies.
+    */
+    if (rule.id === 'tech-novice-hf') {
+      const applies =
+        licenseClass === 'tech' &&
+        technicianHfPowerSegments.some(segment =>
+          privNumberInRange(mhz, segment.lowMHz, segment.highMHz)
+        );
+
+      if (!applies) return;
+
+      result.display = rule.transmitterPower || '200 W PEP';
+      result.source = rule.source || '97.313(c)(2)';
+
+      if (rule.condition) result.conditions.push(rule.condition);
+      if (rule.exception) result.conditions.push(rule.exception);
+
+      return;
+    }
+
     const sameBand = !rule.band || bands.includes(rule.band);
-    const inRange =
-      (typeof rule.lowMHz !== 'number' && !Array.isArray(rule.frequenciesMHz)) ||
-      privNumberInRange(mhz, rule.lowMHz, rule.highMHz) ||
-      rule.frequenciesMHz?.some(freq => Math.abs(mhz - freq) < 0.00001);
 
-    if (!sameBand || !inRange) return;
+    const inFrequencyRange =
+      typeof rule.lowMHz !== 'number' ||
+      privNumberInRange(mhz, rule.lowMHz, rule.highMHz);
 
-    if (rule.id === 'tech-novice-hf' && licenseClass !== 'tech') {
+    const onNamedFrequency =
+      !Array.isArray(rule.frequenciesMHz) ||
+      rule.frequenciesMHz.some(freq => Math.abs(mhz - freq) < 0.00001);
+
+    if (!sameBand || !inFrequencyRange || !onNamedFrequency) {
       return;
     }
 
     if (rule.radiatedPower && rule.transmitterPower) {
-      result.display = `${rule.transmitterPower}; ${rule.radiatedPower}`;
+      result.display =
+        `${rule.transmitterPower}; ${rule.radiatedPower}`;
     } else {
-      result.display = rule.radiatedPower || rule.transmitterPower || result.display;
+      result.display =
+        rule.radiatedPower ||
+        rule.transmitterPower ||
+        result.display;
     }
 
     result.source = rule.source || result.source;
@@ -7887,21 +7929,54 @@ function privSummaryAllowedForMode(segment, modeKey) {
   return Boolean(segment?.summaryMode === modeKey);
 }
 
-function privGetSummarySegments(licenseClass, modeKey = currentPrivSummaryMode) {
+function privGetSummarySegments(
+  licenseClass,
+  modeKey = currentPrivSummaryMode
+) {
   const fccClassKey = PRIV_LICENSE_TO_FCC_KEY[licenseClass];
+
   const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
   const allClassSegments = FCC_97301_REGION2?.allClasses || [];
+
+  /*
+    Build the raw pool from both:
+    - class-specific privileges, such as Technician HF ranges; and
+    - all-class VHF/UHF/microwave privileges.
+  */
   const baseSegments = [...classSegments, ...allClassSegments];
+
   const rows = [];
   const seen = new Set();
 
-  const addRow = (base, lowMHz, highMHz, extra = {}) => {
-    if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) return;
-	/*
-	  A matching endpoint is not a usable frequency segment for the
-	  compact table. Only render a positive-width overlap.
-	*/
-	if (highMHz <= lowMHz) return;
+  function is219to220(segment) {
+    return (
+      segment.band === '1.25m' &&
+      segment.lowMHz >= 219 &&
+      segment.highMHz <= 220
+    );
+  }
+
+  function addRow(base, lowMHz, highMHz, extra = {}) {
+    if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
+      return;
+    }
+
+    /*
+      A matching endpoint does not create usable operating spectrum.
+      Only show positive-width intersections.
+    */
+    if (highMHz <= lowMHz) {
+      return;
+    }
+
+    /*
+      The compact table must not list 219–220 MHz outside Data mode.
+      It is special-purpose digital forwarding spectrum, not a
+      general CW, phone, or image privilege.
+    */
+    if (is219to220(base) && modeKey !== 'data') {
+      return;
+    }
 
     const key = [
       base.band,
@@ -7909,10 +7984,13 @@ function privGetSummarySegments(licenseClass, modeKey = currentPrivSummaryMode) 
       highMHz,
       modeKey,
       extra.locationDependent ? 'location' : '',
-      extra.discrete60m ? 'discrete60m' : ''
+      extra.is60mContiguous ? '60m-contiguous' : ''
     ].join('|');
 
-    if (seen.has(key)) return;
+    if (seen.has(key)) {
+      return;
+    }
+
     seen.add(key);
 
     rows.push({
@@ -7922,31 +8000,33 @@ function privGetSummarySegments(licenseClass, modeKey = currentPrivSummaryMode) 
       summaryMode: modeKey,
       ...extra
     });
-  };
+  }
 
   /*
     §97.305(a): CW is permitted on any frequency already authorized
     to the control operator, subject to other Part 97 restrictions.
-    Therefore the selected license ranges themselves form CW rows.
   */
   if (modeKey === 'cw') {
     baseSegments.forEach(segment => {
       addRow(segment, segment.lowMHz, segment.highMHz);
     });
 
-    return rows.sort((a, b) => a.lowMHz - b.lowMHz);
+    return mergeSummaryRows(rows);
   }
 
   const emission = PRIV_CHECKER_MODES[modeKey]?.emission;
 
   (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
-    if (!rule.modes?.includes(emission)) return;
+    if (!rule.modes?.includes(emission)) {
+      return;
+    }
 
     baseSegments
       .filter(segment => segment.band === rule.band)
       .forEach(segment => {
         /*
-          “Entire band” mode rules cover the selected license segment.
+          “Entire band” emission authorization covers the license
+          segment itself, subject to special restrictions elsewhere.
         */
         if (rule.range === 'entire') {
           addRow(segment, segment.lowMHz, segment.highMHz);
@@ -7954,38 +8034,95 @@ function privGetSummarySegments(licenseClass, modeKey = currentPrivSummaryMode) 
         }
 
         /*
-          The 60m rule provides both a contiguous range and discrete
-          channel references. The compact table shows the contiguous
-          segment; the checker remains the source for channel detail.
+          60m has a contiguous segment plus discrete channels.
+          The compact table shows only the contiguous segment.
+          The exact-frequency checker is responsible for discrete
+          channel carrier/emission validation.
         */
         if (Array.isArray(rule.rangesMHz)) {
           rule.rangesMHz.forEach(range => {
-            const lowMHz = Math.max(segment.lowMHz, range.low);
-            const highMHz = Math.min(segment.highMHz, range.high);
-
-            addRow(segment, lowMHz, highMHz, {
-              is60mContiguous: segment.band === '60m'
-            });
+            addRow(
+              segment,
+              Math.max(segment.lowMHz, range.low),
+              Math.min(segment.highMHz, range.high),
+              {
+                is60mContiguous: segment.band === '60m'
+              }
+            );
           });
         }
 
         /*
-          Normal §97.305 frequency-segment rows: render the geometric
-          intersection of the selected class range and mode range.
+          Standard §97.305 frequency-range rows: use only the
+          overlap between the selected license segment and the
+          emission-authorized segment.
         */
         if (typeof rule.lowMHz === 'number') {
-          const lowMHz = Math.max(segment.lowMHz, rule.lowMHz);
-          const highMHz = Math.min(segment.highMHz, rule.highMHz);
-
-          addRow(segment, lowMHz, highMHz, {
-            locationDependent:
-              rule.standards?.includes('97.307(f)(11)') || false
-          });
+          addRow(
+            segment,
+            Math.max(segment.lowMHz, rule.lowMHz),
+            Math.min(segment.highMHz, rule.highMHz),
+            {
+              locationDependent:
+                rule.standards?.includes('97.307(f)(11)') || false
+            }
+          );
         }
       });
   });
 
-  return rows.sort((a, b) => a.lowMHz - b.lowMHz);
+  return mergeSummaryRows(rows);
+}
+
+/*
+  Compact-table cleanup:
+  - Remove exact duplicates.
+  - Where a row is fully contained inside another row of the same
+    band and operating mode, retain the broader row.
+  - This makes Technician 23cm display as 1240–1300 MHz once,
+    rather than displaying both 1240–1300 and its contained
+    1270–1295 record.
+  - Keep distinct 60m and location-dependent entries separate.
+*/
+function mergeSummaryRows(rows) {
+  const sorted = [...rows].sort((a, b) => {
+    if (a.band !== b.band) {
+      return a.lowMHz - b.lowMHz;
+    }
+
+    if (a.lowMHz !== b.lowMHz) {
+      return a.lowMHz - b.lowMHz;
+    }
+
+    return b.highMHz - a.highMHz;
+  });
+
+  const merged = [];
+
+  sorted.forEach(candidate => {
+    const containedByExisting = merged.some(existing => {
+      const sameBand = existing.band === candidate.band;
+      const sameMode = existing.summaryMode === candidate.summaryMode;
+
+      const sameSpecialFlags =
+        Boolean(existing.locationDependent) ===
+          Boolean(candidate.locationDependent) &&
+        Boolean(existing.is60mContiguous) ===
+          Boolean(candidate.is60mContiguous);
+
+      const containsRange =
+        existing.lowMHz <= candidate.lowMHz &&
+        existing.highMHz >= candidate.highMHz;
+
+      return sameBand && sameMode && sameSpecialFlags && containsRange;
+    });
+
+    if (!containedByExisting) {
+      merged.push(candidate);
+    }
+  });
+
+  return merged.sort((a, b) => a.lowMHz - b.lowMHz);
 }
 	
 function privSummaryConditions(segment, modeKey, licenseClass) {
