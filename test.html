@@ -4875,10 +4875,8 @@ async function fetchSolarJson(url, label = url) {
   async function load(attempt) {
     const requestUrl = new URL(url);
 
-    /*
-      Add a unique query value to bypass potentially stale/broken
-      cached feed responses on every initial request and retry.
-    */
+    /*      Add a unique query value to bypass potentially stale/broken
+      cached feed responses on every initial request and retry.    */
     requestUrl.searchParams.set(
       '_ts',
       `${Date.now()}-${attempt}`
@@ -4902,10 +4900,8 @@ async function fetchSolarJson(url, label = url) {
 
       const raw = await response.text();
 
-      /*
-        NOAA live JSON feeds can occasionally include a UTF-8 BOM,
-        NaN, or Infinity, which standard JSON parsing rejects.
-      */
+      /*        NOAA live JSON feeds can occasionally include a UTF-8 BOM,
+        NaN, or Infinity, which standard JSON parsing rejects.      */
       const cleaned = raw
         .replace(/^\uFEFF/, '')
         .replace(/-?Infinity\b|\bNaN\b/g, 'null')
@@ -5146,107 +5142,235 @@ function renderSolarData(vals) {
 }
 
 async function fetchSolar() {
+  console.time('Solar refresh total');
+
   const btn = sq('solar-refresh-btn');
-  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
-  	const solarError = sq('solar-err');
-	if (solarError) solarError.classList.remove('on');
+
+  if (btn) {
+    btn.classList.add('spinning');
+    btn.disabled = true;
+  }
+
+  const solarError = sq('solar-err');
+
+  if (solarError) {
+    solarError.classList.remove('on');
+  }
+
   setSolarStatus('Fetching NOAA SWPC data…', false);
 
   try {
-	const [
-  solarFlux, sunspots, kp, aindex, xray,
-  wind, mag, proton, electron
-] = await Promise.all([
-  fetchSolarJson(solarUrls.solarFlux, '10 cm solar flux'),
-  fetchSolarJson(solarUrls.sunspots, 'Sunspot number'),
-  fetchSolarJson(solarUrls.kp, 'Planetary K-index'),
-  fetchSolarJson(solarUrls.aindex, 'Fredericksburg A-index'),
-  fetchSolarJson(solarUrls.xray, 'GOES X-ray flux'),
-  fetchSolarJson(solarUrls.wind, 'Solar-wind plasma data'),
-  fetchSolarJson(solarUrls.mag, 'Solar-wind magnetic-field data'),
-  fetchSolarJson(solarUrls.proton, 'GOES proton flux'),
-  fetchSolarJson(solarUrls.electron, 'GOES electron flux')
-]);
-    const sf0 = solRowAt(solarFlux, 0), sf1 = solRowAt(solarFlux, 1);
-    const sfv = solN(solPick(sf0, ['flux'])), sfp = solN(solPick(sf1, ['flux']));
-    const ss0 = solRowAt(sunspots, 0), ss1 = solRowAt(sunspots, 1);
-    const ssv = solN(solPick(ss0, ['ssn'])), ssp = solN(solPick(ss1, ['ssn']));
-    const k0 = solRowAt(kp, 0), k1 = solRowAt(kp, 1);
-    const kv = solN(solPick(k0, ['Kp'])), kpPrev = solN(solPick(k1, ['Kp']));
-    const a0 = solRowAt(aindex, 0), a1 = solRowAt(aindex, 1);
-    const av = solN(solPick(a0, ['afred_1_day'])), ap = solN(solPick(a1, ['afred_1_day']));
-    const x0 = solRowAt(xray, 0), x1 = solRowAt(xray, 1);
-    const xA = solN(solPick(x0, ['xrsa', 'observed_flux_a', 'flux_a']));
-    const xB = solN(solPick(x0, ['xrsb', 'observed_flux_b', 'observed_flux', 'flux']));
-    const xAp = solN(solPick(x1, ['xrsa', 'observed_flux_a', 'flux_a']));
-    const xBp = solN(solPick(x1, ['xrsb', 'observed_flux_b', 'observed_flux', 'flux']));
-    const w0 = solRowAt(wind, 0), w1 = solRowAt(wind, 1);
-	/*     const wv = solN(solPick(w0, ['proton_speed'])), wp = solN(solPick(w1, ['proton_speed'])); */
-	//const wv = solN(solPick(w0, 'proton_speed', 'speed'));
-    //const wp = solN(solPick(w1, 'proton_speed', 'speed'));
-	const wv = solN(solPick(w0, ['proton_speed', 'speed']));
-    const wp = solN(solPick(w1, ['proton_speed', 'speed']));
-    const m0 = solRowAt(mag, 0), m1 = solRowAt(mag, 1);
-	/*     const mv = solN(solPick(m0, ['bz_gsm'])), mp = solN(solPick(m1, ['bz_gsm'])); */
-	//const mv = solN(solPick(m0, 'bz_gsm', 'bzgsm'));
-	//const mp = solN(solPick(m1, 'bz_gsm', 'bzgsm'));
-	const mv = solN(solPick(m0, ['bz_gsm', 'bzgsm']));
-	const mp = solN(solPick(m1, ['bz_gsm', 'bzgsm']));
-    const d0 = solRowAt(wind, 0), d1 = solRowAt(wind, 1);
-	/*    const dv = solN(solPick(d0, ['proton_density'])), dp = solN(solPick(d1, ['proton_density'])); */
-	//const dv = solN(solPick(d0, 'proton_density', 'density'));
-	//const dp = solN(solPick(d1, 'proton_density', 'density'));
-	const dv = solN(solPick(d0, ['proton_density', 'density']));
-	const dp = solN(solPick(d1, ['proton_density', 'density']));
-    const p0 = solRowAt(proton, 0), p1 = solRowAt(proton, 1);
-    const pv = solN(solPick(p0, ['flux'])), pp = solN(solPick(p1, ['flux']));
-    const e0 = solRowAt(electron, 0), e1 = solRowAt(electron, 1);
-    const ev = solN(solPick(e0, ['flux'])), ep = solN(solPick(e1, ['flux']));
+    console.time('Solar NOAA fetches');
+
+    const solarRequests = [
+      fetchSolarJson(solarUrls.solarFlux, '10 cm solar flux'),
+      fetchSolarJson(solarUrls.sunspots, 'Sunspot number'),
+      fetchSolarJson(solarUrls.kp, 'Planetary K-index'),
+      fetchSolarJson(solarUrls.aindex, 'Fredericksburg A-index'),
+      fetchSolarJson(solarUrls.xray, 'GOES X-ray flux'),
+      fetchSolarJson(solarUrls.wind, 'Solar-wind plasma data'),
+      fetchSolarJson(solarUrls.mag, 'Solar-wind magnetic-field data'),
+      fetchSolarJson(solarUrls.proton, 'GOES proton flux'),
+      fetchSolarJson(solarUrls.electron, 'GOES electron flux')
+    ];
+
+    const [
+      solarFlux,
+      sunspots,
+      kp,
+      aindex,
+      xray,
+      wind,
+      mag,
+      proton,
+      electron
+    ] = await Promise.all(solarRequests);
+
+    console.timeEnd('Solar NOAA fetches');
+
+    const sf0 = solRowAt(solarFlux, 0);
+    const sf1 = solRowAt(solarFlux, 1);
+    const sfv = solN(solPick(sf0, ['flux']));
+    const sfp = solN(solPick(sf1, ['flux']));
+
+    const ss0 = solRowAt(sunspots, 0);
+    const ss1 = solRowAt(sunspots, 1);
+    const ssv = solN(solPick(ss0, ['ssn']));
+    const ssp = solN(solPick(ss1, ['ssn']));
+
+    const k0 = solRowAt(kp, 0);
+    const k1 = solRowAt(kp, 1);
+    const kv = solN(solPick(k0, ['Kp']));
+    const kpPrev = solN(solPick(k1, ['Kp']));
+
+    const a0 = solRowAt(aindex, 0);
+    const a1 = solRowAt(aindex, 1);
+    const av = solN(solPick(a0, ['afred_1_day']));
+    const ap = solN(solPick(a1, ['afred_1_day']));
+
+    const x0 = solRowAt(xray, 0);
+    const x1 = solRowAt(xray, 1);
+    const xA = solN(solPick(x0, [
+      'xrsa',
+      'observed_flux_a',
+      'flux_a'
+    ]));
+    const xB = solN(solPick(x0, [
+      'xrsb',
+      'observed_flux_b',
+      'observed_flux',
+      'flux'
+    ]));
+    const xAp = solN(solPick(x1, [
+      'xrsa',
+      'observed_flux_a',
+      'flux_a'
+    ]));
+    const xBp = solN(solPick(x1, [
+      'xrsb',
+      'observed_flux_b',
+      'observed_flux',
+      'flux'
+    ]));
+
+    const w0 = solRowAt(wind, 0);
+    const w1 = solRowAt(wind, 1);
+    const wv = solN(solPick(w0, [
+      'proton_speed',
+      'speed'
+    ]));
+    const wp = solN(solPick(w1, [
+      'proton_speed',
+      'speed'
+    ]));
+
+    const m0 = solRowAt(mag, 0);
+    const m1 = solRowAt(mag, 1);
+    const mv = solN(solPick(m0, [
+      'bz_gsm',
+      'bzgsm'
+    ]));
+    const mp = solN(solPick(m1, [
+      'bz_gsm',
+      'bzgsm'
+    ]));
+
+    const d0 = solRowAt(wind, 0);
+    const d1 = solRowAt(wind, 1);
+    const dv = solN(solPick(d0, [
+      'proton_density',
+      'density'
+    ]));
+    const dp = solN(solPick(d1, [
+      'proton_density',
+      'density'
+    ]));
+
+    const p0 = solRowAt(proton, 0);
+    const p1 = solRowAt(proton, 1);
+    const pv = solN(solPick(p0, ['flux']));
+    const pp = solN(solPick(p1, ['flux']));
+
+    const e0 = solRowAt(electron, 0);
+    const e1 = solRowAt(electron, 1);
+    const ev = solN(solPick(e0, ['flux']));
+    const ep = solN(solPick(e1, ['flux']));
+
+    console.time('Solar render');
 
     renderSolarData({
-      sfv, sfp, ssv, ssp, kv, kpPrev, av, ap,
-      xA, xB, xAp, xBp, wv, wp, mv, mp, dv, dp, pv, pp, ev, ep,
-      sf0, ss0, k0, a0, x0, w0, m0, d0, p0, e0
+      sfv,
+      sfp,
+      ssv,
+      ssp,
+      kv,
+      kpPrev,
+      av,
+      ap,
+      xA,
+      xB,
+      xAp,
+      xBp,
+      wv,
+      wp,
+      mv,
+      mp,
+      dv,
+      dp,
+      pv,
+      pp,
+      ev,
+      ep,
+      sf0,
+      ss0,
+      k0,
+      a0,
+      x0,
+      w0,
+      m0,
+      d0,
+      p0,
+      e0
     });
 
+    console.timeEnd('Solar render');
+
     setSolarStatus('', false);
-    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-    fetchSparklineData();
-    } catch (e) {
-	    const errorEl = sq('solar-err');
-	
-	    if (errorEl) {
-	      errorEl.innerHTML = solarLoaded
-	        ? '⚠ NOAA solar data is temporarily unavailable or timed out. Showing the most recent successful reading.'
-	        : '⚠ NOAA solar data is temporarily unavailable or timed out. Please try Refresh Data again in a moment.';
-	
-	      errorEl.classList.add('on');
-	    }
-	
-	    /*
-	      Never leave the full-panel loading overlay up after a failure.
-	      This is the key safeguard against a locked-up dashboard.
-	    */
-	    const overlay = document.getElementById('solar-loading-overlay');
-	    const liveData = document.getElementById('solar-live-data');
-	
-	    if (overlay) {
-	      overlay.style.display = 'none';
-	    }
-	
-	    if (liveData) {
-	      liveData.style.display = '';
-	    }
-	
-	    setSolarStatus('', true);
-	
-	    if (btn) {
-	      btn.classList.remove('spinning');
-	      btn.disabled = false;
-	    }
-	
-	    console.warn('Solar data refresh failed:', e);
-	  }
+
+    if (btn) {
+      btn.classList.remove('spinning');
+      btn.disabled = false;
+    }
+
+    console.time('Solar sparkline');
+
+    fetchSparklineData()
+      .catch(error => {
+        console.warn('Solar sparkline failed:', error);
+      })
+      .finally(() => {
+        console.timeEnd('Solar sparkline');
+      });
+
+    console.timeEnd('Solar refresh total');
+
+  } catch (e) {
+    console.timeEnd('Solar refresh total');
+
+    const errorEl = sq('solar-err');
+
+    if (errorEl) {
+      errorEl.innerHTML = solarLoaded
+        ? '⚠ NOAA solar data is temporarily unavailable or timed out. Showing the most recent successful reading.'
+        : '⚠ NOAA solar data is temporarily unavailable or timed out. Please try Refresh Data again in a moment.';
+
+      errorEl.classList.add('on');
+    }
+
+    /*
+      Do not allow a failed or stalled solar request to trap the
+      user behind the loading overlay.
+    */
+    const overlay = document.getElementById('solar-loading-overlay');
+    const liveData = document.getElementById('solar-live-data');
+
+    if (overlay) {
+      overlay.style.display = 'none';
+    }
+
+    if (liveData) {
+      liveData.style.display = '';
+    }
+
+    setSolarStatus('', true);
+
+    if (btn) {
+      btn.classList.remove('spinning');
+      btn.disabled = false;
+    }
+
+    console.warn('Solar data refresh failed:', e);
+  }
 }
 	
 // fetchSolar now called by deferredInit() at bottom of script
