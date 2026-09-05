@@ -4868,93 +4868,89 @@ const solarUrls = {
   electron:  'https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-7-day.json'
 };
 
-/* replaced 20 aug json errors
 async function fetchSolarJson(url, label = url) {
+  const REQUEST_TIMEOUT_MS = 12000;
+  const RETRY_DELAYS_MS = [1000, 2000];
+
   async function load(attempt) {
     const requestUrl = new URL(url);
 
-    if (attempt > 0) {
-      requestUrl.searchParams.set('_ts', Date.now().toString());
-    }
+    /*
+      Add a unique query value to bypass potentially stale/broken
+      cached feed responses on every initial request and retry.
+    */
+    requestUrl.searchParams.set(
+      '_ts',
+      `${Date.now()}-${attempt}`
+    );
 
-    const response = await fetch(requestUrl.toString(), {
-      cache: 'no-store'
-    });
+    const controller = new AbortController();
 
-    const raw = await response.text();
-
-    if (!response.ok) {
-      throw new Error(`${label}: HTTP ${response.status}`);
-    }
-
-    // NOAA's live RTSW feeds can contain bare NaN or Infinity values.
-    // Those are invalid JSON, so treat unavailable numeric readings as null.
-    const cleaned = raw
-      .replace(/^\uFEFF/, '')
-      .replace(/-?Infinity\b|\bNaN\b/g, 'null');
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, REQUEST_TIMEOUT_MS);
 
     try {
-      return JSON.parse(cleaned);
+      const response = await fetch(requestUrl.toString(), {
+        cache: 'no-store',
+        signal: controller.signal
+      });
+
+      if (!response.ok) {
+        throw new Error(`${label}: NOAA returned HTTP ${response.status}`);
+      }
+
+      const raw = await response.text();
+
+      /*
+        NOAA live JSON feeds can occasionally include a UTF-8 BOM,
+        NaN, or Infinity, which standard JSON parsing rejects.
+      */
+      const cleaned = raw
+        .replace(/^\uFEFF/, '')
+        .replace(/-?Infinity\b|\bNaN\b/g, 'null')
+        .trim();
+
+      if (!cleaned) {
+        throw new Error(`${label}: NOAA returned an empty response`);
+      }
+
+      try {
+        return JSON.parse(cleaned);
+      } catch (error) {
+        throw new Error(
+          `${label}: received an incomplete or malformed NOAA response`
+        );
+      }
     } catch (error) {
-      throw new Error(
-        `${label}: NOAA returned invalid JSON (${raw.length.toLocaleString()} characters). ` +
-        `${error.message}`
-      );
-    }
-  }
+      if (controller.signal.aborted) {
+        throw new Error(
+          `${label}: request timed out after ${REQUEST_TIMEOUT_MS / 1000} seconds`
+        );
+      }
 
-  try {
-    return await load(0);
-  } catch (firstError) {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return await load(1);
-  }
-}
-*/
-
-async function fetchSolarJson(url, label = url) {
-  async function load(attempt) {
-    const requestUrl = new URL(url);
-
-    // Always avoid a possibly stale or malformed cached response.
-    requestUrl.searchParams.set('_ts', `${Date.now()}-${attempt}`);
-
-    const response = await fetch(requestUrl.toString(), {
-      cache: 'no-store'
-    });
-
-    if (!response.ok) {
-      throw new Error(`${label}: NOAA returned HTTP ${response.status}`);
-    }
-
-    const raw = await response.text();
-
-    // NOAA live feeds can occasionally contain a UTF-8 BOM, NaN, or Infinity.
-    const cleaned = raw
-      .replace(/^\uFEFF/, '')
-      .replace(/-?Infinity\b|\bNaN\b/g, 'null')
-      .trim();
-
-    try {
-      return JSON.parse(cleaned);
-    } catch (error) {
-      throw new Error(
-        `${label}: received an incomplete or malformed NOAA response`
-      );
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 
   let lastError;
 
-  // Initial request plus two retries: up to three total attempts.
+  /*
+    First try plus two retries means at most three requests per feed.
+    Each individual request is capped at 12 seconds.
+  */
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       return await load(attempt);
     } catch (error) {
       lastError = error;
 
-      if (attempt < 2) {
-        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      if (attempt < RETRY_DELAYS_MS.length) {
+        await new Promise(resolve => {
+          setTimeout(resolve, RETRY_DELAYS_MS[attempt]);
+        });
       }
     }
   }
@@ -5152,7 +5148,8 @@ function renderSolarData(vals) {
 async function fetchSolar() {
   const btn = sq('solar-refresh-btn');
   if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
-  sq('solar-err').classList.remove('on');
+  	const solarError = sq('solar-err');
+	if (solarError) solarError.classList.remove('on');
   setSolarStatus('Fetching NOAA SWPC data…', false);
 
   try {
@@ -5215,20 +5212,43 @@ async function fetchSolar() {
     setSolarStatus('', false);
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
     fetchSparklineData();
-  } catch (e) {
-    sq('solar-err').innerHTML = solarLoaded
-	  ? '⚠ NOAA solar data is temporarily unavailable. Showing the most recent successful reading.'
-	  : '⚠ NOAA solar data is temporarily unavailable. Please try Refresh Data again in a moment.';
-    sq('solar-err').classList.add('on');
-    if (!solarLoaded) {
-      const overlay = document.getElementById('solar-loading-overlay');
-      if (overlay) overlay.style.display = 'none';
-      const liveData = document.getElementById('solar-live-data');
-      if (liveData) liveData.style.display = '';
-    }
-    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-  }
+    } catch (e) {
+	    const errorEl = sq('solar-err');
+	
+	    if (errorEl) {
+	      errorEl.innerHTML = solarLoaded
+	        ? '⚠ NOAA solar data is temporarily unavailable or timed out. Showing the most recent successful reading.'
+	        : '⚠ NOAA solar data is temporarily unavailable or timed out. Please try Refresh Data again in a moment.';
+	
+	      errorEl.classList.add('on');
+	    }
+	
+	    /*
+	      Never leave the full-panel loading overlay up after a failure.
+	      This is the key safeguard against a locked-up dashboard.
+	    */
+	    const overlay = document.getElementById('solar-loading-overlay');
+	    const liveData = document.getElementById('solar-live-data');
+	
+	    if (overlay) {
+	      overlay.style.display = 'none';
+	    }
+	
+	    if (liveData) {
+	      liveData.style.display = '';
+	    }
+	
+	    setSolarStatus('', true);
+	
+	    if (btn) {
+	      btn.classList.remove('spinning');
+	      btn.disabled = false;
+	    }
+	
+	    console.warn('Solar data refresh failed:', e);
+	  }
 }
+	
 // fetchSolar now called by deferredInit() at bottom of script
 
 function updateSolarAgeBadge() {
