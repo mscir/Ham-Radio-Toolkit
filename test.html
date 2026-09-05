@@ -8093,53 +8093,47 @@ function privGetSummarySegments(
     );
   }
 
-    function ruleAllowsSelectedMode(rule) {
-	    const modes = rule.modes || [];
-	
-	    /*
-	      Technician HF authority is limited by §97.301(e) and §97.307:
-	      - 80m, 40m, and 15m: CW only.
-	      - 10m: CW, RTTY/Data, plus phone only from 28.300–28.500 MHz.
-	      A §97.305 emission-table row does not expand those privileges.
-	    */
-	    if (licenseClass === 'tech') {
-	      if (
-	        ['80m', '40m', '15m'].includes(rule.band) &&
-	        modeKey !== 'cw'
-	      ) {
-	        return false;
-	      }
-	
-	      if (
-	        rule.band === '10m' &&
-	        modeKey === 'image'
-	      ) {
-	        return false;
-	      }
-	
-	      if (
-	        rule.band === '10m' &&
-	        modeKey === 'phone' &&
-	        rule.highMHz <= 28.300
-	      ) {
-	        return false;
-	      }
-	    }
-	
-	    if (modeKey === 'data') {
-	      return modes.includes('RTTY') || modes.includes('Data');
-	    }
-	
-	    if (modeKey === 'phone') {
-	      return modes.includes('Phone');
-	    }
-	
-	    if (modeKey === 'image') {
-	      return modes.includes('Image');
-	    }
-	
-	    return false;
-	  }
+  function ruleAllowsSelectedMode(rule) {
+    const modes = rule.modes || [];
+
+    if (licenseClass === 'tech') {
+      if (
+        ['80m', '40m', '15m'].includes(rule.band) &&
+        modeKey !== 'cw'
+      ) {
+        return false;
+      }
+
+      if (
+        rule.band === '10m' &&
+        modeKey === 'image'
+      ) {
+        return false;
+      }
+
+      if (
+        rule.band === '10m' &&
+        modeKey === 'phone' &&
+        rule.highMHz <= 28.300
+      ) {
+        return false;
+      }
+    }
+
+    if (modeKey === 'data') {
+      return modes.includes('RTTY') || modes.includes('Data');
+    }
+
+    if (modeKey === 'phone') {
+      return modes.includes('Phone');
+    }
+
+    if (modeKey === 'image') {
+      return modes.includes('Image');
+    }
+
+    return false;
+  }
 
   function addRow(base, lowMHz, highMHz, extra = {}) {
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
@@ -8148,8 +8142,6 @@ function privGetSummarySegments(
     if (highMHz <= lowMHz) {
       return;
     }
-    /*      219–220 MHz is special-purpose, Data-only spectrum.
-      Do not show it for CW, Phone, or Image.    */
     if (is219to220(base) && modeKey !== 'data') {
       return;
     }
@@ -8177,28 +8169,23 @@ function privGetSummarySegments(
     });
   }
 
-  /*
-    §97.305(a): CW is permitted on frequencies otherwise authorized
-    to the control operator, subject to other Part 97 restrictions.
-  */
-  
-	if (modeKey === 'cw') {
-		  baseSegments.forEach(segment => {
-		    addRow(
-		      segment,
-		      segment.lowMHz,
-		      segment.highMHz,
-		      {
-		        is60mContiguous: segment.band === '60m'
-		      }
-		    );
-		  });
-		
-		  return mergeSummaryRows(rows, licenseClass, modeKey);
-		}
-	  return mergeSummaryRows(rows, licenseClass, modeKey);
-	}
+  // CW: full class privileges
+  if (modeKey === 'cw') {
+    baseSegments.forEach(segment => {
+      addRow(
+        segment,
+        segment.lowMHz,
+        segment.highMHz,
+        {
+          is60mContiguous: segment.band === '60m'
+        }
+      );
+    });
 
+    return mergeSummaryRows(rows, licenseClass, modeKey);
+  }
+
+  // Non-CW modes: use emission table
   (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
     if (!ruleAllowsSelectedMode(rule)) {
       return;
@@ -8212,10 +8199,6 @@ function privGetSummarySegments(
           return;
         }
 
-        /*
-          60m table view shows the contiguous range. The exact
-          checker handles discrete-channel carrier details.
-        */
         if (Array.isArray(rule.rangesMHz)) {
           rule.rangesMHz.forEach(range => {
             addRow(
