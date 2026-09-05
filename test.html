@@ -8093,19 +8093,53 @@ function privGetSummarySegments(
     );
   }
 
-  function ruleAllowsSelectedMode(rule) {
-    const modes = rule.modes || [];
-    if (modeKey === 'data') {
-      return modes.includes('RTTY') || modes.includes('Data');
-    }
-    if (modeKey === 'phone') {
-      return modes.includes('Phone');
-    }
-    if (modeKey === 'image') {
-      return modes.includes('Image');
-    }
-    return false;
-  }
+    function ruleAllowsSelectedMode(rule) {
+	    const modes = rule.modes || [];
+	
+	    /*
+	      Technician HF authority is limited by §97.301(e) and §97.307:
+	      - 80m, 40m, and 15m: CW only.
+	      - 10m: CW, RTTY/Data, plus phone only from 28.300–28.500 MHz.
+	      A §97.305 emission-table row does not expand those privileges.
+	    */
+	    if (licenseClass === 'tech') {
+	      if (
+	        ['80m', '40m', '15m'].includes(rule.band) &&
+	        modeKey !== 'cw'
+	      ) {
+	        return false;
+	      }
+	
+	      if (
+	        rule.band === '10m' &&
+	        modeKey === 'image'
+	      ) {
+	        return false;
+	      }
+	
+	      if (
+	        rule.band === '10m' &&
+	        modeKey === 'phone' &&
+	        rule.highMHz <= 28.300
+	      ) {
+	        return false;
+	      }
+	    }
+	
+	    if (modeKey === 'data') {
+	      return modes.includes('RTTY') || modes.includes('Data');
+	    }
+	
+	    if (modeKey === 'phone') {
+	      return modes.includes('Phone');
+	    }
+	
+	    if (modeKey === 'image') {
+	      return modes.includes('Image');
+	    }
+	
+	    return false;
+	  }
 
   function addRow(base, lowMHz, highMHz, extra = {}) {
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
