@@ -7937,17 +7937,14 @@ function privGetSummarySegments(
 
   const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
   const allClassSegments = FCC_97301_REGION2?.allClasses || [];
-
   /*
     Build the raw pool from both:
     - class-specific privileges, such as Technician HF ranges; and
     - all-class VHF/UHF/microwave privileges.
   */
   const baseSegments = [...classSegments, ...allClassSegments];
-
   const rows = [];
   const seen = new Set();
-
   function is219to220(segment) {
     return (
       segment.band === '1.25m' &&
@@ -7956,6 +7953,48 @@ function privGetSummarySegments(
     );
   }
 
+function mergeSummaryRows(rows) {
+  const sorted = [...rows].sort((a, b) => {
+    if (a.band !== b.band) {
+      return a.lowMHz - b.lowMHz;
+    }
+
+    if (a.lowMHz !== b.lowMHz) {
+      return a.lowMHz - b.lowMHz;
+    }
+
+    return b.highMHz - a.highMHz;
+  });
+
+  const merged = [];
+
+  sorted.forEach(candidate => {
+    const containedByExisting = merged.some(existing => {
+      const sameBand = existing.band === candidate.band;
+      const sameMode = existing.summaryMode === candidate.summaryMode;
+
+      const sameSpecialFlags =
+        Boolean(existing.locationDependent) ===
+          Boolean(candidate.locationDependent) &&
+        Boolean(existing.is60mContiguous) ===
+          Boolean(candidate.is60mContiguous);
+
+      const containsRange =
+        existing.lowMHz <= candidate.lowMHz &&
+        existing.highMHz >= candidate.highMHz;
+
+      return sameBand && sameMode && sameSpecialFlags && containsRange;
+    });
+
+    if (!containedByExisting) {
+      merged.push(candidate);
+    }
+  });
+
+  return merged.sort((a, b) => a.lowMHz - b.lowMHz);
+}
+
+	
   function addRow(base, lowMHz, highMHz, extra = {}) {
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
       return;
@@ -8084,46 +8123,7 @@ function privGetSummarySegments(
     1270–1295 record.
   - Keep distinct 60m and location-dependent entries separate.
 */
-function mergeSummaryRows(rows) {
-  const sorted = [...rows].sort((a, b) => {
-    if (a.band !== b.band) {
-      return a.lowMHz - b.lowMHz;
-    }
 
-    if (a.lowMHz !== b.lowMHz) {
-      return a.lowMHz - b.lowMHz;
-    }
-
-    return b.highMHz - a.highMHz;
-  });
-
-  const merged = [];
-
-  sorted.forEach(candidate => {
-    const containedByExisting = merged.some(existing => {
-      const sameBand = existing.band === candidate.band;
-      const sameMode = existing.summaryMode === candidate.summaryMode;
-
-      const sameSpecialFlags =
-        Boolean(existing.locationDependent) ===
-          Boolean(candidate.locationDependent) &&
-        Boolean(existing.is60mContiguous) ===
-          Boolean(candidate.is60mContiguous);
-
-      const containsRange =
-        existing.lowMHz <= candidate.lowMHz &&
-        existing.highMHz >= candidate.highMHz;
-
-      return sameBand && sameMode && sameSpecialFlags && containsRange;
-    });
-
-    if (!containedByExisting) {
-      merged.push(candidate);
-    }
-  });
-
-  return merged.sort((a, b) => a.lowMHz - b.lowMHz);
-}
 	
 function privSummaryConditions(segment, modeKey, licenseClass) {
   const notes = [];
