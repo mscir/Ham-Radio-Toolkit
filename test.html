@@ -8078,7 +8078,6 @@ function privGetSummarySegments(
   modeKey = currentPrivSummaryMode
 ) {
   const fccClassKey = PRIV_LICENSE_TO_FCC_KEY[licenseClass];
-
   const classSegments = FCC_97301_REGION2?.[fccClassKey] || [];
   const allClassSegments = FCC_97301_REGION2?.allClasses || [];
   const baseSegments = [...classSegments, ...allClassSegments];
@@ -8098,11 +8097,6 @@ function privGetSummarySegments(
     const modes = rule.modes || [];
 
     if (modeKey === 'data') {
-      /*
-        The UI calls this mode “RTTY / Data.” The FCC table contains
-        some “RTTY, Data” rows and some Data-only rows, especially
-        219–220 MHz. Both belong in this compact data view.
-      */
       return modes.includes('RTTY') || modes.includes('Data');
     }
 
@@ -8127,8 +8121,8 @@ function privGetSummarySegments(
     }
 
     /*
-      219–220 MHz is special-purpose Data-only spectrum. It must
-      never appear in CW, Phone, or Image compact summaries.
+      219–220 MHz is special-purpose, Data-only spectrum.
+      Do not show it for CW, Phone, or Image.
     */
     if (is219to220(base) && modeKey !== 'data') {
       return;
@@ -8160,7 +8154,7 @@ function privGetSummarySegments(
 
   /*
     §97.305(a): CW is permitted on frequencies otherwise authorized
-    to the operator, subject to other Part 97 restrictions.
+    to the control operator, subject to other Part 97 restrictions.
   */
   if (modeKey === 'cw') {
     baseSegments.forEach(segment => {
@@ -8178,18 +8172,14 @@ function privGetSummarySegments(
     baseSegments
       .filter(segment => segment.band === rule.band)
       .forEach(segment => {
-        /*
-          “Entire band” entries apply across the operator’s
-          frequency-authorized segment.
-        */
         if (rule.range === 'entire') {
           addRow(segment, segment.lowMHz, segment.highMHz);
           return;
         }
 
         /*
-          60m compact view includes only the contiguous segment;
-          discrete channels remain an exact-checker job.
+          60m table view shows the contiguous range. The exact
+          checker handles discrete-channel carrier details.
         */
         if (Array.isArray(rule.rangesMHz)) {
           rule.rangesMHz.forEach(range => {
@@ -8204,10 +8194,6 @@ function privGetSummarySegments(
           });
         }
 
-        /*
-          Normal §97.305 range entries: render only the intersection
-          between the frequency authorization and emission authority.
-        */
         if (typeof rule.lowMHz === 'number') {
           addRow(
             segment,
@@ -8226,14 +8212,6 @@ function privGetSummarySegments(
 }
 
 
-/*
-  Compact-table cleanup:
-  1. Remove rows fully contained by broader equivalent rows.
-  2. Merge adjacent / overlapping rows only when their compact-table
-     conditions would be identical.
-  3. Preserve meaningful distinctions such as 60m contiguous space
-     and location-dependent rows.
-*/
 function mergeSummaryRows(rows, licenseClass, modeKey) {
   const sorted = [...rows].sort((a, b) => {
     if (a.band !== b.band) {
@@ -8247,6 +8225,10 @@ function mergeSummaryRows(rows, licenseClass, modeKey) {
     return b.highMHz - a.highMHz;
   });
 
+  /*
+    First remove rows that are fully contained inside another row
+    with the same display-relevant properties.
+  */
   const cleaned = [];
 
   sorted.forEach(candidate => {
@@ -8277,13 +8259,17 @@ function mergeSummaryRows(rows, licenseClass, modeKey) {
     }
   });
 
-  const mergeable = [];
+  /*
+    Then merge touching/overlapping rows only when their displayed
+    compact-table conditions are the same.
+  */
+  const merged = [];
 
   cleaned.forEach(candidate => {
-    const previous = mergeable[mergeable.length - 1];
+    const previous = merged[merged.length - 1];
 
     if (!previous) {
-      mergeable.push({ ...candidate });
+      merged.push({ ...candidate });
       return;
     }
 
@@ -8296,11 +8282,6 @@ function mergeSummaryRows(rows, licenseClass, modeKey) {
       Boolean(previous.is60mContiguous) ===
         Boolean(candidate.is60mContiguous);
 
-    /*
-      Use the same text-generation function the renderer uses.
-      If the notes differ, do not merge the rows: the legal
-      difference needs to remain visible in the compact table.
-    */
     const previousNotes = privSummaryConditions(
       previous,
       modeKey,
@@ -8315,10 +8296,6 @@ function mergeSummaryRows(rows, licenseClass, modeKey) {
 
     const sameNotes = previousNotes === candidateNotes;
 
-    /*
-      A tiny floating-point tolerance lets 7.100 / 7.1000000001
-      and similar endpoints merge safely.
-    */
     const touchingOrOverlapping =
       candidate.lowMHz <= previous.highMHz + 0.000001;
 
@@ -8336,34 +8313,26 @@ function mergeSummaryRows(rows, licenseClass, modeKey) {
       return;
     }
 
-    mergeable.push({ ...candidate });
+    merged.push({ ...candidate });
   });
 
-  return mergeable.sort((a, b) => a.lowMHz - b.lowMHz);
+  return merged.sort((a, b) => a.lowMHz - b.lowMHz);
 }
 	
 function addRow(base, lowMHz, highMHz, extra = {}) {
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
       return;
     }
-
-    /*
-      A matching endpoint does not create usable operating spectrum.
-      Only show positive-width intersections.
-    */
+    /*      A matching endpoint does not create usable operating spectrum.
+      Only show positive-width intersections.    */
     if (highMHz <= lowMHz) {
       return;
     }
-
-    /*
-      The compact table must not list 219–220 MHz outside Data mode.
-      It is special-purpose digital forwarding spectrum, not a
-      general CW, phone, or image privilege.
-    */
+    /*      The compact table must not list 219–220 MHz outside Data mode.
+      It is special-purpose digital forwarding spectrum, not a      general CW, phone, or image privilege.    */
     if (is219to220(base) && modeKey !== 'data') {
       return;
     }
-
     const key = [
       base.band,
       lowMHz,
@@ -8376,9 +8345,7 @@ function addRow(base, lowMHz, highMHz, extra = {}) {
     if (seen.has(key)) {
       return;
     }
-
     seen.add(key);
-
     rows.push({
       ...base,
       lowMHz,
@@ -8387,44 +8354,30 @@ function addRow(base, lowMHz, highMHz, extra = {}) {
       ...extra
     });
   }
-
-  /*
-    §97.305(a): CW is permitted on any frequency already authorized
-    to the control operator, subject to other Part 97 restrictions.
-  */
+  /*    §97.305(a): CW is permitted on any frequency already authorized
+    to the control operator, subject to other Part 97 restrictions.  */
   if (modeKey === 'cw') {
     baseSegments.forEach(segment => {
       addRow(segment, segment.lowMHz, segment.highMHz);
     });
-
     return mergeSummaryRows(rows);
   }
-
   const emission = PRIV_CHECKER_MODES[modeKey]?.emission;
-
   (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
     if (!rule.modes?.includes(emission)) {
       return;
     }
-
     baseSegments
       .filter(segment => segment.band === rule.band)
       .forEach(segment => {
-        /*
-          “Entire band” emission authorization covers the license
-          segment itself, subject to special restrictions elsewhere.
-        */
+        /*          “Entire band” emission authorization covers the license
+          segment itself, subject to special restrictions elsewhere.        */
         if (rule.range === 'entire') {
           addRow(segment, segment.lowMHz, segment.highMHz);
           return;
         }
-
-        /*
-          60m has a contiguous segment plus discrete channels.
-          The compact table shows only the contiguous segment.
-          The exact-frequency checker is responsible for discrete
-          channel carrier/emission validation.
-        */
+        /*          60m has a contiguous segment plus discrete channels.          The compact table shows only the contiguous segment.
+          The exact-frequency checker is responsible for discrete          channel carrier/emission validation.        */
         if (Array.isArray(rule.rangesMHz)) {
           rule.rangesMHz.forEach(range => {
             addRow(
@@ -8437,12 +8390,8 @@ function addRow(base, lowMHz, highMHz, extra = {}) {
             );
           });
         }
-
-        /*
-          Standard §97.305 frequency-range rows: use only the
-          overlap between the selected license segment and the
-          emission-authorized segment.
-        */
+        /*          Standard §97.305 frequency-range rows: use only the
+          overlap between the selected license segment and the          emission-authorized segment.        */
         if (typeof rule.lowMHz === 'number') {
           addRow(
             segment,
@@ -8456,7 +8405,6 @@ function addRow(base, lowMHz, highMHz, extra = {}) {
         }
       });
   });
-
   return mergeSummaryRows(rows);
 }
 
