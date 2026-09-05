@@ -7992,57 +7992,78 @@ function privSummaryConditions(segment, modeKey, licenseClass) {
   const notes = [];
   const band = segment.band;
 
+  // ── Power limits that differ from 1,500 W PEP default ──
   if (band === '30m') {
-    notes.push('Secondary; 200 W PEP; no Phone/Image');
+    notes.push('Secondary · 200 W PEP max · no Phone/Image');
   }
 
   if (band === '60m') {
-    notes.push('Secondary; max 2.8 kHz');
+    if (segment.is60mContiguous) {
+      notes.push('Secondary · 9.15 W ERP max · 2.8 kHz BW');
+    } else {
+      notes.push('Secondary · 100 W ERP max · 2.8 kHz BW · discrete channels');
+    }
   }
 
   if (band === '2200m' || band === '630m') {
-    notes.push('Fixed location, notification, and sharing requirements');
+    notes.push('Fixed location · FCC notification required · sharing restrictions');
   }
-	
-   if (band === '70cm') {
-	  notes.push('Location/sharing restrictions; 50 W PEP limit may apply in specified areas');
-	}
-	
-	if (band === '33cm') {
-	  notes.push('Location restrictions; 50 W PEP limit may apply near White Sands');
-	}
 
-  if (
-    modeKey === 'data' &&
-    ['80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m'].includes(band)
-  ) {
-    notes.push('2.8 kHz max; permitted §97.309 digital code');
+  if (band === '70cm') {
+    notes.push('Location/sharing restrictions · 50 W PEP in specified areas');
+  }
+
+  if (band === '33cm') {
+    notes.push('Geographic restrictions (White Sands/TX-NM) · 50 W PEP in protected zones');
+  }
+
+  // ── Mode-specific bandwidth/digital code rules ──
+  if (modeKey === 'data' && ['80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m'].includes(band)) {
+    notes.push('2.8 kHz max BW · §97.309 digital code required');
   }
 
   if (modeKey === 'data' && band === '6m') {
-    notes.push('Up to 20 kHz bandwidth; applicable digital-code rules');
+    notes.push('Up to 20 kHz BW · §97.309 digital code rules');
   }
 
   if (modeKey === 'data' && ['1.25m', '70cm'].includes(band)) {
-    notes.push('Up to 100 kHz bandwidth; applicable digital-code rules');
+    notes.push('Up to 100 kHz BW · §97.309 digital code rules');
   }
 
+  // ── Technician HF power limit (200 W PEP on four segments) ──
   const technicianHfSegments = [
-  [3.525, 3.600],
-  [7.025, 7.125],
-  [21.025, 21.200],
-  [28.000, 28.500]
-];
+    [3.525, 3.600],
+    [7.025, 7.125],
+    [21.025, 21.200],
+    [28.000, 28.500]
+  ];
 
-const isTechnicianHfPowerSegment =
-	  licenseClass === 'tech' &&
-	  technicianHfSegments.some(([low, high]) =>
-	    segment.lowMHz >= low && segment.highMHz <= high
-	  );
-	
-	if (isTechnicianHfPowerSegment) {
-	  notes.push('Technician HF maximum: 200 W PEP');
-	}
+  const isTechnicianHfPowerSegment =
+    licenseClass === 'tech' &&
+    technicianHfSegments.some(([low, high]) =>
+      segment.lowMHz >= low && segment.highMHz <= high
+    );
+
+  if (isTechnicianHfPowerSegment) {
+    notes.push('Technician HF max: 200 W PEP');
+  }
+
+  // ── Special-purpose restrictions ──
+  if (band === '1.25m' && segment.lowMHz >= 219 && segment.highMHz <= 220) {
+    notes.push('⚠️ Fixed point-to-point digital forwarding ONLY · not for general use');
+  }
+
+  // ── Location-dependent phone restrictions (40m 7.075–7.100) ──
+  if (segment.locationDependent) {
+    notes.push('⚠️ Location-dependent: ITU Regions 1/3 or US west of 130°W / south of 20°N');
+  }
+
+  // ── Secondary service warnings ──
+  if (['30m', '60m', '2200m', '630m', '70cm', '33cm', '23cm'].includes(band)) {
+    if (!notes.some(n => n.includes('Secondary'))) {
+      notes.push('Secondary allocation · do not cause interference');
+    }
+  }
 
   return [...new Set(notes)].join(' · ') || '—';
 }
@@ -8088,44 +8109,83 @@ function privSummaryPower(segment, licenseClass) {
   )?.display || '1,500 W PEP';
 }
 
-
-
 function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
   const area = document.getElementById('priv-table-area');
-
   if (!area) return;
 
   currentPrivSummaryMode = modeKey;
-
   const label = privSummaryLabelFromModeKey(modeKey);
   const segments = privGetSummarySegments(currentLicenseClass, modeKey);
 
+  // ── DISCLAIMER BANNER ──
+  let html = `
+    <div style="background:rgba(255,180,0,.06);border:1px solid rgba(255,180,0,.25);border-radius:var(--r);padding:12px 14px;margin-bottom:16px;font-size:12px;line-height:1.6;color:var(--text)">
+      <strong style="color:var(--amber)">⚠️ Guideline only:</strong>
+      This table summarizes typical U.S. amateur frequency privileges from FCC Part 97 (§97.301, §97.305, §97.313).
+      It does <strong>not</strong> replace the control operator's responsibility to verify exact frequency, mode, bandwidth, power,
+      and location restrictions before transmitting.
+      <strong style="color:var(--heading)">Use the Frequency Checker above for specific authorization questions.</strong>
+      Full rules: <a href="https://www.ecfr.gov/current/title-47/part-97" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">47 CFR Part 97</a> ·
+      <a href="https://www.arrl.org/fcc-rules-and-regulations" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">ARRL Band Chart</a>
+    </div>
+  `;
+
   if (!segments.length) {
-    area.innerHTML = `
+    html += `
       <div class="priv-group-hdr">▸ ${privCheckerEscape(label)} privileges</div>
       <div style="padding:16px 12px;color:var(--text-dim);font-size:13px">
         No listed ${privCheckerEscape(label)} segments were found for the selected license class.
       </div>
     `;
+    area.innerHTML = html;
     return;
   }
 
+  // ── HELPER: Determine restriction level ──
+  function getRestrictionLevel(segment, modeKey, licenseClass) {
+    const band = segment.band;
+    const notes = privSummaryConditions(segment, modeKey, licenseClass);
+    
+    // Critical: operation prohibited or severely restricted without additional verification
+    const critical = [
+      'Fixed point-to-point digital forwarding ONLY',
+      'FCC notification required',
+      'Location-dependent'
+    ].some(keyword => notes.includes(keyword));
+
+    // Warning: significant power/bandwidth/allocation restrictions
+    const warning = [
+      'Secondary allocation',
+      '200 W PEP max',
+      '9.15 W ERP',
+      '100 W ERP',
+      'Geographic restrictions',
+      '50 W PEP',
+      'Technician HF max: 200 W'
+    ].some(keyword => notes.includes(keyword));
+
+    if (critical) return 'critical';
+    if (warning) return 'warning';
+    return 'normal';
+  }
+
   const rows = segments.map(segment => {
-    const range = privSummaryFormatRange(
-      segment.lowMHz,
-      segment.highMHz
-    );
-
+    const range = privSummaryFormatRange(segment.lowMHz, segment.highMHz);
     const power = privSummaryPower(segment, currentLicenseClass);
-    const notes = privSummaryConditions(
-      segment,
-      modeKey,
-      currentLicenseClass
-    );
+    const notes = privSummaryConditions(segment, modeKey, currentLicenseClass);
+    const restriction = getRestrictionLevel(segment, modeKey, currentLicenseClass);
 
-    return `
-      <tr>
-        <td class="priv-band">${privCheckerEscape(segment.band)}</td>
+    // Visual indicator in Band column
+    let bandIndicator = '';
+    if (restriction === 'critical') {
+      bandIndicator = `<span style="color:#ff3c3c;font-weight:700" title="Critical restrictions — verify before transmitting">⚠️ </span>`;
+    } else if (restriction === 'warning') {
+      bandIndicator = `<span style="color:#ffb400;font-weight:700" title="Special restrictions apply">⚡ </span>`;
+    }
+
+    html += `
+      <tr style="${restriction === 'critical' ? 'background:rgba(255,60,60,.04);' : ''}">
+        <td class="priv-band">${bandIndicator}${privCheckerEscape(segment.band)}</td>
         <td class="priv-freq">${privCheckerEscape(range)}</td>
         <td class="priv-power">${privCheckerEscape(power)}</td>
         <td class="priv-note">${privCheckerEscape(notes)}</td>
@@ -8133,24 +8193,32 @@ function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
     `;
   }).join('');
 
-  area.innerHTML = `
+  html = `
+    ${html}
     <div class="priv-group-hdr">
       ▸ ${privCheckerEscape(label)} privileges — ${privCheckerEscape(PRIV_LICENSE_LABELS[currentLicenseClass])}
     </div>
-
     <table class="priv-table">
       <thead>
         <tr>
           <th>Band</th>
           <th>Frequency range</th>
           <th>Max power</th>
-          <th>Key condition</th>
+          <th>Key conditions</th>
         </tr>
       </thead>
-      <tbody>${rows}</tbody>
+      <tbody>${html}</tbody>
     </table>
+
+    <div style="margin-top:12px;font-size:11px;color:var(--text-dim);line-height:1.6">
+      <span style="color:#ff3c3c">⚠️</span> Critical restrictions (notification, location-dependent, or special-purpose) &nbsp;|&nbsp;
+      <span style="color:#ffb400">⚡</span> Warning (power limits, secondary allocation, geographic restrictions)
+    </div>
   `;
+
+  area.innerHTML = html;
 }
+	
 /* new */
 function initPrivileges() {
   const buttons = document.getElementById('priv-mode-btns');
