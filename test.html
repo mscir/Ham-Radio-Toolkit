@@ -8363,11 +8363,15 @@ function privSummaryConditions(segment, modeKey, licenseClass) {
     notes.push('Secondary · 200 W PEP max · no Phone/Image');
   }
 
-  if (band === '60m') {
+if (band === '60m') {
     if (segment.is60mContiguous) {
-      notes.push('Secondary · 9.15 W ERP max · 2.8 kHz BW');
+      notes.push(
+        'Secondary · 9.15 W ERP max · 2.8 kHz BW · verify exact mode/frequency'
+      );
     } else {
-      notes.push('Secondary · 100 W ERP max · 2.8 kHz BW · discrete channels');
+      notes.push(
+        'Secondary · 100 W ERP max · 2.8 kHz BW · discrete channels'
+      );
     }
   }
 
