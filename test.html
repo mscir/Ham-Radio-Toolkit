@@ -8181,18 +8181,21 @@ function privGetSummarySegments(
     §97.305(a): CW is permitted on frequencies otherwise authorized
     to the control operator, subject to other Part 97 restrictions.
   */
-  if (modeKey === 'cw') {
-	  baseSegments.forEach(segment => {
-	    addRow(
-	      segment,
-	      segment.lowMHz,
-	      segment.highMHz,
-	      {
-	        is60mContiguous: segment.band === '60m'
-	      }
-	    );
-	  });
-	
+  
+	if (modeKey === 'cw') {
+		  baseSegments.forEach(segment => {
+		    addRow(
+		      segment,
+		      segment.lowMHz,
+		      segment.highMHz,
+		      {
+		        is60mContiguous: segment.band === '60m'
+		      }
+		    );
+		  });
+		
+		  return mergeSummaryRows(rows, licenseClass, modeKey);
+		}
 	  return mergeSummaryRows(rows, licenseClass, modeKey);
 	}
 
