@@ -8095,19 +8095,15 @@ function privGetSummarySegments(
 
   function ruleAllowsSelectedMode(rule) {
     const modes = rule.modes || [];
-
     if (modeKey === 'data') {
       return modes.includes('RTTY') || modes.includes('Data');
     }
-
     if (modeKey === 'phone') {
       return modes.includes('Phone');
     }
-
     if (modeKey === 'image') {
       return modes.includes('Image');
     }
-
     return false;
   }
 
@@ -8115,19 +8111,14 @@ function privGetSummarySegments(
     if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
       return;
     }
-
     if (highMHz <= lowMHz) {
       return;
     }
-
-    /*
-      219–220 MHz is special-purpose, Data-only spectrum.
-      Do not show it for CW, Phone, or Image.
-    */
+    /*      219–220 MHz is special-purpose, Data-only spectrum.
+      Do not show it for CW, Phone, or Image.    */
     if (is219to220(base) && modeKey !== 'data') {
       return;
     }
-
     const key = [
       base.band,
       lowMHz,
@@ -8318,106 +8309,15 @@ function mergeSummaryRows(rows, licenseClass, modeKey) {
 
   return merged.sort((a, b) => a.lowMHz - b.lowMHz);
 }
-	
-function addRow(base, lowMHz, highMHz, extra = {}) {
-    if (!Number.isFinite(lowMHz) || !Number.isFinite(highMHz)) {
-      return;
-    }
-    /*      A matching endpoint does not create usable operating spectrum.
-      Only show positive-width intersections.    */
-    if (highMHz <= lowMHz) {
-      return;
-    }
-    /*      The compact table must not list 219–220 MHz outside Data mode.
-      It is special-purpose digital forwarding spectrum, not a      general CW, phone, or image privilege.    */
-    if (is219to220(base) && modeKey !== 'data') {
-      return;
-    }
-    const key = [
-      base.band,
-      lowMHz,
-      highMHz,
-      modeKey,
-      extra.locationDependent ? 'location' : '',
-      extra.is60mContiguous ? '60m-contiguous' : ''
-    ].join('|');
 
-    if (seen.has(key)) {
-      return;
-    }
-    seen.add(key);
-    rows.push({
-      ...base,
-      lowMHz,
-      highMHz,
-      summaryMode: modeKey,
-      ...extra
-    });
-  }
-  /*    §97.305(a): CW is permitted on any frequency already authorized
-    to the control operator, subject to other Part 97 restrictions.  */
-  if (modeKey === 'cw') {
-    baseSegments.forEach(segment => {
-      addRow(segment, segment.lowMHz, segment.highMHz);
-    });
-    return mergeSummaryRows(rows);
-  }
-  const emission = PRIV_CHECKER_MODES[modeKey]?.emission;
-  (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
-    if (!rule.modes?.includes(emission)) {
-      return;
-    }
-    baseSegments
-      .filter(segment => segment.band === rule.band)
-      .forEach(segment => {
-        /*          “Entire band” emission authorization covers the license
-          segment itself, subject to special restrictions elsewhere.        */
-        if (rule.range === 'entire') {
-          addRow(segment, segment.lowMHz, segment.highMHz);
-          return;
-        }
-        /*          60m has a contiguous segment plus discrete channels.          The compact table shows only the contiguous segment.
-          The exact-frequency checker is responsible for discrete          channel carrier/emission validation.        */
-        if (Array.isArray(rule.rangesMHz)) {
-          rule.rangesMHz.forEach(range => {
-            addRow(
-              segment,
-              Math.max(segment.lowMHz, range.low),
-              Math.min(segment.highMHz, range.high),
-              {
-                is60mContiguous: segment.band === '60m'
-              }
-            );
-          });
-        }
-        /*          Standard §97.305 frequency-range rows: use only the
-          overlap between the selected license segment and the          emission-authorized segment.        */
-        if (typeof rule.lowMHz === 'number') {
-          addRow(
-            segment,
-            Math.max(segment.lowMHz, rule.lowMHz),
-            Math.min(segment.highMHz, rule.highMHz),
-            {
-              locationDependent:
-                rule.standards?.includes('97.307(f)(11)') || false
-            }
-          );
-        }
-      });
-  });
-  return mergeSummaryRows(rows);
-}
-
-/*
-  Compact-table cleanup:
+/*  Compact-table cleanup:
   - Remove exact duplicates.
   - Where a row is fully contained inside another row of the same
     band and operating mode, retain the broader row.
   - This makes Technician 23cm display as 1240–1300 MHz once,
     rather than displaying both 1240–1300 and its contained
     1270–1295 record.
-  - Keep distinct 60m and location-dependent entries separate.
-*/
+  - Keep distinct 60m and location-dependent entries separate.*/
 
 	
 function privSummaryConditions(segment, modeKey, licenseClass) {
