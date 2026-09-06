@@ -357,14 +357,12 @@ body{
    PANEL 3 — DECLUTTER PASS 1
    Add after the existing Panel 3 rules
 =========================================== */
-
 /* Compact class/mode controls without changing their active-state behavior */
 .priv-controls {
   display: grid;
   gap: 8px;
   margin: 14px 0 12px;
 }
-
 .priv-control-row {
   display: flex;
   flex-wrap: wrap;
@@ -434,7 +432,6 @@ body{
   white-space: nowrap;
   margin-left: 4px;
 }
-
 .priv-reference-links a {
   color: var(--accent);
   text-decoration: none;
@@ -469,7 +466,6 @@ body{
   color: var(--poor);
   margin-right: 3px;
 }
-
 .priv-special-mark {
   color: var(--amber);
   margin: 0 3px 0 8px;
@@ -1597,7 +1593,8 @@ body{
     <div class="panel-title">Frequency <span>Privileges</span></div>
     <div class="panel-desc" id="priv-panel-desc">Legal frequency ranges and power limits for Amateur Extra licensees by mode. Data from ARRL.org frequency allocations and FCC 47 CFR Part 97.</div>
   </div>
-	<!-- LICENSE CLASS + MODE SELECTORS -->
+
+<!-- LICENSE CLASS + MODE SELECTORS -->
 	<div class="priv-controls">
 	  <div class="priv-control-row">
 	    <span class="priv-control-label">License class</span>
@@ -1637,6 +1634,9 @@ body{
 	      <button type="button" class="mode-btn active" data-priv-summary-mode="data">RTTY/Data</button>
 	      <button type="button" class="mode-btn" data-priv-summary-mode="image">Image</button>
 	    </div>
+	  </div>
+	</div>
+			  
 	  </div>
 	</div>
   <div id="priv-table-area"><div class="priv-group-hdr">▸ Extra-Class HF Phone / Image Segments</div>
