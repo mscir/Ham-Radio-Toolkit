@@ -8700,57 +8700,55 @@ function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
   currentPrivSummaryMode = modeKey;
 
   const label = privSummaryLabelFromModeKey(modeKey);
+  const licenseLabel = PRIV_LICENSE_LABELS[currentLicenseClass];
   const segments = privGetSummarySegments(
     currentLicenseClass,
     modeKey
   );
 
-  const disclaimer = `
-    <div style="
-      background:rgba(255,180,0,.06);
-      border:1px solid rgba(255,180,0,.25);
-      border-radius:var(--r);
-      padding:12px 14px;
-      margin-bottom:16px;
-      font-size:12px;
-      line-height:1.6;
-      color:var(--text)
-    ">
-      <strong style="color:var(--amber)">⚠️ Guideline only:</strong>
-      This table summarizes typical U.S. amateur frequency privileges from
-      FCC Part 97 (§97.301, §97.305, and §97.313). It does
-      <strong>not</strong> replace the control operator's responsibility to
-      verify the exact frequency, mode, occupied bandwidth, power, location,
-      and band-specific restrictions before transmitting.
-      <strong style="color:var(--heading)">
-        Use the Frequency Checker above for specific authorization questions.
-      </strong>
-      <br>
-      <span style="font-size:11px;color:var(--text-dim)">
-        Full rules:
-        <a
-          href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color:var(--accent);text-decoration:underline"
-        >47 CFR Part 97</a>
-        ·
-        <a
-          href="https://www.arrl.org/fcc-rules-and-regulations"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color:var(--accent);text-decoration:underline"
-        >ARRL FCC Rules & Regulations</a>
+  const referenceNote = `
+    <div class="priv-reference-note">
+      <span class="priv-reference-icon">⚠</span>
+      <span>
+        <strong>Reference guide.</strong>
+        Verify the exact frequency, emission, bandwidth, power, location,
+        and applicable restrictions before transmitting. Use the Frequency
+        Checker below for a specific authorization question.
+        <span class="priv-reference-links">
+          <a
+            href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97"
+            target="_blank"
+            rel="noopener noreferrer"
+          >47 CFR Part 97</a>
+          <span aria-hidden="true">·</span>
+          <a
+            href="https://www.arrl.org/fcc-rules-and-regulations"
+            target="_blank"
+            rel="noopener noreferrer"
+          >ARRL FCC Rules</a>
+        </span>
+      </span>
+    </div>
+  `;
+
+  const summaryHeading = `
+    <div class="priv-group-hdr priv-summary-heading">
+      <span id="priv-summary-heading-text">
+        ${privCheckerEscape(label)} privileges ·
+        ${privCheckerEscape(licenseLabel)}
+      </span>
+
+      <span class="priv-inline-legend">
+        <span class="priv-critical-mark">⚠</span> Verify before transmitting
+        <span class="priv-special-mark">⚡</span> Special condition
       </span>
     </div>
   `;
 
   if (!segments.length) {
     area.innerHTML = `
-      ${disclaimer}
-      <div class="priv-group-hdr">
-        ▸ ${privCheckerEscape(label)} privileges
-      </div>
+      ${referenceNote}
+      ${summaryHeading}
       <div style="padding:16px 12px;color:var(--text-dim);font-size:13px">
         No listed ${privCheckerEscape(label)} segments were found for the
         selected license class.
@@ -8818,7 +8816,7 @@ function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
           style="color:var(--poor);font-weight:700"
           title="Critical restrictions — verify before transmitting"
           aria-label="Critical restrictions apply"
-        >⚠️ </span>
+        >⚠ </span>
       `;
     } else if (restriction === 'warning') {
       indicator = `
@@ -8853,12 +8851,8 @@ function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
   }).join('');
 
   area.innerHTML = `
-    ${disclaimer}
-
-    <div class="priv-group-hdr">
-      ▸ ${privCheckerEscape(label)} privileges —
-      ${privCheckerEscape(PRIV_LICENSE_LABELS[currentLicenseClass])}
-    </div>
+    ${referenceNote}
+    ${summaryHeading}
 
     <table class="priv-table">
       <thead>
@@ -8873,36 +8867,18 @@ function renderPrivCompactSummary(modeKey = currentPrivSummaryMode) {
         ${rows}
       </tbody>
     </table>
-
-    <div style="
-      margin-top:12px;
-      font-size:11px;
-      color:var(--text-dim);
-      line-height:1.6
-    ">
-      <span style="color:var(--poor)">⚠️</span>
-      Critical restrictions: special-purpose operation, notification, or
-      location-dependent rules — verify before transmitting.
-      &nbsp;|&nbsp;
-      <span style="color:var(--amber)">⚡</span>
-      Special conditions: power limits, secondary allocation, bandwidth
-      limits, or geographic restrictions.
-    </div>
   `;
 }
 	
 /* new */
 function initPrivileges() {
   const buttons = document.getElementById('priv-mode-btns');
-
   if (!buttons) return;
-
   buttons.innerHTML = '';
-
   const modes = [
     { key: 'cw', label: 'CW' },
     { key: 'phone', label: 'Phone' },
-    { key: 'data', label: 'RTTY / Data' },
+    { key: 'data', label: ''RTTY/Data' },
     { key: 'image', label: 'Image' }
   ];
 
