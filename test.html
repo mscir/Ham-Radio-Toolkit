@@ -353,7 +353,162 @@ body{
 .priv-power{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--good);white-space:nowrap}
 .priv-note{font-size:15px;color:var(--text-dim);line-height:1.5}
 .priv-group-hdr{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);padding:10px 12px 6px;background:rgba(0,0,0,.12);border-bottom:1px solid var(--border)}
+/* ===========================================
+   PANEL 3 — DECLUTTER PASS 1
+   Add after the existing Panel 3 rules
+=========================================== */
 
+/* Compact class/mode controls without changing their active-state behavior */
+.priv-controls {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 12px;
+}
+
+.priv-control-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+.priv-control-label {
+  min-width: 96px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.priv-control-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+/* More compact than default .mode-btn, scoped to top controls only */
+.priv-controls .mode-btn {
+  padding: 5px 12px;
+}
+/* Override the generic 20px bottom margin on the summary mode group */
+.priv-summary-mode-btns {
+  margin: 0;
+}
+/* Preserve the id used by JavaScript while moving style out of HTML */
+.lc-saved-badge {
+  display: none;
+  padding: 2px 7px;
+  border: 1px solid rgba(57, 255, 20, .20);
+  border-radius: 2px;
+  background: rgba(57, 255, 20, .10);
+  color: var(--good);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+/* Replace the full warning card with a quiet safety/reference note */
+.priv-reference-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 10px 0 14px;
+  padding: 8px 10px;
+  border-left: 2px solid rgba(255, 180, 0, .75);
+  background: rgba(255, 180, 0, .035);
+  color: var(--text-dim);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.priv-reference-note strong {
+  color: var(--amber);
+  font-weight: 700;
+}
+.priv-reference-icon {
+  flex: 0 0 auto;
+  color: var(--amber);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.priv-reference-links {
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.priv-reference-links a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.priv-reference-links a:hover,
+.priv-reference-links a:focus-visible {
+  text-decoration: underline;
+}
+/* Allow a title and compact legend to share the existing table heading */
+.priv-summary-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 5px 14px;
+}
+/*  Keep existing .priv-group-hdr appearance, but slightly reduce its vertical footprint now that the table legend lives here. */
+.priv-summary-heading.priv-group-hdr {
+  padding: 8px 12px 6px;
+  letter-spacing: .15em;
+}
+.priv-inline-legend {
+  color: var(--text-dim);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.priv-critical-mark {
+  color: var(--poor);
+  margin-right: 3px;
+}
+
+.priv-special-mark {
+  color: var(--amber);
+  margin: 0 3px 0 8px;
+}
+/* Slightly compact the summary table only. The full reference table uses .priv-table too, so this rule must be scoped to #priv-table-area rather than changing .priv-table globally. */
+#priv-table-area > .priv-table {
+  font-size: 13px;
+}
+#priv-table-area > .priv-table thead th {
+  padding: 7px 10px;
+}
+#priv-table-area > .priv-table td {
+  padding: 8px 10px;
+}
+#priv-table-area > .priv-table .priv-band,
+#priv-table-area > .priv-table .priv-freq,
+#priv-table-area > .priv-table .priv-power {
+  font-size: 14px;
+}
+#priv-table-area > .priv-table .priv-note {
+  font-size: 13px;
+  line-height: 1.4;
+}
+/* Keep the compact controls and rule references usable on smaller screens */
+@media (max-width: 620px) {
+  .priv-control-label {
+    min-width: 100%;
+  }
+  .priv-reference-links {
+    display: inline-block;
+    margin: 2px 0 0;
+    white-space: normal;
+  }
+  .priv-inline-legend {
+    width: 100%;
+    white-space: normal;
+  }
+}
+	
 /* ===========================================
    PANEL 4 — Q-CODES & PHONETICS
 =========================================== */
@@ -1446,9 +1601,9 @@ body{
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap">
     <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim)">License Class:</span>
     <div style="display:flex;gap:4px" id="license-class-btns">
-      <button class="mode-btn" id="lc-tech"    onclick="setLicenseClass('tech')"   style="padding:6px 14px">Technician</button>
-      <button class="mode-btn" id="lc-general" onclick="setLicenseClass('general')" style="padding:6px 14px">General</button>
-      <button class="mode-btn active" id="lc-extra" onclick="setLicenseClass('extra')" style="padding:6px 14px">Extra</button>
+      <button class="mode-btn" id="lc-tech"    onclick="setLicenseClass('tech')">Technician</button>
+      <button class="mode-btn" id="lc-general" onclick="setLicenseClass('general')">General</button>
+      <button class="mode-btn active" id="lc-extra" onclick="setLicenseClass('extra')">Extra</button>
     </div>
     <span id="lc-saved-badge" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(57,255,20,.1);color:var(--good);border:1px solid rgba(57,255,20,.2)">✓ Saved</span>
   </div>
