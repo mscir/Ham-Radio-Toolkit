@@ -1597,17 +1597,70 @@ body{
     <div class="panel-title">Frequency <span>Privileges</span></div>
     <div class="panel-desc" id="priv-panel-desc">Legal frequency ranges and power limits for Amateur Extra licensees by mode. Data from ARRL.org frequency allocations and FCC 47 CFR Part 97.</div>
   </div>
-  <!-- LICENSE CLASS SELECTOR -->
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap">
-    <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim)">License Class:</span>
-    <div style="display:flex;gap:4px" id="license-class-btns">
-      <button class="mode-btn" id="lc-tech"    onclick="setLicenseClass('tech')">Technician</button>
-      <button class="mode-btn" id="lc-general" onclick="setLicenseClass('general')">General</button>
-      <button class="mode-btn active" id="lc-extra" onclick="setLicenseClass('extra')">Extra</button>
-    </div>
-    <span id="lc-saved-badge" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(57,255,20,.1);color:var(--good);border:1px solid rgba(57,255,20,.2)">✓ Saved</span>
-  </div>
-  <div class="mode-btns" id="priv-mode-btns"></div>
+	<!-- LICENSE CLASS + MODE SELECTORS -->
+	<div class="priv-controls">
+	  <div class="priv-control-row">
+	    <span class="priv-control-label">License class</span>
+	
+	    <div class="priv-control-buttons" id="license-class-btns">
+	      <button
+	        class="mode-btn"
+	        id="lc-tech"
+	        type="button"
+	        onclick="setLicenseClass('tech')"
+	      >Technician</button>
+	
+	      <button
+	        class="mode-btn"
+	        id="lc-general"
+	        type="button"
+	        onclick="setLicenseClass('general')"
+	      >General</button>
+	
+	      <button
+	        class="mode-btn active"
+	        id="lc-extra"
+	        type="button"
+	        onclick="setLicenseClass('extra')"
+	      >Extra</button>
+	    </div>
+	
+	    <span id="lc-saved-badge" class="lc-saved-badge">✓ Saved</span>
+	  </div>
+	
+	  <div class="priv-control-row">
+	    <span class="priv-control-label">Operating mode</span>
+	
+	    <div class="mode-btns priv-summary-mode-btns" id="priv-mode-btns">
+	      <button type="button" class="mode-btn" data-priv-summary-mode="cw">CW</button>
+	      <button type="button" class="mode-btn" data-priv-summary-mode="phone">Phone</button>
+	      <button type="button" class="mode-btn active" data-priv-summary-mode="data">RTTY/Data</button>
+	      <button type="button" class="mode-btn" data-priv-summary-mode="image">Image</button>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="priv-reference-note">
+	  <span class="priv-reference-icon">⚠</span>
+	  <span>
+	    <strong>Reference guide.</strong>
+	    Verify the exact frequency, emission, bandwidth, power, location, and applicable restrictions before transmitting.
+	    Use the Frequency Checker below for a specific authorization question.
+	    <span class="priv-reference-links">
+	      <a
+	        href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97"
+	        target="_blank"
+	        rel="noopener noreferrer"
+	      >47 CFR Part 97</a>
+	      <span aria-hidden="true">·</span>
+	      <a
+	        href="https://www.arrl.org/fcc-rules-and-regulations"
+	        target="_blank"
+	        rel="noopener noreferrer"
+	      >ARRL FCC Rules</a>
+	    </span>
+	  </span>
+	</div>
   <div id="priv-table-area"><div class="priv-group-hdr">▸ Extra-Class HF Phone / Image Segments</div>
     <table class="priv-table"><thead><tr><th>Band</th><th>Frequency Range</th><th>Max Power</th><th>Notes</th></tr></thead><tbody><tr>
         <td class="priv-band">80m</td>
