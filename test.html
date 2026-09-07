@@ -353,6 +353,7 @@ body{
 .priv-power{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--good);white-space:nowrap}
 .priv-note{font-size:15px;color:var(--text-dim);line-height:1.5}
 .priv-group-hdr{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);padding:10px 12px 6px;background:rgba(0,0,0,.12);border-bottom:1px solid var(--border)}
+
 /* ===========================================
    PANEL 3 — DECLUTTER PASS 1
    Add after the existing Panel 3 rules
@@ -600,24 +601,7 @@ body{
   color: var(--text-dim);
   line-height: 1.55;
 }
-.priv-checker-submit {
-  width: auto;
-  min-width: 120px;
-  padding: 8px 20px;
-  margin: 0;
-  flex: 0 0 auto;
-}
-/* Frequency checker: keep input and Check button on one row */
-.priv-checker-input-row {
-  display: grid;
-  grid-template-columns: minmax(200px, 420px) auto;
-  align-items: end;
-  gap: 10px;
-  margin: 10px 0 12px;
-}
-.priv-checker-input-wrap {
-  min-width: 0;
-}
+/******** */
 /* Frequency checker: compact input and aligned Check button */
 .priv-checker-input-row {
   display: grid;
@@ -626,12 +610,16 @@ body{
   gap: 10px;
   margin: 10px 0 4px;
 }
+
 .priv-checker-input-wrap {
   min-width: 0;
 }
+
 .priv-checker-input-wrap .calc-input {
   width: 100%;
+  margin: 0;
 }
+
 .priv-checker-input-row .priv-checker-submit {
   display: inline-block;
   width: auto !important;
@@ -641,11 +629,11 @@ body{
   margin: 0;
   justify-self: start;
 }
+/* Stack controls only on narrow phone screens */
 @media (max-width: 560px) {
   .priv-checker-input-row {
     grid-template-columns: 1fr;
   }
-
   .priv-checker-input-row .priv-checker-submit {
     width: 100% !important;
     max-width: none;
