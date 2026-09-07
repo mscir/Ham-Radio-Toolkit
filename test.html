@@ -524,17 +524,6 @@ body{
   max-width: 720px;
 }
 
-.priv-checker-input-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 10px;
-  margin: 10px 0 12px;
-}
-.priv-checker-input-wrap {
-  flex: 0 1 420px;
-  min-width: 200px;
-}
 .priv-checker-label {
   display: block;
   font-family: 'Barlow Condensed', sans-serif;
@@ -576,7 +565,6 @@ body{
 .priv-checker-mode-row .mode-btns {
   margin: 0;
 }
-
 .priv-checker-presets {
   margin-bottom: 12px;
 }
@@ -596,7 +584,6 @@ body{
   font-size: 12px;
   margin: 0 6px 6px 0;
 }
-
 .priv-freq-result {
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid var(--border);
@@ -607,7 +594,6 @@ body{
   line-height: 1.7;
   color: var(--text-dim);
 }
-
 .priv-checker-disclaimer {
   margin-top: 8px;
   font-size: 11px;
@@ -629,19 +615,41 @@ body{
   gap: 10px;
   margin: 10px 0 12px;
 }
-
 .priv-checker-input-wrap {
   min-width: 0;
 }
-
+/* Frequency checker: compact input and aligned Check button */
+.priv-checker-input-row {
+  display: grid;
+  grid-template-columns: 210px auto;
+  align-items: end;
+  gap: 10px;
+  margin: 10px 0 4px;
+}
+.priv-checker-input-wrap {
+  min-width: 0;
+}
+.priv-checker-input-wrap .calc-input {
+  width: 100%;
+}
 .priv-checker-input-row .priv-checker-submit {
   display: inline-block;
   width: auto !important;
-  min-width: 120px;
+  min-width: 108px;
   max-width: max-content;
   padding: 8px 20px;
   margin: 0;
   justify-self: start;
+}
+@media (max-width: 560px) {
+  .priv-checker-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .priv-checker-input-row .priv-checker-submit {
+    width: 100% !important;
+    max-width: none;
+  }
 }
 
 /* ===========================================
@@ -1856,23 +1864,23 @@ body{
 	      type="text"
 	      inputmode="decimal"
 	      autocomplete="off"
-	      placeholder="e.g. 14.074 or 146.520"
+	      placeholder="e.g. 14.074"
 	      onkeydown="if(event.key==='Enter')checkPrivAuthorization()"
 	    >
-	
-	    <div class="priv-checker-hint">
-	      Enter MHz. Example: <code>14074</code> is interpreted as
-	      <code>14.074 MHz</code>.
-	    </div>
 	  </div>
 	
-	<button
-	  class="calc-btn priv-checker-submit"
-	  type="button"
-	  onclick="checkPrivAuthorization()"
-	>
-	  Check
-	</button>
+	  <button
+	    class="calc-btn priv-checker-submit"
+	    type="button"
+	    onclick="checkPrivAuthorization()"
+	  >
+	    Check
+	  </button>
+	</div>
+	
+	<div class="priv-checker-hint">
+	  Enter MHz. Example: <code>14074</code> is interpreted as
+	  <code>14.074 MHz</code>.
 	</div>
 	
 	<div class="priv-checker-mode-row">
