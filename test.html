@@ -614,6 +614,13 @@ body{
   color: var(--text-dim);
   line-height: 1.55;
 }
+.priv-checker-submit {
+  width: auto;
+  min-width: 120px;
+  padding: 8px 20px;
+  margin: 0;
+  flex: 0 0 auto;
+}
 	
 /* ===========================================
    PANEL 4 — Q-CODES & PHONETICS
@@ -1837,13 +1844,13 @@ body{
 	    </div>
 	  </div>
 	
-	  <button
-	    class="calc-btn"
-	    type="button"
-	    onclick="checkPrivAuthorization()"
-	  >
-	    Check
-	  </button>
+	<button
+	  class="calc-btn priv-checker-submit"
+	  type="button"
+	  onclick="checkPrivAuthorization()"
+	>
+	  Check
+	</button>
 	</div>
 	
 	<div class="priv-checker-mode-row">
@@ -1924,6 +1931,8 @@ body{
 	  rules. It does not replace the control operator’s responsibility to comply
 	  with all applicable FCC rules.
 	</div>
+
+	<div class="divider"></div>
 
   <!-- ── FULL BAND REFERENCE TABLE ── -->
   <div class="section-label" id="band-ref-label">▸ Complete Extra Class Band Reference</div>
