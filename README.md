@@ -86,5 +86,49 @@ If you spot a calculation error, a broken tool feed, a typo, or have a feature i
 
 ---
 
+## 🔎 Frequency Privileges Data Methodology
+
+The **Frequency Privileges** reference and authorization checker are designed as a practical U.S. amateur-radio operating aid. Their displayed frequency ranges, license-class access, operating-mode guidance, power limits, and special-condition notes are derived from and cross-checked against the current FCC Amateur Radio Service rules in **47 CFR Part 97**, with the ARRL’s U.S. amateur-band allocation material used as a readability and presentation cross-reference.
+
+### Primary regulatory sources
+
+The FCC’s electronic Code of Federal Regulations (eCFR) is the controlling source used for rule interpretation. The toolkit’s privilege data is reviewed against the following Part 97 provisions:
+
+- **§97.301 — Authorized frequency bands:** License-class frequency privileges, amateur allocations, and applicable ITU Region 2 limitations.
+- **§97.303 — Frequency sharing requirements:** Secondary allocations, geographic restrictions, protection requirements, and other shared-use conditions.
+- **§97.305 — Authorized emission types:** Permitted emission categories and band-specific limitations.
+- **§97.307 — Emission standards:** Occupied-bandwidth and technical emission requirements, including applicable RTTY/data limitations.
+- **§97.309 — RTTY and data emission codes:** Digital-code requirements relevant to RTTY/data operation.
+- **§97.313 — Transmitter power standards:** General maximum power limits and exceptions, including band- or license-specific power restrictions.
+
+The project also cross-references the ARRL’s current U.S. amateur-band allocation resources. ARRL material is used to help present the FCC rules in an operator-friendly format; where a simplified chart or explanatory material differs from the FCC rule text, the FCC rule text controls.
+
+### How the data is checked
+
+For each displayed band or frequency segment, the review process is intended to verify the following fields independently:
+
+1. **Frequency boundaries** — Confirm lower and upper limits against the appropriate Part 97 table, rule paragraph, or channel specification.
+2. **License-class eligibility** — Confirm whether Technician, General, and/or Amateur Extra operators may transmit in that segment.
+3. **Mode or emission guidance** — Compare the displayed CW, phone, RTTY/data, image, or other emission guidance with §97.305 and related requirements.
+4. **Power limits** — Check the normal maximum power rule and every applicable exception, such as lower limits, ERP/EIRP limits, PEP limits, or license-class-specific limits.
+5. **Special conditions** — Identify restrictions that deserve an on-screen warning, including secondary status, geographic limitations, coordination requirements, notification requirements, bandwidth limits, channelized operation, or protection of primary users.
+6. **Checker behavior** — Test representative authorized and unauthorized inputs for each license class and operating mode to confirm that the interactive checker returns a result consistent with the same underlying reference data.
+7. **Reader-facing wording** — Review labels and notes so that the interface distinguishes FCC authorization from voluntary band-plan practice, local coordination requirements, and operator judgment.
+
+### Scope and limitations
+
+The toolkit is not an official FCC publication, legal advice, or a substitute for the control operator’s responsibility under Part 97. A frequency appearing in an amateur allocation does not, by itself, guarantee that every emission, bandwidth, power level, operating location, or operating purpose is permitted.
+
+Before transmitting, operators should verify the current FCC text, applicable regional or geographic restrictions, band-specific conditions, station control requirements, and any local repeater or coordination rules. The Frequency Checker is intended to highlight common authorization questions and conditions—not to provide a final legal determination.
+
+### Accuracy and maintenance commitment
+
+The project aims to maintain a high-confidence, operator-useful representation of the FCC rules through source-based review, field-by-field cross-checking, and regression testing of the displayed tables and checker results. The full Frequency Privileges audit is documented as an ongoing maintenance process: reported discrepancies, FCC rule changes, and credible source updates should be reviewed and corrected promptly.
+
+Users who identify a possible discrepancy are encouraged to open a GitHub Issue with the frequency, selected license class, operating mode, displayed result, and the relevant FCC or ARRL source citation.
+
+---
+
 ## 📝 Compliance Disclaimer
-*Data parsed across regulatory panels is synchronized against ARRL and FCC Part 97 rule structures. Operators must always verify explicit regional operating privileges against current regulatory guidelines before transmitting.*
+
+*Frequency Privileges data is reviewed against current FCC Part 97 requirements and cross-referenced with ARRL U.S. amateur-band allocation material. The FCC’s current eCFR text controls. Operators remain responsible for verifying current frequency, emission, bandwidth, power, location, sharing, and other applicable requirements before transmitting.*
