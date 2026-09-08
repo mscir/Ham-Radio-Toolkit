@@ -3528,14 +3528,6 @@ function showRef(id, btn) {
 // BAND ACTIVITY DATA
 // ===========================================
 const BAND_ACTIVITY = {
-	/*
-  '160m': { label:'160m — 1.8–2.0 MHz', rows:[
-    {freq:'1.800–1.830',mode:'CW',tags:['cw'],notes:'CW calling and DX. QRM from broadcast on some paths. Very low noise at night.'},
-    {freq:'1.843',mode:'Phone (USB)',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> USB phone calling frequency (Region 2). QRM below 1.840.'},
-    {freq:'1.838',mode:'WSPR',tags:['data'],notes:'Weak Signal Propagation Reporter beacon mode.'},
-    {freq:'1.840',mode:'FT8',tags:['data'],notes:'FT8/FT4 digital calling frequency on 160m.'},
-    {freq:'1.845–2.000',mode:'SSB Phone',tags:['phone'],notes:'General phone segment. Mostly rag-chewing, DXing, NVIS local/regional.'},
-  ]}, */
 '160m': { label:'160m — 1.8–2.0 MHz', rows:[
   {freq:'1.800–1.840',mode:'CW',tags:['cw'],notes:'CW and DX. Classic DX window roughly 1.830–1.840.'},
   {freq:'1.800–1.810',mode:'Digital',tags:['data'],notes:'ARRL suggested digital segment (older modes).'},
@@ -3547,19 +3539,6 @@ const BAND_ACTIVITY = {
   {freq:'1.995–2.000',mode:'Experimental',tags:['all'],notes:'Experimental (ARRL).'},
   {freq:'1.999–2.000',mode:'Beacons',tags:['all'],notes:'Beacons (ARRL).'},
 ]},
-/*
-  '80m': { label:'80m — 3.5–4.0 MHz', rows:[
-    {freq:'3.500–3.525',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW DX sub-band. Keep traffic short, this is prime DX territory.'},
-    {freq:'3.525–3.600',mode:'CW / Data',tags:['cw','data'],notes:'CW general, RTTY/PSK31 around 3.580–3.600.'},
-    {freq:'3.570–3.600',mode:'RTTY / FT8',tags:['data'],notes:'FT8 on 3.573. PSK31 around 3.580. Busy digital segment.'},
-    {freq:'3.573',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> Most active FT8 frequency on 80m.'},
-    {freq:'3.600–3.700',mode:'Phone (Extra)',tags:['phone'],notes:'Extra-exclusive phone. Less QRM, used for DX phone.'},
-    {freq:'3.710',mode:'AM',tags:['phone'],notes:'AM calling frequency. Older-style AM rigs popular here.'},
-    {freq:'3.733',mode:'SSTV',tags:['image'],notes:'SSTV calling on 80m.'},
-    {freq:'3.800–4.000',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Busiest phone segment on 80m. Lots of nets, rag-chewing, NVIS regional.'},
-    {freq:'3.845',mode:'SSTV',tags:['image'],notes:'Secondary SSTV calling.'},
-    {freq:'3.885',mode:'AM',tags:['phone'],notes:'AM phone. Active AM net frequency.'},
-  ]}, */
 '80m': { label:'80m — 3.5–4.0 MHz', rows:[
   {
     freq:'3.500–3.525',
@@ -6714,8 +6693,8 @@ const FCC_97301_REGION2 = {
   allClasses: [
     { band: '6m', lowMHz: 50.000, highMHz: 54.000, sharing: ['97.303(a)'] },
     { band: '2m', lowMHz: 144.000, highMHz: 148.000, sharing: ['97.303(a)', '97.303(k)'] },
-    { band: '1.25m', lowMHz: 219.000, highMHz: 220.000, sharing: ['97.303(l)'] },
-    { band: '1.25m', lowMHz: 222.000, highMHz: 225.000, sharing: ['97.303(a)'] },
+    { band: '1.25m', segmentId: '1.25m-219-220', lowMHz: 219.000, highMHz: 220.000, sharing: ['97.303(l)'], specialPurpose: 'fixed-point-to-point-digital-forwarding' },
+    { band: '1.25m', segmentId: '1.25m-222-225', lowMHz: 222.000, highMHz: 225.000, sharing: ['97.303(a)'] },
     { band: '70cm', lowMHz: 420.000, highMHz: 450.000, sharing: ['97.303(a)', '97.303(b)', '97.303(m)'] },
     { band: '33cm', lowMHz: 902.000, highMHz: 928.000, sharing: ['97.303(a)', '97.303(b)', '97.303(e)', '97.303(n)'] },
     { band: '23cm', lowMHz: 1240.000, highMHz: 1300.000, sharing: ['97.303(b)', '97.303(d)', '97.303(o)'] },
@@ -7626,6 +7605,20 @@ function privGetBandNames(segments) {
   return [...new Set(segments.map(segment => segment.band))];
 }
 
+	function privGetSegmentIds(segments) {
+  return [
+    ...new Set(
+      segments
+        .map(segment => segment.segmentId)
+        .filter(Boolean)
+    )
+  ];
+}
+
+function privIs219to220MHz(mhz) {
+  return privNumberInRange(mhz, 219.000, 220.000);
+}
+	
 function privFindEmissionRules(mhz, bands, modeKey) {
   const mode = PRIV_CHECKER_MODES[modeKey];
   if (!mode || !FCC_97305_EMISSIONS?.segments) {
@@ -8027,6 +8020,65 @@ function evaluatePrivilegeAuthorization({
   }
 
   const bandNames = privGetBandNames(frequencySegments);
+	  /*
+    219–220 MHz is not general amateur operation. It is limited to
+    fixed point-to-point digital message-forwarding systems and has
+    notification, location, AMTS-distance, and possible written-approval
+    requirements that this four-mode checker cannot evaluate.
+  */
+  if (privIs219to220MHz(normalized.mhz)) {
+    baseResult.bandNames = bandNames;
+    baseResult.frequencySegments = frequencySegments;
+
+    if (mode !== 'data') {
+      baseResult.status = 'not-authorized';
+      baseResult.statusLabel = 'Not authorized';
+      baseResult.message =
+        '219–220 MHz is not authorized for CW, Phone, or Image operation. ' +
+        'This segment is limited to qualifying fixed point-to-point digital message-forwarding systems.';
+      return baseResult;
+    }
+
+    baseResult.power = privFindPowerRule(
+      normalized.mhz,
+      bandNames,
+      licenseClass
+    );
+
+    baseResult.status = 'needs-more-information';
+    baseResult.statusLabel = 'Needs more information';
+    baseResult.message =
+      '219–220 MHz is limited to qualifying fixed point-to-point digital message-forwarding systems. ' +
+      'Station purpose, fixed location, required notification, AMTS-distance conditions, and any written approval must be verified before transmitting.';
+
+    baseResult.conditions = [
+      {
+        text: 'Only fixed point-to-point digital message-forwarding systems, including intercity packet backbone networks, are permitted.',
+        source: '97.303(l)(1)'
+      },
+      {
+        text: 'All other purposes are prohibited.',
+        source: '97.303(l)(1)'
+      },
+      {
+        text: 'Maximum occupied bandwidth: 100 kHz.',
+        source: '97.307(f)(13)'
+      },
+      {
+        text: 'Maximum transmitter power: 50 W PEP.',
+        source: '97.313(h)'
+      }
+    ];
+
+    baseResult.needsMoreInformation = [
+      {
+        text: 'Required fixed-location, notification, AMTS-distance, and possible written-approval conditions cannot be verified by this checker.',
+        source: '97.303(l)(3)-(5)'
+      }
+    ];
+
+    return baseResult;
+  }
      /*
     60 m has both a contiguous 5.3515–5.3665 MHz segment and
     four discrete channels with mode-specific carrier-frequency rules.
@@ -8488,19 +8540,23 @@ function privGetSummarySegments(
 
   // CW: full class privileges
   if (modeKey === 'cw') {
-    baseSegments.forEach(segment => {
-      addRow(
-        segment,
-        segment.lowMHz,
-        segment.highMHz,
-        {
-          is60mContiguous: segment.band === '60m'
-        }
-      );
-    });
+  baseSegments.forEach(segment => {
+    if (is219to220(segment)) {
+      return;
+    }
 
-    return mergeSummaryRows(rows, licenseClass, modeKey);
-  }
+    addRow(
+      segment,
+      segment.lowMHz,
+      segment.highMHz,
+      {
+        is60mContiguous: segment.band === '60m'
+      }
+    );
+  });
+
+  return mergeSummaryRows(rows, licenseClass, modeKey);
+}
 
   // Non-CW modes: use emission table
   (FCC_97305_EMISSIONS?.segments || []).forEach(rule => {
