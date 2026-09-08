@@ -1959,23 +1959,51 @@ body{
 
 	<div class="divider"></div>
 
-  <!-- ── FULL BAND REFERENCE TABLE ── -->
-  <div class="section-label" id="band-ref-label">▸ Complete Extra Class Band Reference</div>
-  <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Bands available to your selected license class. Click any row to highlight. Rows marked ⚠ have special restrictions.</div>
-  <table class="priv-table" id="priv-full-band-table" style="cursor:pointer">
-    <thead>
-      <tr>
-        <th>Band</th>
-        <th>Frequency Range</th>
-        <th>Allowed Modes</th>
-        <th>Max Power</th>
-        <th>Notes</th>
-      </tr>
-    </thead>
-    <tbody id="priv-full-band-tbody"></tbody>
-  </table>
+<!-- ── FULL BAND REFERENCE TABLE (COLLAPSIBLE) ── -->
+<div class="priv-full-container" style="margin-top:12px;">
+  <div id="priv-full-header"
+       class="section-label"
+       style="cursor:pointer;user-select:none;"
+       onclick="togglePrivFullTable()">
+    ▸ Complete <span id="priv-full-title-class">Extra</span> Class Band Reference
+  </div>
 
+  <div id="priv-full-wrapper" style="display:none;margin-top:8px;">
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:6px;">
+      Bands available to your selected license class. Click any row to highlight.
+      Rows marked ⚠ have special restrictions.
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="priv-table" id="priv-full-band-table" style="cursor:pointer">
+        <thead>
+          <tr>
+            <th>Band</th>
+            <th>Frequency Range</th>
+            <th>Allowed Modes</th>
+            <th>Max Power</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="priv-full-band-tbody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+<script>
+function togglePrivFullTable() {
+  const wrapper = document.getElementById('priv-full-wrapper');
+  const header = document.getElementById('priv-full-header');
+  const isHidden = wrapper.style.display === 'none' || wrapper.style.display === '';
+
+  wrapper.style.display = isHidden ? 'block' : 'none';
+
+  // Update triangle character
+  const baseText = header.textContent.replace(/^[▸▾] /, '');
+  header.textContent = (isHidden ? '▾ ' : '▸ ') + baseText;
+}
+</script>
 
 <!-- PANEL 4: POWER & CALCULATIONS -->
 <div class="panel" id="panel-power-calc">
@@ -9193,7 +9221,14 @@ const PRIV_BANDS_ALL = [
    Used only by initPrivFullTable().
 =========================================== */
 
+/* ===========================================
+   COMPLETE BAND REFERENCE — DISPLAY MODEL
+   Curated FCC Part 97 reference rows.
+   Used only by initPrivFullTable().
+=========================================== */
+
 const PRIV_FULL_REFERENCE_ROWS = [
+  // LF / MF special bands
   {
     band: '2200m',
     lo: 0.1357,
@@ -9212,6 +9247,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '500 W PEP; 5 W EIRP',
     notes: '⚠ Fixed location, PLC separation, UTC notification, and sharing restrictions apply; Alaska near Russia: 1 W EIRP max'
   },
+
+  // 160m
   {
     band: '160m',
     lo: 1.800,
@@ -9222,6 +9259,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Avoid interference to radiolocation operations in 1.900–2.000 MHz'
   },
 
+  // 80m
   {
     band: '80m',
     lo: 3.525,
@@ -9268,6 +9306,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Extra phone/image segment'
   },
 
+  // 60m
   {
     band: '60m',
     lo: 5.3515,
@@ -9288,6 +9327,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: '⚠ 5332, 5348, 5373, and 5405 kHz centers only · exact carrier/emission-designator rules apply'
   },
 
+  // 40m
   {
     band: '40m',
     lo: 7.025,
@@ -9334,6 +9374,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Extra phone/image segment; 7.200–7.300 MHz international-broadcast sharing applies'
   },
 
+  // 30m
   {
     band: '30m',
     lo: 10.100,
@@ -9344,6 +9385,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: '⚠ Secondary allocation · no Phone/Image · must protect other-nation fixed services'
   },
 
+  // 20m
   {
     band: '20m',
     lo: 14.025,
@@ -9381,6 +9423,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Extra phone/image segment'
   },
 
+  // 17m
   {
     band: '17m',
     lo: 18.068,
@@ -9400,6 +9443,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Phone/Image segment'
   },
 
+  // 15m
   {
     band: '15m',
     lo: 21.025,
@@ -9446,6 +9490,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Extra phone/image segment'
   },
 
+  // 12m
   {
     band: '12m',
     lo: 24.890,
@@ -9465,6 +9510,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Phone/Image segment'
   },
 
+  // 10m
   {
     band: '10m',
     lo: 28.000,
@@ -9502,6 +9548,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'Phone/Image segment'
   },
 
+  // 6m
   {
     band: '6m',
     lo: 50.000,
@@ -9509,7 +9556,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     classes: ['tech', 'general', 'extra'],
     modes: 'CW',
     power: '1,500 W PEP',
-    notes: 'CW-only segment'
+    notes: 'Technician CW-only segment'
   },
   {
     band: '6m',
@@ -9521,6 +9568,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'MCW, Phone, Image, RTTY/Data, and other authorized emissions'
   },
 
+  // 2m
   {
     band: '2m',
     lo: 144.000,
@@ -9540,6 +9588,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'MCW, Phone, Image, RTTY/Data, Test, and other authorized emissions'
   },
 
+  // 1.25m (220 MHz band)
   {
     band: '1.25m',
     lo: 219.000,
@@ -9559,6 +9608,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: 'RTTY/Data, Phone, Image, MCW, Test, and other authorized emissions'
   },
 
+  // 70cm
   {
     band: '70cm',
     lo: 420.000,
@@ -9568,6 +9618,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Geographic restrictions apply; 420–430 MHz prohibited north of Line A'
   },
+
+  // 33cm
   {
     band: '33cm',
     lo: 902.000,
@@ -9577,6 +9629,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Geographic prohibitions and protected segments apply'
   },
+
+  // 23cm
   {
     band: '23cm',
     lo: 1240.000,
@@ -9596,6 +9650,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     notes: '⚠ Sharing and geographic restrictions apply'
   },
 
+  // 13cm
   {
     band: '13cm',
     lo: 2300.000,
@@ -9614,6 +9669,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing and ISM interference restrictions apply'
   },
+
+  // 5cm
   {
     band: '5cm',
     lo: 5650.000,
@@ -9623,6 +9680,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   },
+
+  // 3cm
   {
     band: '3cm',
     lo: 10000.000,
@@ -9632,6 +9691,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   },
+
+  // 1.2cm
   {
     band: '1.2cm',
     lo: 24000.000,
@@ -9641,6 +9702,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   },
+
+  // 6mm
   {
     band: '6mm',
     lo: 47000.000,
@@ -9650,6 +9713,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: ''
   },
+
+  // 4mm
   {
     band: '4mm',
     lo: 76000.000,
@@ -9659,6 +9724,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '316 W peak EIRP',
     notes: '⚠ 76–77 GHz amateur operation is suspended; sharing restrictions apply'
   },
+
+  // 2.5mm
   {
     band: '2.5mm',
     lo: 122250.000,
@@ -9668,6 +9735,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   },
+
+  // 2mm
   {
     band: '2mm',
     lo: 134000.000,
@@ -9677,6 +9746,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   },
+
+  // 1mm
   {
     band: '1mm',
     lo: 241000.000,
@@ -9686,6 +9757,8 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   },
+
+  // submm
   {
     band: 'submm',
     lo: 275000.000,
@@ -9696,7 +9769,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     power: '1,500 W PEP',
     notes: '⚠ Sharing restrictions apply'
   }
-];
+];  /* end of PRIV_FULL_REFERENCE_ROWS */
 	
 function getPrivBands() {
   return PRIV_BANDS_ALL.filter(b => b.classes.includes(currentLicenseClass));
