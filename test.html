@@ -6821,12 +6821,13 @@ const FCC_97313_POWER_REFERENCE = {
       source: '97.313(h)'
     },
     {
-      id: '60m-discrete-frequencies',
-      band: '60m',
-      frequenciesMHz: [5.332, 5.348, 5.373, 5.405],
-      radiatedPower: '100 W ERP',
-      source: '97.313(i)'
-    },
+	  id: '60m-discrete-frequencies',
+	  band: '60m',
+	  frequenciesMHz: [5.332, 5.348, 5.373, 5.405],
+	  radiatedPower: '100 W ERP',
+	  condition: 'Applies only to the four remaining discrete 60 m channel reference frequencies.',
+	  source: '97.313(i)'
+	},
     {
       id: '60m-contiguous-segment',
       band: '60m',
@@ -7285,7 +7286,6 @@ const FCC_97303_FREQUENCY_SHARING = {
       source: '97.303(l)(5)'
     }
   ],
-
   bandRestrictions: [
     {
       id: '2200m-sharing',
@@ -7315,27 +7315,35 @@ const FCC_97303_FREQUENCY_SHARING = {
         { low: 5.3515, high: 5.3665 }
       ],
       discreteChannels: [
-        {
-          centerMHz: 5.3320,
-          phoneDataRttyCarrierMHz: 5.3305,
-          cwCarrierMHz: 5.3320
-        },
-        {
-          centerMHz: 5.3480,
-          phoneDataRttyCarrierMHz: 5.3465,
-          cwCarrierMHz: 5.3480
-        },
-        {
-          centerMHz: 5.3730,
-          phoneDataRttyCarrierMHz: 5.3715,
-          cwCarrierMHz: 5.3730
-        },
-        {
-          centerMHz: 5.4050,
-          phoneDataRttyCarrierMHz: 5.4035,
-          cwCarrierMHz: 5.4050
-        }
-      ],
+  {
+    centerMHz: 5.3320,
+    phoneDataRttyCarrierMHz: 5.3305,
+    cwCarrierMHz: 5.3320,
+    maxPower: '100 W ERP',
+    note: 'Discrete channel; USB phone, CW, RTTY, or data only.'
+  },
+  {
+    centerMHz: 5.3480,
+    phoneDataRttyCarrierMHz: 5.3465,
+    cwCarrierMHz: 5.3480,
+    maxPower: '100 W ERP',
+    note: 'Discrete channel; USB phone, CW, RTTY, or data only.'
+  },
+  {
+    centerMHz: 5.3730,
+    phoneDataRttyCarrierMHz: 5.3715,
+    cwCarrierMHz: 5.3730,
+    maxPower: '100 W ERP',
+    note: 'Discrete channel; USB phone, CW, RTTY, or data only.'
+  },
+  {
+    centerMHz: 5.4050,
+    phoneDataRttyCarrierMHz: 5.4035,
+    cwCarrierMHz: 5.4050,
+    maxPower: '100 W ERP',
+    note: 'Discrete channel; USB phone, CW, RTTY, or data only.'
+  }
+],
       maxOccupiedBandwidthKHz: 2.8,
       discreteChannelEmissionDesignators: {
         phone: '2K80J3E',
@@ -9137,35 +9145,15 @@ function setLicenseClass(cls) {
 // ALL bands with per-class availability
 // classes: array of which license classes can use this segment
 const PRIV_BANDS_ALL = [
-{
-  band:'2200m',
-  lo:0.1357,
-  hi:0.1378,
-  power:'1 W EIRP',
-  modes:'Authorized emissions only',
-  notes:'⚠ FCC notification and geographic restrictions apply; verify current §97.303 rules before transmitting',
-  classes:['general','extra']
-},
-{
-  band:'630m',
-  lo:0.472,
-  hi:0.479,
-  power:'5 W EIRP',
-  modes:'Authorized emissions only',
-  notes:'⚠ FCC notification and geographic restrictions apply; verify current §97.303 rules before transmitting',
-  classes:['general','extra']
-},
+{ band:'2200m', lo:0.1357, hi:0.1378, power:'1,500 W PEP; 1 W EIRP', modes:'Authorized emissions only', notes:'⚠ Fixed location, PLC separation, UTC notification, and sharing restrictions apply', classes:['general','extra'] },
+{ band:'630m', lo:0.472, hi:0.479, power:'500 W PEP; 5 W EIRP', modes:'Authorized emissions only', notes:'⚠ Fixed location, PLC separation, UTC notification, and sharing restrictions apply; Alaska near Russia: 1 W EIRP max', classes:['general','extra'] },
 { band:'160m',lo:1.800,  hi:2.000,  power:'1,500 W PEP', modes:'CW, SSB, Digital, Image',     notes:'',       classes:['general','extra'] },
 { band:'80m', lo:3.525,  hi:3.600,  power:'200 W PEP',   modes:'CW only', notes:'Technician CW-only segment', classes:['tech']},
 { band:'80m', lo:3.525, hi:3.600, power:'1,500 W PEP', modes:'CW, RTTY/Data',  notes:'General CW/Data segment',  classes:['general'] },
 { band:'80m', lo:3.800, hi:4.000, power:'1,500 W PEP', modes:'CW, Phone, Image',  notes:'General phone/image segment',  classes:['general'] },
 { band:'80m', lo:3.500, hi:3.600, power:'1,500 W PEP', modes:'CW, RTTY/Data',  notes:'Extra CW/Data segment',  classes:['extra'] },
 { band:'80m', lo:3.600, hi:4.000, power:'1,500 W PEP', modes:'CW, Phone, Image',  notes:'Extra phone/image segment',  classes:['extra'] },
-{ band:'60m', lo:5.3305, hi:5.3335, power:'100 W ERP', modes:'USB, CW, RTTY/Data', notes:'⚠ Center frequency 5332 kHz · secondary service · max 2.8 kHz bandwidth', classes:['general','extra'] },
-{ band:'60m', lo:5.3465, hi:5.3495, power:'100 W ERP', modes:'USB, CW, RTTY/Data', notes:'⚠ Center frequency 5348 kHz · secondary service · max 2.8 kHz bandwidth', classes:['general','extra'] },
 { band:'60m', lo:5.3515, hi:5.3665, power:'9.15 W ERP', modes:'CW, Phone, RTTY/Data', notes:'⚠ Secondary allocation · max 2.8 kHz bandwidth · do not cause harmful interference', classes:['general','extra'] },
-{ band:'60m', lo:5.3715, hi:5.3745, power:'100 W ERP', modes:'USB, CW, RTTY/Data', notes:'⚠ Center frequency 5373 kHz · secondary service · max 2.8 kHz bandwidth', classes:['general','extra'] },
-{ band:'60m', lo:5.4035, hi:5.4065, power:'100 W ERP', modes:'USB, CW, RTTY/Data', notes:'⚠ Center frequency 5405 kHz · secondary service · max 2.8 kHz bandwidth', classes:['general','extra'] },
 { band:'40m', lo:7.025, hi:7.125, power:'200 W PEP',  modes:'CW',  notes:'Technician CW-only segment',  classes:['tech'] },
 { band:'40m', lo:7.025, hi:7.125, power:'1,500 W PEP',  modes:'CW, RTTY/Data',  notes:'General CW/Data segment',  classes:['general'] },
 { band:'40m', lo:7.175, hi:7.300, power:'1,500 W PEP',  modes:'CW, Phone, Image',  notes:'General phone/image segment',  classes:['general'] },
