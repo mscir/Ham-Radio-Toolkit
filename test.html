@@ -9611,7 +9611,7 @@ const PRIV_FULL_REFERENCE_ROWS = [
     classes: ['tech', 'general', 'extra'],
     modes: 'CW',
     power: '1,500 W PEP',
-    notes: 'Technician CW-only segment'
+    notes: 'CW-only segment'
   },
   {
     band: '6m',
@@ -9871,15 +9871,36 @@ function initPrivFullTable() {
   rows.forEach((row, index) => {
     const hasWarn = row.notes.startsWith('⚠');
 
-    const range = row.rangeLabel || (
-      row.lo < 1
-        ? `${(row.lo * 1000).toFixed(1)} – ${(row.hi * 1000).toFixed(1)} kHz`
-        : row.hi === null
-          ? `${row.lo.toFixed(0)} GHz and above`
-          : row.lo >= 1000
-            ? `${row.lo.toFixed(0)} – ${row.hi.toFixed(0)} MHz`
-            : `${row.lo.toFixed(3).replace(/\.?0+$/, '')} – ${row.hi.toFixed(3).replace(/\.?0+$/, '')} MHz`
-    );
+    const formatFullReferenceRange = (entry) => {
+	  if (entry.rangeLabel) {
+	    return entry.rangeLabel;
+	  }
+	
+	  // 2200m and 630m values are stored in MHz; the full reference displays them in kHz.
+	  if (entry.lo < 1) {
+	    return `${(entry.lo * 1000).toFixed(1)} – ${(entry.hi * 1000).toFixed(1)} kHz`;
+	  }
+	
+	  // The continuous 60m allocation has 0.1 kHz boundaries and must never be rounded.
+	  if (entry.band === '60m') {
+	    return `${entry.lo.toFixed(4)} – ${entry.hi.toFixed(4)} MHz`;
+	  }
+	
+	  // 275 GHz and above is handled by rangeLabel; retained as a safe fallback.
+	  if (entry.hi === null) {
+	    return `${entry.lo.toFixed(0)} GHz and above`;
+	  }
+	
+	  // Microwave source values are stored as whole-MHz quantities.
+	  if (entry.lo >= 1000) {
+	    return `${entry.lo.toFixed(0)} – ${entry.hi.toFixed(0)} MHz`;
+	  }
+	
+	  // Preserve allocation-edge precision for HF and VHF rather than trimming trailing zeroes.
+	  return `${entry.lo.toFixed(3)} – ${entry.hi.toFixed(3)} MHz`;
+	};
+	
+	const range = formatFullReferenceRange(row);
 
     const tr = document.createElement('tr');
 
