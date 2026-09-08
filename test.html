@@ -9205,6 +9205,17 @@ function setLicenseClass(cls) {
 
   // Rebuild tables and re-run any pending check
   initPrivFullTable();
+	const fullTitleClass = document.getElementById('priv-full-title-class');
+	
+	if (fullTitleClass) {
+	  const classNames = {
+	    tech: 'Technician',
+	    general: 'General',
+	    extra: 'Amateur Extra'
+	  };
+	
+	  fullTitleClass.textContent = classNames[currentLicenseClass];
+	}
   initPrivileges();
   const raw = document.getElementById('priv-freq-input');
   if (raw && raw.value.trim()) checkPrivFreq();
