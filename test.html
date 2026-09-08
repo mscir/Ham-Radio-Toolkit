@@ -9187,6 +9187,517 @@ const PRIV_BANDS_ALL = [
 { band:'23cm',  lo:1240,   hi:1300,   power:'1,500 W PEP', modes:'All modes',                   notes:'Secondary service on some segments',         classes:['tech','general','extra'] },
 ];
 
+/* ===========================================
+   COMPLETE BAND REFERENCE — DISPLAY MODEL
+   Curated FCC Part 97 reference rows.
+   Used only by initPrivFullTable().
+=========================================== */
+
+const PRIV_FULL_REFERENCE_ROWS = [
+  {
+    band: '2200m',
+    lo: 0.1357,
+    hi: 0.1378,
+    classes: ['general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP; 1 W EIRP',
+    notes: '⚠ Fixed location, PLC separation, UTC notification, and sharing restrictions apply'
+  },
+  {
+    band: '630m',
+    lo: 0.472,
+    hi: 0.479,
+    classes: ['general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '500 W PEP; 5 W EIRP',
+    notes: '⚠ Fixed location, PLC separation, UTC notification, and sharing restrictions apply; Alaska near Russia: 1 W EIRP max'
+  },
+  {
+    band: '160m',
+    lo: 1.800,
+    hi: 2.000,
+    classes: ['general', 'extra'],
+    modes: 'CW, Phone, RTTY/Data, Image',
+    power: '1,500 W PEP',
+    notes: 'Avoid interference to radiolocation operations in 1.900–2.000 MHz'
+  },
+
+  {
+    band: '80m',
+    lo: 3.525,
+    hi: 3.600,
+    classes: ['tech'],
+    modes: 'CW',
+    power: '200 W PEP',
+    notes: 'Technician CW-only segment'
+  },
+  {
+    band: '80m',
+    lo: 3.525,
+    hi: 3.600,
+    classes: ['general'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'General CW/Data segment'
+  },
+  {
+    band: '80m',
+    lo: 3.800,
+    hi: 4.000,
+    classes: ['general'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'General phone/image segment'
+  },
+  {
+    band: '80m',
+    lo: 3.500,
+    hi: 3.600,
+    classes: ['extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'Extra CW/Data segment'
+  },
+  {
+    band: '80m',
+    lo: 3.600,
+    hi: 4.000,
+    classes: ['extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Extra phone/image segment'
+  },
+
+  {
+    band: '60m',
+    lo: 5.3515,
+    hi: 5.3665,
+    classes: ['general', 'extra'],
+    modes: 'CW, USB Phone, RTTY/Data',
+    power: '9.15 W ERP',
+    notes: '⚠ Continuous segment · 2.8 kHz max · secondary allocation · must not cause harmful interference'
+  },
+  {
+    band: '60m',
+    lo: 5.3305,
+    hi: 5.4050,
+    classes: ['general', 'extra'],
+    rangeLabel: 'Four discrete channel references',
+    modes: 'CW, USB Phone, RTTY/Data',
+    power: '100 W ERP',
+    notes: '⚠ 5332, 5348, 5373, and 5405 kHz centers only · exact carrier/emission-designator rules apply'
+  },
+
+  {
+    band: '40m',
+    lo: 7.025,
+    hi: 7.125,
+    classes: ['tech'],
+    modes: 'CW',
+    power: '200 W PEP',
+    notes: 'Technician CW-only segment'
+  },
+  {
+    band: '40m',
+    lo: 7.025,
+    hi: 7.125,
+    classes: ['general'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'General CW/Data segment'
+  },
+  {
+    band: '40m',
+    lo: 7.175,
+    hi: 7.300,
+    classes: ['general'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'General phone/image segment; 7.200–7.300 MHz international-broadcast sharing applies'
+  },
+  {
+    band: '40m',
+    lo: 7.000,
+    hi: 7.125,
+    classes: ['extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'Extra CW/Data segment'
+  },
+  {
+    band: '40m',
+    lo: 7.125,
+    hi: 7.300,
+    classes: ['extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Extra phone/image segment; 7.200–7.300 MHz international-broadcast sharing applies'
+  },
+
+  {
+    band: '30m',
+    lo: 10.100,
+    hi: 10.150,
+    classes: ['general', 'extra'],
+    modes: 'CW, RTTY/Data',
+    power: '200 W PEP',
+    notes: '⚠ Secondary allocation · no Phone/Image · must protect other-nation fixed services'
+  },
+
+  {
+    band: '20m',
+    lo: 14.025,
+    hi: 14.150,
+    classes: ['general'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'General CW/Data segment'
+  },
+  {
+    band: '20m',
+    lo: 14.225,
+    hi: 14.350,
+    classes: ['general'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'General phone/image segment'
+  },
+  {
+    band: '20m',
+    lo: 14.000,
+    hi: 14.150,
+    classes: ['extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'Extra CW/Data segment'
+  },
+  {
+    band: '20m',
+    lo: 14.150,
+    hi: 14.350,
+    classes: ['extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Extra phone/image segment'
+  },
+
+  {
+    band: '17m',
+    lo: 18.068,
+    hi: 18.110,
+    classes: ['general', 'extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'CW/Data segment'
+  },
+  {
+    band: '17m',
+    lo: 18.110,
+    hi: 18.168,
+    classes: ['general', 'extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Phone/Image segment'
+  },
+
+  {
+    band: '15m',
+    lo: 21.025,
+    hi: 21.200,
+    classes: ['tech'],
+    modes: 'CW',
+    power: '200 W PEP',
+    notes: 'Technician CW-only segment'
+  },
+  {
+    band: '15m',
+    lo: 21.025,
+    hi: 21.200,
+    classes: ['general'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'General CW/Data segment'
+  },
+  {
+    band: '15m',
+    lo: 21.275,
+    hi: 21.450,
+    classes: ['general'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'General phone/image segment'
+  },
+  {
+    band: '15m',
+    lo: 21.000,
+    hi: 21.200,
+    classes: ['extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'Extra CW/Data segment'
+  },
+  {
+    band: '15m',
+    lo: 21.200,
+    hi: 21.450,
+    classes: ['extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Extra phone/image segment'
+  },
+
+  {
+    band: '12m',
+    lo: 24.890,
+    hi: 24.930,
+    classes: ['general', 'extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'CW/Data segment'
+  },
+  {
+    band: '12m',
+    lo: 24.930,
+    hi: 24.990,
+    classes: ['general', 'extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Phone/Image segment'
+  },
+
+  {
+    band: '10m',
+    lo: 28.000,
+    hi: 28.300,
+    classes: ['tech'],
+    modes: 'CW, RTTY/Data',
+    power: '200 W PEP',
+    notes: 'Technician CW/Data segment'
+  },
+  {
+    band: '10m',
+    lo: 28.300,
+    hi: 28.500,
+    classes: ['tech'],
+    modes: 'CW, Phone',
+    power: '200 W PEP',
+    notes: 'Technician phone segment; J3E/R3E only'
+  },
+  {
+    band: '10m',
+    lo: 28.000,
+    hi: 28.300,
+    classes: ['general', 'extra'],
+    modes: 'CW, RTTY/Data',
+    power: '1,500 W PEP',
+    notes: 'CW/Data segment'
+  },
+  {
+    band: '10m',
+    lo: 28.300,
+    hi: 29.700,
+    classes: ['general', 'extra'],
+    modes: 'CW, Phone, Image',
+    power: '1,500 W PEP',
+    notes: 'Phone/Image segment'
+  },
+
+  {
+    band: '6m',
+    lo: 50.000,
+    hi: 50.100,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'CW',
+    power: '1,500 W PEP',
+    notes: 'CW-only segment'
+  },
+  {
+    band: '6m',
+    lo: 50.100,
+    hi: 54.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: 'MCW, Phone, Image, RTTY/Data, and other authorized emissions'
+  },
+
+  {
+    band: '2m',
+    lo: 144.000,
+    hi: 144.100,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'CW',
+    power: '1,500 W PEP',
+    notes: 'CW segment; MCW is not authorized below 144.100 MHz'
+  },
+  {
+    band: '2m',
+    lo: 144.100,
+    hi: 148.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: 'MCW, Phone, Image, RTTY/Data, Test, and other authorized emissions'
+  },
+
+  {
+    band: '1.25m',
+    lo: 219.000,
+    hi: 220.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'RTTY/Data only',
+    power: '50 W PEP',
+    notes: '⚠ Fixed point-to-point digital message forwarding only · notification/location/AMTS restrictions apply'
+  },
+  {
+    band: '1.25m',
+    lo: 222.000,
+    hi: 225.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: 'RTTY/Data, Phone, Image, MCW, Test, and other authorized emissions'
+  },
+
+  {
+    band: '70cm',
+    lo: 420.000,
+    hi: 450.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Geographic restrictions apply; 420–430 MHz prohibited north of Line A'
+  },
+  {
+    band: '33cm',
+    lo: 902.000,
+    hi: 928.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Geographic prohibitions and protected segments apply'
+  },
+  {
+    band: '23cm',
+    lo: 1240.000,
+    hi: 1300.000,
+    classes: ['general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing and geographic restrictions apply'
+  },
+  {
+    band: '23cm',
+    lo: 1270.000,
+    hi: 1295.000,
+    classes: ['tech'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing and geographic restrictions apply'
+  },
+
+  {
+    band: '13cm',
+    lo: 2300.000,
+    hi: 2310.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: '13cm',
+    lo: 2390.000,
+    hi: 2450.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing and ISM interference restrictions apply'
+  },
+  {
+    band: '5cm',
+    lo: 5650.000,
+    hi: 5925.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: '3cm',
+    lo: 10000.000,
+    hi: 10500.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: '1.2cm',
+    lo: 24000.000,
+    hi: 24250.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: '6mm',
+    lo: 47000.000,
+    hi: 47200.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: ''
+  },
+  {
+    band: '4mm',
+    lo: 76000.000,
+    hi: 81000.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '316 W peak EIRP',
+    notes: '⚠ 76–77 GHz amateur operation is suspended; sharing restrictions apply'
+  },
+  {
+    band: '2.5mm',
+    lo: 122250.000,
+    hi: 123000.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: '2mm',
+    lo: 134000.000,
+    hi: 141000.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: '1mm',
+    lo: 241000.000,
+    hi: 250000.000,
+    classes: ['tech', 'general', 'extra'],
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  },
+  {
+    band: 'submm',
+    lo: 275000.000,
+    hi: null,
+    classes: ['tech', 'general', 'extra'],
+    rangeLabel: '275 GHz and above',
+    modes: 'Authorized emissions',
+    power: '1,500 W PEP',
+    notes: '⚠ Sharing restrictions apply'
+  }
+];
+	
 function getPrivBands() {
   return PRIV_BANDS_ALL.filter(b => b.classes.includes(currentLicenseClass));
 }
@@ -9195,6 +9706,7 @@ function getPrivBands() {
 // Keep PRIV_BANDS as a function call for compatibility
 function getPrivBandsCompat() { return getPrivBands(); }
 
+/*
 function initPrivFullTable() {
   const tbody = document.getElementById('priv-full-band-tbody');
   if (!tbody) return;
@@ -9215,7 +9727,54 @@ function initPrivFullTable() {
     tbody.appendChild(tr);
   });
 }
+*/
 
+function initPrivFullTable() {
+  const tbody = document.getElementById('priv-full-band-tbody');
+
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+
+  const rows = PRIV_FULL_REFERENCE_ROWS.filter(row =>
+    row.classes.includes(currentLicenseClass)
+  );
+
+  rows.forEach((row, index) => {
+    const hasWarn = row.notes.startsWith('⚠');
+
+    const range = row.rangeLabel || (
+      row.lo < 1
+        ? `${(row.lo * 1000).toFixed(1)} – ${(row.hi * 1000).toFixed(1)} kHz`
+        : row.hi === null
+          ? `${row.lo.toFixed(0)} GHz and above`
+          : row.lo >= 1000
+            ? `${row.lo.toFixed(0)} – ${row.hi.toFixed(0)} MHz`
+            : `${row.lo.toFixed(3).replace(/\.?0+$/, '')} – ${row.hi.toFixed(3).replace(/\.?0+$/, '')} MHz`
+    );
+
+    const tr = document.createElement('tr');
+
+    tr.id = `priv-band-row-${index}`;
+    tr.style.cursor = 'pointer';
+    tr.onclick = () => tr.classList.toggle('highlight');
+
+    tr.innerHTML = `
+      <td class="priv-band">${privCheckerEscape(row.band)}</td>
+      <td class="priv-freq">${privCheckerEscape(range)}</td>
+      <td style="font-size:12px;color:var(--text)">
+        ${privCheckerEscape(row.modes)}
+      </td>
+      <td class="priv-power">${privCheckerEscape(row.power)}</td>
+      <td style="font-size:12px;color:${hasWarn ? 'var(--amber)' : 'var(--text-dim)'}">
+        ${privCheckerEscape(row.notes || '—')}
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+	
 function setPrivFreq(mhz) {
   document.getElementById('priv-freq-input').value = mhz;
   checkPrivFreq();
