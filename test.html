@@ -844,6 +844,21 @@ body{
 .max-power-table td:first-child{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);white-space:nowrap}
 .max-power-table td:nth-child(2){font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--good)}
 
+.rf-reference-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-dim);
+  background: rgba(72, 185, 255, 0.04);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+}
 /* ===========================================
    PANEL 6 — FIRST QSO GUIDE
 =========================================== */
@@ -3442,6 +3457,12 @@ take it with a grain of salt!</div>
       <input class="calc-input" id="rf-mw" type="number" step="any" placeholder="e.g. 100000" style="width:100%;margin:0" oninput="rfConvFromMw()">
     </div>
   </div>
+
+	<div style="display:flex;flex-wrap:wrap;gap:8px;margin:-10px 0 20px;">
+	  <span class="rf-reference-chip">1 mW = 0 dBm</span>
+	  <span class="rf-reference-chip">1 W = 30 dBm</span>
+	  <span class="rf-reference-chip">100 W = 50 dBm</span>
+	</div>
 
   <!-- S-Unit table -->
   <div class="section-label">▸ S-Units (HF — IARU Region 1 standard)</div>
