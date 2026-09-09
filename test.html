@@ -11070,12 +11070,35 @@ function rfConvFromMw() {
   dbmField.value = (10 * Math.log10(milliwatts)).toFixed(2);
 }
 function rfConvDbd() {
-  const dbd = parseFloat(document.getElementById('rf-dbd').value);
-  if (!isNaN(dbd)) document.getElementById('rf-dbi').value = (dbd + 2.15).toFixed(2);
+  const input = document.getElementById('rf-dbd');
+  const output = document.getElementById('rf-dbi');
+
+  if (!input || !output) return;
+
+  const dbd = parseFloat(input.value);
+
+  if (!Number.isFinite(dbd)) {
+    output.value = '';
+    return;
+  }
+
+  output.value = (dbd + 2.15).toFixed(2);
 }
+
 function rfConvDbi() {
-  const dbi = parseFloat(document.getElementById('rf-dbi').value);
-  if (!isNaN(dbi)) document.getElementById('rf-dbd').value = (dbi - 2.15).toFixed(2);
+  const input = document.getElementById('rf-dbi');
+  const output = document.getElementById('rf-dbd');
+
+  if (!input || !output) return;
+
+  const dbi = parseFloat(input.value);
+
+  if (!Number.isFinite(dbi)) {
+    output.value = '';
+    return;
+  }
+
+  output.value = (dbi - 2.15).toFixed(2);
 }
 function dbmToS() {
   const input = document.getElementById('rf-dbm-to-s');
