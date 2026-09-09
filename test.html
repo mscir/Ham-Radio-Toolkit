@@ -3440,14 +3440,37 @@ take it with a grain of salt!</div>
   </table>
 
   <!-- S-Unit lookup -->
-  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
-    <div style="flex:1;min-width:160px">
-      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">dBm → S-Unit</div>
-      <input class="calc-input" id="rf-dbm-to-s" type="number" placeholder="e.g. -73" style="width:100%;margin:0" oninput="dbmToS()">
-    </div>
-    <div id="rf-s-result" style="font-family:'Share Tech Mono',monospace;font-size:26px;color:var(--accent);min-width:80px;padding-bottom:6px">—</div>
-  </div>
-
+<div style="margin-bottom:20px">
+  <div class="section-label">▸ dBm → S-Unit</div>
+	  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end">
+	    <div style="width:180px;max-width:100%">
+	      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">
+	        Signal level (dBm)
+	      </div>
+	      <input class="calc-input"
+	             id="rf-dbm-to-s"
+	             type="number"
+	             placeholder="e.g. -73"
+	             step="1"
+	             style="width:100%;margin:0"
+	             oninput="dbmToS()">
+	    </div>
+	
+	    <div style="min-width:150px;padding:8px 12px;border:1px solid var(--border);background:var(--panel);">
+	      <div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">
+	        Estimated S-meter reading
+	      </div>
+	      <div id="rf-s-result"
+	           style="font-family:'Share Tech Mono',monospace;font-size:26px;line-height:1.2;color:var(--accent);margin-top:2px">
+	        —
+	      </div>
+	    </div>
+	  </div>	
+	  <div style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-top:8px">
+	    Reference: IARU Region 1 HF convention—S9 = −73 dBm; each S-unit is 6 dB.
+	    Actual receiver S-meters may not be calibrated to this scale.
+	  </div>
+	</div>
   <!-- dBd / dBi -->
   <div class="section-label">▸ Antenna Gain: dBd ↔ dBi</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
@@ -10985,15 +11008,33 @@ function rfConvDbi() {
   if (!isNaN(dbi)) document.getElementById('rf-dbd').value = (dbi - 2.15).toFixed(2);
 }
 function dbmToS() {
-  const dbm = parseFloat(document.getElementById('rf-dbm-to-s').value);
+  const input = document.getElementById('rf-dbm-to-s');
   const el = document.getElementById('rf-s-result');
-  if (isNaN(dbm)) { el.textContent = '—'; return; }
-  // IARU Region 1 HF standard: S1 = -121 dBm, each S-unit = 6 dB
+  if (!input || !el) return;
+  const dbm = parseFloat(input.value);
+  if (Number.isNaN(dbm)) {
+    el.textContent = '—';
+    el.style.color = 'var(--accent)';
+    return;
+  }
+  // IARU Region 1 HF reference:
+  // S9 = -73 dBm; each S-unit below S9 is 6 dB.
   const s = (dbm + 127) / 6;
-  if (s < 1) el.textContent = 'S1−';
-  else if (s > 9) el.textContent = `S9+${Math.round((dbm + 73))} dB`;
-  else el.textContent = `S${Math.round(Math.max(1,Math.min(9,s)))}`;
-  el.style.color = s >= 7 ? 'var(--good)' : s >= 4 ? 'var(--amber)' : 'var(--text-dim)';
+  if (dbm > -73) {
+    const overS9 = Math.round(dbm + 73);
+    el.textContent = `S9+${overS9} dB`;
+  } else if (s < 1) {
+    el.textContent = 'Below S1';
+  } else {
+    const roundedS = Math.max(1, Math.min(9, Math.round(s)));
+    el.textContent = `S${roundedS}`;
+  }
+  el.style.color =
+    dbm >= -85
+      ? 'var(--good)'
+      : dbm >= -103
+        ? 'var(--amber)'
+        : 'var(--text-dim)';
 }
 function initSUnitTable() {
   const tbody = document.getElementById('s-unit-table');
