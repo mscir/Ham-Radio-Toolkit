@@ -816,6 +816,10 @@ body{
   font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--accent);
   text-align:center;min-height:38px;
 }
+.calc-input:invalid {
+  border-color: var(--bad);
+  box-shadow: 0 0 0 1px rgba(255, 90, 90, 0.20);
+}
 .calc-btn{
   font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;
   letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;
@@ -3420,15 +3424,15 @@ take it with a grain of salt!</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:20px">
     <div>
       <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">dBm</div>
-      <input class="calc-input" id="rf-dbm" type="number" placeholder="e.g. 43" step="0.1" style="width:100%;margin:0" oninput="rfConvFromDbm()">
+      <input class="calc-input" id="rf-dbm" type="number" step="any" placeholder="e.g. 43" style="width:100%;margin:0" oninput="rfConvFromDbm()">
     </div>
     <div>
       <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">Watts</div>
-      <input class="calc-input" id="rf-watts" type="number" placeholder="e.g. 100" step="0.001" style="width:100%;margin:0" oninput="rfConvFromWatts()">
+      <input class="calc-input" id="rf-watts" type="number" step="any" placeholder="e.g. 100" style="width:100%;margin:0" oninput="rfConvFromWatts()">
     </div>
     <div>
       <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">milliwatts</div>
-      <input class="calc-input" id="rf-mw" type="number" placeholder="e.g. 100000" step="0.001" style="width:100%;margin:0" oninput="rfConvFromMw()">
+      <input class="calc-input" id="rf-mw" type="number" step="any" placeholder="e.g. 100000" style="width:100%;margin:0" oninput="rfConvFromMw()">
     </div>
   </div>
 
@@ -3451,7 +3455,7 @@ take it with a grain of salt!</div>
 	             id="rf-dbm-to-s"
 	             type="number"
 	             placeholder="e.g. -73"
-	             step="1"
+	             step="any"
 	             style="width:100%;margin:0"
 	             oninput="dbmToS()">
 	    </div>
@@ -3476,11 +3480,11 @@ take it with a grain of salt!</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
     <div>
       <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">dBd (vs dipole)</div>
-      <input class="calc-input" id="rf-dbd" type="number" placeholder="e.g. 5.5" step="0.1" style="width:100%;margin:0" oninput="rfConvDbd()">
+      <input class="calc-input" id="rf-dbd" type="number" placeholder="e.g. 5.5" step="any" style="width:100%;margin:0" oninput="rfConvDbd()">
     </div>
     <div>
       <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase">dBi (vs isotropic)</div>
-      <input class="calc-input" id="rf-dbi" type="number" placeholder="e.g. 7.65" step="0.1" style="width:100%;margin:0" oninput="rfConvDbi()">
+      <input class="calc-input" id="rf-dbi" type="number" placeholder="e.g. 7.65" step="any" style="width:100%;margin:0" oninput="rfConvDbi()">
     </div>
   </div>
   <div style="font-size:12px;color:var(--text-dim);line-height:1.7">dBi = dBd + 2.15 · A dipole has 2.15 dBi gain over an isotropic radiator.</div>
