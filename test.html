@@ -10979,25 +10979,84 @@ function calcAntenna() {
 // ===========================================
 // RF UNIT CONVERTER
 // ===========================================
+function rfFormatPower(value, significantDigits = 6) {
+  if (!Number.isFinite(value)) return '';
+
+  if (value === 0) return '0';
+
+  const abs = Math.abs(value);
+
+  // Scientific notation prevents tiny valid values from being displayed as zero.
+  if (abs < 0.0001 || abs >= 1000000) {
+    return value.toExponential(3);
+  }
+
+  return Number(value.toPrecision(significantDigits)).toString();
+}
+
+function rfClearPowerFields(exceptId) {
+  ['rf-dbm', 'rf-watts', 'rf-mw'].forEach(id => {
+    if (id !== exceptId) {
+      const field = document.getElementById(id);
+      if (field) field.value = '';
+    }
+  });
+}
+
 function rfConvFromDbm() {
-  const dbm = parseFloat(document.getElementById('rf-dbm').value);
-  if (isNaN(dbm)) return;
-  const w = Math.pow(10, dbm / 10) / 1000;
-  document.getElementById('rf-watts').value = w < 0.001 ? w.toExponential(3) : w.toFixed(6).replace(/0+$/, '').replace(/\.$/, '');
-  document.getElementById('rf-mw').value = (w * 1000).toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  const input = document.getElementById('rf-dbm');
+  const wattsField = document.getElementById('rf-watts');
+  const mwField = document.getElementById('rf-mw');
+
+  if (!input || !wattsField || !mwField) return;
+
+  const dbm = parseFloat(input.value);
+
+  if (Number.isNaN(dbm)) {
+    rfClearPowerFields('rf-dbm');
+    return;
+  }
+
+  const watts = Math.pow(10, dbm / 10) / 1000;
+  wattsField.value = rfFormatPower(watts);
+  mwField.value = rfFormatPower(watts * 1000);
 }
+
 function rfConvFromWatts() {
-  const w = parseFloat(document.getElementById('rf-watts').value);
-  if (isNaN(w) || w <= 0) return;
-  document.getElementById('rf-dbm').value = (10 * Math.log10(w * 1000)).toFixed(2);
-  document.getElementById('rf-mw').value = (w * 1000).toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  const input = document.getElementById('rf-watts');
+  const dbmField = document.getElementById('rf-dbm');
+  const mwField = document.getElementById('rf-mw');
+
+  if (!input || !dbmField || !mwField) return;
+
+  const watts = parseFloat(input.value);
+
+  if (!Number.isFinite(watts) || watts <= 0) {
+    rfClearPowerFields('rf-watts');
+    return;
+  }
+
+  dbmField.value = (10 * Math.log10(watts * 1000)).toFixed(2);
+  mwField.value = rfFormatPower(watts * 1000);
 }
+
 function rfConvFromMw() {
-  const mw = parseFloat(document.getElementById('rf-mw').value);
-  if (isNaN(mw) || mw <= 0) return;
-  const w = mw / 1000;
-  document.getElementById('rf-watts').value = w.toFixed(6).replace(/0+$/, '').replace(/\.$/, '');
-  document.getElementById('rf-dbm').value = (10 * Math.log10(mw)).toFixed(2);
+  const input = document.getElementById('rf-mw');
+  const dbmField = document.getElementById('rf-dbm');
+  const wattsField = document.getElementById('rf-watts');
+
+  if (!input || !dbmField || !wattsField) return;
+
+  const milliwatts = parseFloat(input.value);
+
+  if (!Number.isFinite(milliwatts) || milliwatts <= 0) {
+    rfClearPowerFields('rf-mw');
+    return;
+  }
+
+  const watts = milliwatts / 1000;
+  wattsField.value = rfFormatPower(watts);
+  dbmField.value = (10 * Math.log10(milliwatts)).toFixed(2);
 }
 function rfConvDbd() {
   const dbd = parseFloat(document.getElementById('rf-dbd').value);
