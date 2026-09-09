@@ -1,7 +1,7 @@
 STEP 1: 
-<br>verify all pages, what's left: 
-<br>
-<br>Grid Square Calculator | Maidenhead coordinate conversion | Latitude/longitude signs, longitude wrapping, locator precision
+verify all pages, what's left: 
+
+Grid Square Calculator | Maidenhead coordinate conversion | Latitude/longitude signs, longitude wrapping, locator precision
 <br>
 <br>Q Code / Phonetics     | Reference lookup and searchable presentation   | Correct wording, regional/operational nuance    
 <br>
