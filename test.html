@@ -817,8 +817,15 @@ body{
   text-align:center;min-height:38px;
 }
 .calc-input:invalid {
-  border-color: var(--bad);
-  box-shadow: 0 0 0 1px rgba(255, 90, 90, 0.20);
+  border-color: var(--bad) !important;
+  box-shadow: 0 0 0 1px rgba(255, 90, 90, 0.28) !important;
+}
+
+.calc-input:focus:invalid {
+  border-color: var(--bad) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 90, 90, 0.32),
+    0 0 10px rgba(255, 90, 90, 0.12) !important;
 }
 .calc-btn{
   font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;
