@@ -2080,26 +2080,93 @@ function togglePrivFullTable() {
   <div class="panel-header">
     <div class="panel-badge">▸ RF MATH MADE EASY</div>
     <div class="panel-title">Power &amp; <span>Calculations</span></div>
-    <div class="panel-desc">dB conversions, watts-to-dBm, max legal 
-power by band, and a simple RF exposure estimator. Always operate at 
-minimum necessary power.</div>
+    <div class="panel-desc">dB conversions, watts-to-dBm, max legal power by band, and a simple RF exposure estimator. Always operate at minimum necessary power.</div>
   </div>
-  <div class="section-label">▸ Maximum Legal Power by Band/License</div>
-  <div class="card" style="margin-bottom:20px">
+<div class="section-label">▸ Power Limits: Quick Reference</div>
+
+<div class="card" style="margin-bottom:20px">
   <table class="max-power-table">
-    <thead><tr><th>Band / Condition</th><th>Max Power (PEP)</th><th>Notes</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Band / Condition</th>
+        <th>Limit</th>
+        <th>Important condition</th>
+      </tr>
+    </thead>
     <tbody>
-      <tr><td>All HF (general)</td><td style="color: var(--good);">1,500 W</td><td style="font-size: 11px; color: var(--text-dim);">General/Advanced/Extra on most HF bands</td></tr>
-      <tr><td>30m (10.1 MHz)</td><td style="color: var(--amber);">200 W</td><td style="font-size: 11px; color: var(--text-dim);">Hard limit — CW/Data only, no phone</td></tr>
-      <tr><td>60m (5 channels)</td><td style="color: var(--amber);">100 W ERP</td><td style="font-size: 11px; color: var(--text-dim);">USB phone/data only on 5 specific channels</td></tr>
-      <tr><td>2200m / 630m</td><td style="color: var(--amber);">1W / 5W EIRP</td><td style="font-size: 11px; color: var(--text-dim);">Must register with UTC before operating</td></tr>
-      <tr><td>10m Novice/Tech</td><td style="color: var(--amber);">200 W</td><td style="font-size: 11px; color: var(--text-dim);">28.0–28.5 MHz only for Tech licensees</td></tr>
-      <tr><td>VHF/UHF/µwave</td><td style="color: var(--good);">1,500 W</td><td style="font-size: 11px; color: var(--text-dim);">Geographic restrictions may apply on 70cm/33cm/23cm</td></tr>
-      <tr><td>Technician HF</td><td style="color: var(--text-dim);">200 W</td><td style="font-size: 11px; color: var(--text-dim);">Limited to 10m Novice/Tech segments + 6m/VHF/UHF</td></tr>
-      <tr><td>General HF</td><td style="color: var(--good);">1,500 W</td><td style="font-size: 11px; color: var(--text-dim);">Full power on General segments; Extra sub-bands excluded</td></tr>
+      <tr>
+        <td>Most amateur bands</td>
+        <td style="color:var(--good);">1,500 W PEP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          Subject to your license privileges and band-specific restrictions.
+        </td>
+      </tr>
+      <tr>
+        <td>Technician HF privileges</td>
+        <td style="color:var(--amber);">200 W PEP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          Applies to Technician HF segments; 6 m and above generally allow up to 1,500 W PEP.
+        </td>
+      </tr>
+      <tr>
+        <td>30 m</td>
+        <td style="color:var(--amber);">200 W PEP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          CW and RTTY/Data only; secondary allocation.
+        </td>
+      </tr>
+      <tr>
+        <td>60 m continuous segment</td>
+        <td style="color:var(--amber);">9.15 W ERP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          5.3515–5.3665 MHz; secondary allocation; 2.8 kHz maximum bandwidth.
+        </td>
+      </tr>
+      <tr>
+        <td>60 m discrete references</td>
+        <td style="color:var(--amber);">100 W ERP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          5332, 5348, 5373, and 5405 kHz center-frequency references only.
+        </td>
+      </tr>
+      <tr>
+        <td>2200 m</td>
+        <td style="color:var(--amber);">1,500 W PEP; 1 W EIRP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          Fixed-location, notification, PLC-separation, and sharing requirements apply.
+        </td>
+      </tr>
+      <tr>
+        <td>630 m</td>
+        <td style="color:var(--amber);">500 W PEP; 5 W EIRP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          Fixed-location, notification, PLC-separation, and sharing requirements apply; special Alaska/Russia limit applies.
+        </td>
+      </tr>
+      <tr>
+        <td>219–220 MHz</td>
+        <td style="color:var(--amber);">50 W PEP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          Fixed point-to-point digital message forwarding only; other conditions apply.
+        </td>
+      </tr>
+      <tr>
+        <td>70 cm / 33 cm / 23 cm</td>
+        <td style="color:var(--good);">Up to 1,500 W PEP</td>
+        <td style="font-size:11px;color:var(--text-dim);">
+          Geographic restrictions, protected services, and sharing conditions may apply.
+        </td>
+      </tr>
     </tbody>
   </table>
+
+  <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-top:10px">
+    For the authoritative mode, frequency, class, location, and special-purpose conditions,
+    use <strong style="color:var(--text)">Frequency Privileges</strong>.
+    Power limits do not override bandwidth, emission, sharing, RF-exposure, or interference obligations.
   </div>
+</div>
+
   <div class="calc-grid">
     <div class="calc-card">
       <div class="calc-title">⚡ Watts ↔ dBW / dBm</div>
