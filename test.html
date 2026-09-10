@@ -2183,7 +2183,12 @@ function togglePrivFullTable() {
       <div class="calc-title">⚡ Watts ↔ dBW / dBm</div>
       <div class="calc-row"><label class="calc-label">Watts</label><input class="calc-input" id="w2db-watts" type="number" placeholder="e.g. 100" oninput="calcWatts2dB()"></div>
       <div class="calc-result" id="w2db-result">Enter watts above</div>
-      <div class="divider" style="margin:12px 0"></div>
+	   <div style="font-size:10px;color:var(--text-dim);line-height:1.55;margin-top:8px">
+		  <strong style="color:var(--text)">dB</strong> expresses a ratio.
+		  <strong style="color:var(--text)">dBm</strong> is referenced to 1 mW;
+		  <strong style="color:var(--text)">dBW</strong> is referenced to 1 W.
+		</div>
+	  <div class="divider" style="margin:12px 0"></div>
       <table class="db-table">
         <tbody><tr><td>3 dB</td><td>= 2× power</td><td style="font-size: 11px; color: var(--text-dim);">Double or half</td></tr>
         <tr><td>10 dB</td><td>= 10× power</td><td style="font-size: 11px; color: var(--text-dim);">One S-unit ≈ 6dB</td></tr>
@@ -4902,22 +4907,46 @@ const PRIV_MODES = {
 // POWER CALCULATORS
 // ===========================================
 function calcWatts2dB() {
-  const w = parseFloat(document.getElementById('w2db-watts').value);
-  const el = document.getElementById('w2db-result');
-  if (!w || w <= 0) { el.textContent = 'Enter watts above'; return; }
-  const dbw = (10 * Math.log10(w)).toFixed(2);
-  const dbm = (10 * Math.log10(w * 1000)).toFixed(2);
-  el.textContent = `${w} W  =  ${dbw} dBW  =  ${dbm} dBm`;
+  const input = document.getElementById('w2db-watts');
+  const result = document.getElementById('w2db-result');
+  if (!input || !result) return;
+  const watts = parseFloat(input.value);
+  if (!Number.isFinite(watts) || watts <= 0) {
+    result.textContent = 'Enter a positive power value';
+    result.style.color = 'var(--text-dim)';
+    return;
+  }
+  const dbw = 10 * Math.log10(watts);
+  const dbm = 10 * Math.log10(watts * 1000);
+  result.textContent =
+    `${watts} W  =  ${dbw.toFixed(2)} dBW  =  ${dbm.toFixed(2)} dBm`;
+  result.style.color = 'var(--accent)';
 }
+
 function calcDB() {
-  const a = parseFloat(document.getElementById('db-from').value);
-  const b = parseFloat(document.getElementById('db-to').value);
-  const el = document.getElementById('db-result');
-  if (!a || !b || a <= 0 || b <= 0) { el.textContent = 'Enter values above'; return; }
-  const db = (10 * Math.log10(b / a)).toFixed(2);
-  const dir = b > a ? '+' : '';
-  el.textContent = `${a}W → ${b}W  =  ${dir}${db} dB`;
-}
+  const fromInput = document.getElementById('db-from');
+  const toInput = document.getElementById('db-to');
+  const result = document.getElementById('db-result');
+  if (!fromInput || !toInput || !result) return;
+  const fromWatts = parseFloat(fromInput.value);
+  const toWatts = parseFloat(toInput.value);
+  if (!Number.isFinite(fromWatts) || fromWatts <= 0 ||
+      !Number.isFinite(toWatts) || toWatts <= 0) {
+    result.textContent = 'Enter positive start and end power values';
+    result.style.color = 'var(--text-dim)';
+    return;
+  }
+  const dbChange = 10 * Math.log10(toWatts / fromWatts);
+  const sign = dbChange > 0 ? '+' : '';
+  result.textContent =
+    `${fromWatts} W → ${toWatts} W  =  ${sign}${dbChange.toFixed(2)} dB`;
+  result.style.color =
+    dbChange > 0
+      ? 'var(--good)'
+      : dbChange < 0
+        ? 'var(--amber)'
+        : 'var(--text)';
+}	
 
 function calcOhmRF() {
   const powerInput = document.getElementById('ohm-power');
