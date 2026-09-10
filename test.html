@@ -2181,7 +2181,7 @@ function togglePrivFullTable() {
   <div class="calc-grid">
     <div class="calc-card">
       <div class="calc-title">⚡ Watts ↔ dBW / dBm</div>
-      <div class="calc-row"><label class="calc-label">Watts</label><input class="calc-input" id="w2db-watts" type="number" placeholder="e.g. 100" oninput="calcWatts2dB()"></div>
+      <div class="calc-row"><label class="calc-label">Watts</label><input class="calc-input" id="w2db-watts" type="number" placeholder="e.g. 100" min="0" step="any" oninput="calcWatts2dB()"></div>
       <div class="calc-result" id="w2db-result">Enter watts above</div>
 	   <div style="font-size:10px;color:var(--text-dim);line-height:1.55;margin-top:8px">
 		  <strong style="color:var(--text)">dB</strong> expresses a ratio.
@@ -2200,8 +2200,8 @@ function togglePrivFullTable() {
     </div>
     <div class="calc-card">
       <div class="calc-title">📐 dB Change Calculator</div>
-      <div class="calc-row"><label class="calc-label">Start (W)</label><input class="calc-input" id="db-from" type="number" placeholder="e.g. 100" oninput="calcDB()"></div>
-      <div class="calc-row"><label class="calc-label">End (W)</label><input class="calc-input" id="db-to" type="number" placeholder="e.g. 200" oninput="calcDB()"></div>
+      <div class="calc-row"><label class="calc-label">Start (W)</label><input class="calc-input" id="db-from" type="number" placeholder="e.g. 100" min="0" step="any" oninput="calcDB()"></div>
+      <div class="calc-row"><label class="calc-label">End (W)</label><input class="calc-input" id="db-to" type="number" placeholder="e.g. 200" min="0" step="any" oninput="calcDB()"></div>
       <div class="calc-result" id="db-result">Enter values above</div>
       <div class="divider" style="margin:12px 0"></div>
       <div style="font-size: 11px; color: var(--text-dim); line-height: 1.7;">
