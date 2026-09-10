@@ -4885,6 +4885,7 @@ function calcDB() {
   const dir = b > a ? '+' : '';
   el.textContent = `${a}W → ${b}W  =  ${dir}${db} dB`;
 }
+	/*
 function calcRF() {
   const p = parseFloat(document.getElementById('rf-exposure-watts').value);
   const g = parseFloat(document.getElementById('rf-gain').value);
@@ -4900,7 +4901,7 @@ function calcRF() {
                  pden < mpeControlled ? '⚠ Below MPE (controlled only)' : '✗ EXCEEDS MPE — increase distance';
   el.style.color = pden < mpeGeneral ? 'var(--good)' : pden < mpeControlled ? 'var(--amber)' : 'var(--poor)';
   el.textContent = `${pden.toFixed(3)} mW/cm²  —  ${status}`;
-}
+} */
 
 // ===========================================
 // SOLAR DATA
