@@ -618,7 +618,6 @@ body{
   gap: 10px;
   margin: 10px 0 4px;
 }
-
 .priv-checker-input-wrap {
   min-width: 0;
 }
@@ -627,7 +626,6 @@ body{
   width: 100%;
   margin: 0;
 }
-
 .priv-checker-input-row .priv-checker-submit {
   display: inline-block;
   width: auto !important;
@@ -662,21 +660,18 @@ body{
   border-bottom: 1px solid var(--border);
   transition: background-color 0.15s ease, color 0.15s ease;
 }
-
 .priv-full-toggle:hover,
 .priv-full-toggle:focus-visible {
   background: rgba(72, 185, 255, 0.10);
   color: var(--accent);
   outline: none;
 }
-
 .priv-full-toggle-title {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-
 .priv-full-chevron {
   flex: 0 0 auto;
   color: var(--accent);
@@ -715,7 +710,6 @@ body{
 .abbr-c{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;display:flex;gap:10px}
 .abbr-k{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--amber);min-width:56px}
 .abbr-v{font-size:14px;color:var(--text);line-height:1.5}
-
 
 /* ── COLLAPSIBLE SECTIONS ── */
 /* .collapse-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:14px} */
@@ -843,7 +837,6 @@ body{
 .max-power-table td{padding:7px 10px;border-bottom:1px solid rgba(26,45,66,.4);vertical-align:top;line-height:1.5}
 .max-power-table td:first-child{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);white-space:nowrap}
 .max-power-table td:nth-child(2){font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--good)}
-
 .rf-reference-chip {
   display: inline-flex;
   align-items: center;
@@ -859,6 +852,27 @@ body{
   line-height: 1;
   white-space: nowrap;
 }
+.rf-exposure-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 9px;
+  box-sizing: border-box;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--accent);
+  background: rgba(72, 185, 255, 0.05);
+  font-size: 12px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.rf-exposure-link:hover,
+.rf-exposure-link:focus-visible {
+  color: var(--bg);
+  background: var(--accent);
+  outline: none;
+}
+	
 /* ===========================================
    PANEL 6 — FIRST QSO GUIDE
 =========================================== */
@@ -2083,7 +2097,6 @@ function togglePrivFullTable() {
     <div class="panel-desc">dB conversions, watts-to-dBm, max legal power by band, and a simple RF exposure estimator. Always operate at minimum necessary power.</div>
   </div>
 <div class="section-label">▸ Power Limits: Quick Reference</div>
-
 <div class="card" style="margin-bottom:20px">
   <table class="max-power-table">
     <thead>
@@ -2159,14 +2172,12 @@ function togglePrivFullTable() {
       </tr>
     </tbody>
   </table>
-
   <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-top:10px">
     For the authoritative mode, frequency, class, location, and special-purpose conditions,
     use <strong style="color:var(--text)">Frequency Privileges</strong>.
     Power limits do not override bandwidth, emission, sharing, RF-exposure, or interference obligations.
   </div>
 </div>
-
   <div class="calc-grid">
     <div class="calc-card">
       <div class="calc-title">⚡ Watts ↔ dBW / dBm</div>
@@ -2193,20 +2204,37 @@ function togglePrivFullTable() {
         Going from 100W to 1500W is only ~12 dB — less than 2 S-units to the other station. <strong style="color: var(--amber);">A better antenna beats more power every time.</strong>
       </div>
     </div>
-    <div class="calc-card">
-      <div class="calc-title">🔒 Simple RF Exposure Check</div>
-      <div style="font-size: 11px; color: var(--text-dim); line-height: 1.7; margin-bottom: 12px;">
-        FCC requires hams to evaluate RF exposure (Part 97.13). This is a simplified estimate — always use the <a href="https://www.fcc.gov/consumers/guides/rf-safety-calculators" target="_blank" style="color: var(--accent);">FCC's online calculator</a> for compliance.
-      </div>
-      <div class="calc-row"><label class="calc-label">Power (W)</label><input class="calc-input" id="rf-exposure-watts" type="number" placeholder="e.g. 100" oninput="calcRF()"></div>
-      <div class="calc-row"><label class="calc-label">Gain (dBi)</label><input class="calc-input" id="rf-gain" type="number" placeholder="e.g. 2.15" oninput="calcRF()"></div>
-      <div class="calc-row"><label class="calc-label">Distance (m)</label><input class="calc-input" id="rf-dist" type="number" placeholder="e.g. 5" oninput="calcRF()"></div>
-      <div class="calc-row"><label class="calc-label">Duty Cycle %</label><input class="calc-input" id="rf-duty" type="number" placeholder="e.g. 50" oninput="calcRF()"></div>
-      <div class="calc-result" id="rf-result">Enter values above</div>
-      <div style="font-size: 10px; color: var(--text-dim); margin-top: 8px; line-height: 1.5;">FCC
- MPE limit (general pop): 1 mW/cm² at 30–300 MHz. Controlled (amateur): 5
- mW/cm². This calculator uses simplified far-field formula — consult <a href="https://www.arrl.org/rf-exposure" target="_blank" style="color: var(--accent);">ARRL RF Exposure</a> for full evaluation.</div>
-    </div>
+	<div class="calc-card">
+	  <div class="calc-title">🔒 RF Exposure Evaluation</div>	
+	  <div style="font-size:12px;color:var(--text-dim);line-height:1.7;margin-bottom:12px">
+	    FCC rules require every amateur station to perform an RF-exposure evaluation as needed.
+	    A valid evaluation depends on operating frequency, antenna type and location, distance to people,
+	    operating power, gain, and time-averaged transmit duty cycle.
+	  </div>	
+	  <div style="padding:10px 12px;border:1px solid var(--amber);background:rgba(255,184,77,0.06);font-size:12px;color:var(--text);line-height:1.65;margin-bottom:12px">
+	    <strong style="color:var(--amber)">Do not use a simple distance-only estimate as proof of compliance.</strong>
+	    Near-field antennas, portable/mobile operation, multiple transmitters, and RF exposure at frequencies
+	    outside a single MPE range require additional evaluation.
+	  </div>	
+	  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+	    <a href="https://www.arrl.org/rf-exposure-calculator"
+	       target="_blank"
+	       rel="noopener noreferrer"
+	       class="rf-exposure-link">
+	      Open ARRL RF Exposure Calculator ↗
+	    </a>	
+	    <a href="https://www.fcc.gov/general/radio-frequency-safety-0"
+	       target="_blank"
+	       rel="noopener noreferrer"
+	       class="rf-exposure-link">
+	      FCC RF Safety Information ↗
+	    </a>
+	  </div>	
+	  <div style="font-size:11px;color:var(--text-dim);line-height:1.6">
+	    The ARRL tool uses operating power, antenna gain, operating frequency, mode, and maximum transmit time.
+	    Check the calculator’s assumptions and use the current FCC limits for your situation.
+	  </div>
+	</div>
   </div>
 </div>
 
