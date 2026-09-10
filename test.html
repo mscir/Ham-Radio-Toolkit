@@ -2235,6 +2235,39 @@ function togglePrivFullTable() {
 	    Check the calculator’s assumptions and use the current FCC limits for your situation.
 	  </div>
 	</div>
+	  
+	<div class="calc-card">
+      <div class="calc-title">⚙️ RF Voltage &amp; Current</div>
+      <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:12px">
+        Calculate RMS voltage and current from RF power into a resistive or nominal transmission-line impedance.
+      </div>
+      <div class="calc-row">
+        <label class="calc-label">Power (W)</label>
+        <input class="calc-input"
+               id="ohm-power"
+               type="number"
+               placeholder="e.g. 100"
+               step="any"
+               oninput="calcOhmRF()">
+      </div>
+      <div class="calc-row">
+        <label class="calc-label">Impedance (Ω)</label>
+        <input class="calc-input"
+               id="ohm-impedance"
+               type="number"
+               placeholder="e.g. 50"
+               value="50"
+               min="0"
+               step="any"
+               oninput="calcOhmRF()">
+      </div>
+      <div class="calc-result" id="ohm-result">Enter a positive power value</div>
+      <div style="font-size:10px;color:var(--text-dim);line-height:1.55;margin-top:10px">
+        Uses RMS values: \(P = V²/R = I²R\). Assumes a resistive load or nominal impedance.
+        With high SWR or a reactive load, actual feedline voltage/current can be substantially different.
+      </div>
+    </div>
+	  
   </div>
 </div>
 
@@ -4885,23 +4918,26 @@ function calcDB() {
   const dir = b > a ? '+' : '';
   el.textContent = `${a}W → ${b}W  =  ${dir}${db} dB`;
 }
-	/*
-function calcRF() {
-  const p = parseFloat(document.getElementById('rf-exposure-watts').value);
-  const g = parseFloat(document.getElementById('rf-gain').value);
-  const d = parseFloat(document.getElementById('rf-dist').value);
-  const dc = parseFloat(document.getElementById('rf-duty').value) / 100;
-  const el = document.getElementById('rf-result');
-  if (!p || !g || !d || isNaN(dc)) { el.textContent = 'Enter all values'; return; }
-  const gLin = Math.pow(10, g / 10);
-  const eirp = p * gLin;
-  const pden = (eirp / (4 * Math.PI * d * d)) * dc * 100;
-  const mpeGeneral = 1.0, mpeControlled = 5.0;
-  const status = pden < mpeGeneral ? '✓ Below MPE (general public)' :
-                 pden < mpeControlled ? '⚠ Below MPE (controlled only)' : '✗ EXCEEDS MPE — increase distance';
-  el.style.color = pden < mpeGeneral ? 'var(--good)' : pden < mpeControlled ? 'var(--amber)' : 'var(--poor)';
-  el.textContent = `${pden.toFixed(3)} mW/cm²  —  ${status}`;
-} */
+
+function calcOhmRF() {
+  const powerInput = document.getElementById('ohm-power');
+  const impedanceInput = document.getElementById('ohm-impedance');
+  const result = document.getElementById('ohm-result');
+  if (!powerInput || !impedanceInput || !result) return;
+  const power = parseFloat(powerInput.value);
+  const impedance = parseFloat(impedanceInput.value);
+  if (!Number.isFinite(power) || power <= 0 ||
+      !Number.isFinite(impedance) || impedance <= 0) {
+    result.textContent = 'Enter positive power and impedance values';
+    result.style.color = 'var(--text-dim)';
+    return;
+  }
+  const voltageRms = Math.sqrt(power * impedance);
+  const currentRms = Math.sqrt(power / impedance);
+  result.textContent =
+    `${voltageRms.toFixed(2)} V RMS  ·  ${currentRms.toFixed(3)} A RMS`;
+  result.style.color = 'var(--accent)';
+}
 
 // ===========================================
 // SOLAR DATA
