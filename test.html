@@ -3473,6 +3473,60 @@ take it with a grain of salt!</div>
        Cut elements slightly long, install the antenna in its final location, and trim/tune as needed. Results are shown in feet and meters.
      </div>
   </div>
+<!-- BEGINNER ANTENNA CHOICES -->
+	<div style="margin-bottom:18px">
+	  <div class="section-label">▸ Choose an Antenna Starting Point</div>	
+	  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px">
+	    <div style="background:rgba(0,212,255,.05);
+	                border:1px solid rgba(0,212,255,.22);
+	                border-radius:var(--r);
+	                padding:13px 15px">
+	      <div style="font-family:'Barlow Condensed',sans-serif;
+	                  font-size:14px;
+	                  font-weight:700;
+	                  letter-spacing:.1em;
+	                  text-transform:uppercase;
+	                  color:var(--accent);
+	                  margin-bottom:7px">
+	        📻 Local VHF/UHF Contacts
+	      </div>	
+	      <div style="font-size:12px;color:var(--text);line-height:1.7">
+	        For local simplex and repeater use on 2 m and 70 cm, common first antennas include a
+	        <strong>dual-band vertical</strong>, a <strong>J-pole or Slim Jim</strong>, or a
+	        <strong>quarter-wave ground plane</strong>.
+	      </div>	
+	      <div style="font-size:12px;color:var(--text-dim);line-height:1.65;margin-top:7px">
+	        A dual-band vertical is usually purchased and installed. The quarter-wave ground-plane
+	        dimensions below are a practical first homebrew project.
+	      </div>
+	    </div>	
+	    <div style="background:rgba(57,255,20,.045);
+	                border:1px solid rgba(57,255,20,.20);
+	                border-radius:var(--r);
+	                padding:13px 15px">
+	      <div style="font-family:'Barlow Condensed',sans-serif;
+	                  font-size:14px;
+	                  font-weight:700;
+	                  letter-spacing:.1em;
+	                  text-transform:uppercase;
+	                  color:var(--good);
+	                  margin-bottom:7px">
+	        🌐 HF Contacts Beyond Local
+	      </div>	
+	      <div style="font-size:12px;color:var(--text);line-height:1.7">
+	        For HF regional, national, and possible worldwide contacts, start with a
+	        <strong>center-fed half-wave dipole or inverted-V</strong>,
+	        an <strong>end-fed half-wave</strong>, or an
+	        <strong>HF vertical with radials/counterpoise</strong>.
+	      </div>	
+	      <div style="font-size:12px;color:var(--text-dim);line-height:1.65;margin-top:7px">
+	        A dipole is often the simplest first HF antenna. An end-fed half-wave and a multiband
+	        vertical require a proven matching/feedline design; this calculator provides only
+	        simple-wire starting dimensions.
+	      </div>
+	    </div>
+	  </div>
+	</div>
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
 		  <div style="width:190px;flex:0 1 190px">
@@ -11171,7 +11225,7 @@ function calcAntenna() {
       'Elevated Radial Starting Length',
       ft(qw),
       m(qw),
-      'For a raised ground-plane vertical: start with 3–4+ equal, symmetrical radials near 1/4λ.'
+      'For a raised ground-plane vertical: start with 3–4+ equal, symmetrical radials slightly long near 1/4λ, then tune the installed system.'
     ) +
     antCard(
       'Half-Wave Vertical Radiator',
