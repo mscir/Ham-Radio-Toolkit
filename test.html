@@ -3467,9 +3467,11 @@ take it with a grain of salt!</div>
 <!-- PANEL: ANTENNA CALCULATOR -->
 <div class="panel" id="panel-antenna">
   <div class="panel-header">
-    <div class="panel-badge">▸ DIPOLE · VERTICAL · YAGI · MAGNETIC LOOP</div>
+	<div class="panel-badge">▸ SIMPLE WIRE ANTENNAS · VERTICALS · RADIALS</div>
     <div class="panel-title">Antenna <span>Calculator</span></div>
-    <div class="panel-desc">Calculate element lengths for common antenna types. Enter a frequency and select antenna type. All results in feet and meters.</div>
+    <div class="panel-desc">Choose a starting point for simple amateur-radio antennas, then calculate approximate wire dimensions.
+       Cut elements slightly long, install the antenna in its final location, and trim/tune as needed. Results are shown in feet and meters.
+</div>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
     <div style="flex:1;min-width:160px">
@@ -3496,17 +3498,6 @@ take it with a grain of salt!</div>
     <div style="margin-bottom:16px">
       <div class="section-label">▸ Verticals &amp; Ground Plane</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-vertical"></div>
-    </div>
-    <!-- Yagi -->
-    <div style="margin-bottom:16px">
-      <div class="section-label">▸ 3-Element Yagi (approx.)</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-yagi"></div>
-    </div>
-    <!-- Mag Loop -->
-    <div style="margin-bottom:16px">
-      <div class="section-label">▸ Small Transmitting Magnetic Loop</div>
-      <div id="ant-magloop"></div>
-      <div style="font-size:12px;color:var(--text-dim);margin-top:10px;line-height:1.7">⚠ Magnetic loops are highly resonant with narrow bandwidth. The capacitor voltage can be <strong style="color:var(--poor)">extremely high and dangerous</strong> at legal power levels. Keep humans away from the loop while transmitting. These are estimates — real-world results depend on conductor diameter, capacitor Q, and construction quality.</div>
     </div>
     <!-- Loading coil note -->
     <div id="ant-loading-coil" style="display:none;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.25);border-radius:var(--r);padding:14px 16px;margin-bottom:12px">
@@ -11103,7 +11094,6 @@ function setAntFreq(f) {
   document.getElementById('ant-freq').value = f;
   calcAntenna();
 }
-
 function antCard(label, ft, m, note) {
   return `<div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px">${label}</div>
@@ -11112,7 +11102,6 @@ function antCard(label, ft, m, note) {
     ${note ? `<div style="font-size:12px;color:var(--text-dim);margin-top:5px;line-height:1.5">${note}</div>` : ''}
   </div>`;
 }
-
 function ft(n) { return n.toFixed(2); }
 function m(n)  { return (n * 0.3048).toFixed(2); }
 
@@ -11138,29 +11127,6 @@ function calcAntenna() {
     antCard('Quarter-wave Vertical', ft(qw), m(qw), '234 / f — needs 4+ radials') +
     antCard('Half-wave Vertical', ft(hw), m(hw), '468 / f — can be end-fed') +
     antCard('5/8-wave Vertical', ft(fw58), m(fw58), '585 / f — more gain than 1/4λ, needs matching');
-
-  // Yagi
-  const refl = dipTotal * 1.05;
-  const dir1 = dipTotal * 0.95;
-  const dir2 = dipTotal * 0.91;
-  const boom  = dipTotal * 0.8;
-  document.getElementById('ant-yagi').innerHTML =
-    antCard('Reflector', ft(refl), m(refl), '~5% longer than driven element') +
-    antCard('Driven Element (dipole)', ft(dipTotal), m(dipTotal), 'Standard dipole length') +
-    antCard('Director 1', ft(dir1), m(dir1), '~5% shorter than driven element') +
-    antCard('Director 2 (4-el)', ft(dir2), m(dir2), '~9% shorter — optional 4th element') +
-    antCard('Boom Length (3-el)', ft(boom), m(boom), '~0.8× driven element — spacing varies');
-
-  // Mag Loop — small transmitting magnetic loop (circumference ≤ 0.1λ)
-  const mlCircFt  = wl * 0.1;           // 10% of wavelength
-  const mlDiamFt  = mlCircFt / Math.PI;
-  const mlCircM   = mlCircFt * 0.3048;
-  const mlDiamM   = mlDiamFt * 0.3048;
-
-  // Rough tuning capacitor estimate for small mag loop
-  // Using standard approximation: C(pF) ≈ (circumference_m)² / (7.57 × wavelength_m)
-  const wlM2  = 300 / f;
-  const cap   = Math.round((mlCircM * mlCircM) / (7.57 * wlM2));
 
   // Loading coil check (runs after mag loop section is set)
   document.getElementById('ant-magloop').innerHTML =
