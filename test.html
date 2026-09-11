@@ -3549,108 +3549,119 @@ take it with a grain of salt!</div>
 	    <div id="ant-input-message"
 		     style="min-height:18px;margin:-12px 0 14px;font-size:12px;color:var(--poor)">
 		</div>
-  </div>
-  <div id="ant-results" style="display:none">
-    <!-- Wavelength reference -->
-	<div style="margin-bottom:16px">
-	  <div class="section-label">▸ Wavelength Reference</div>
-	  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px"
-	       id="ant-wavelength"></div>
-	</div>
-    <!-- Dipole -->
-    <div style="margin-bottom:16px">
-      <div class="section-label">▸ Half-Wave Dipole / Inverted-V</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-dipole"></div>
-    </div>
-    <!-- Verticals -->
-    <div style="margin-bottom:16px">
-      <div class="section-label">▸ Vertical Radiators &amp; Ground Planes</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-vertical"></div>
-    </div>
-    <!-- Formula notes -->
-    <div style="font-size:12px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:12px">
-		  <strong style="color:var(--heading)">Starting-length formulas:</strong>
-		  Half-wave dipole: 468 ÷ frequency (MHz) feet ·
-		  Quarter-wave radiator: 234 ÷ frequency (MHz) feet ·
-		  5/8-wave radiator: 585 ÷ frequency (MHz) feet.
-		  Final dimensions vary with wire size, insulation, height, nearby objects, ground system, and feed method.
-    </div>
-  </div>
-
-	<!-- Verticals -->
-	<div style="margin-bottom:16px">
-	  <div class="section-label">▸ Vertical Radiators &amp; Ground Planes</div>
-	  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-vertical"></div>
-	</div>
-	<!-- RADIALS & COUNTERPOISES -->
-	<div style="margin-bottom:16px">
-	  <div class="section-label">▸ Radials &amp; Counterpoises</div>
+	  </div>
+		
+	  <div id="ant-results" style="display:none">
 	
-	  <div style="font-size:13px;color:var(--text-dim);line-height:1.75;margin-bottom:11px">
-	    A quarter-wave vertical is only half of the antenna. Radials or a counterpoise provide its
-	    RF-current return path—the effective “other half.” They are not the same thing as an
-	    electrical safety or lightning-protection ground.
+	  <!-- Wavelength reference -->
+	  <div style="margin-bottom:16px">
+	    <div class="section-label">▸ Wavelength Reference</div>
+	    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px"
+	         id="ant-wavelength"></div>
 	  </div>
 	
-	  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:10px">
-	    <div style="background:rgba(0,212,255,.05);
-	                border:1px solid rgba(0,212,255,.22);
-	                border-radius:var(--r);
-	                padding:13px 15px">
-	      <div style="font-family:'Barlow Condensed',sans-serif;
-	                  font-size:14px;
-	                  font-weight:700;
-	                  letter-spacing:.1em;
-	                  text-transform:uppercase;
-	                  color:var(--accent);
-	                  margin-bottom:7px">
-	        Ground-Mounted / Surface / Buried Radials
-	      </div>	
-	      <div style="font-size:13px;color:var(--text);line-height:1.7">
-	        Use these with a vertical mounted at or near ground level. Lay wires on the soil surface
-	        or bury them shallowly, spreading them around the antenna base.
-	      </div>	
-	      <div style="font-size:13px;color:var(--text-dim);line-height:1.65;margin-top:7px">
-	        Do not tune each radial to resonance. Use as many as practical, distribute them as evenly
-	        as possible, and add wire coverage over time. Surface and shallow-buried radials can work
-	        similarly; burial mainly protects wires and makes mowing easier.
+	  <!-- Dipole -->
+	  <div style="margin-bottom:16px">
+	    <div class="section-label">▸ Half-Wave Dipole / Inverted-V</div>
+	    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px"
+	         id="ant-dipole"></div>
+	  </div>
+	
+	  <!-- Verticals -->
+	  <div style="margin-bottom:16px">
+	    <div class="section-label">▸ Vertical Radiators &amp; Ground Planes</div>
+	    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px"
+	         id="ant-vertical"></div>
+	  </div>
+	
+	  <!-- RADIALS & COUNTERPOISES -->
+	  <div style="margin-bottom:16px">
+	    <div class="section-label">▸ Radials &amp; Counterpoises</div>
+	
+	    <div style="font-size:13px;color:var(--text-dim);line-height:1.75;margin-bottom:11px">
+	      A quarter-wave vertical is only half of the antenna. Radials or a counterpoise provide its
+	      RF-current return path—the effective “other half.” They are not the same thing as an
+	      electrical safety or lightning-protection ground.
+	    </div>
+	
+	    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:10px">
+	      <div style="background:rgba(0,212,255,.05);
+	                  border:1px solid rgba(0,212,255,.22);
+	                  border-radius:var(--r);
+	                  padding:13px 15px">
+	        <div style="font-family:'Barlow Condensed',sans-serif;
+	                    font-size:14px;
+	                    font-weight:700;
+	                    letter-spacing:.1em;
+	                    text-transform:uppercase;
+	                    color:var(--accent);
+	                    margin-bottom:7px">
+	          Ground-Mounted / Surface / Buried Radials
+	        </div>
+	
+	        <div style="font-size:13px;color:var(--text);line-height:1.7">
+	          Use these with a vertical mounted at or near ground level. Lay wires on the soil surface
+	          or bury them shallowly, spreading them around the antenna base.
+	        </div>
+	
+	        <div style="font-size:13px;color:var(--text-dim);line-height:1.65;margin-top:7px">
+	          Do not tune each radial to resonance. Use as many as practical, distribute them as evenly
+	          as possible, and add wire coverage over time. Surface and shallow-buried radials can work
+	          similarly; burial mainly protects wires and makes mowing easier.
+	        </div>
 	      </div>
-	    </div>	
-	    <div style="background:rgba(57,255,20,.045);
-	                border:1px solid rgba(57,255,20,.20);
-	                border-radius:var(--r);
-	                padding:13px 15px">
-	      <div style="font-family:'Barlow Condensed',sans-serif;
-	                  font-size:14px;
-	                  font-weight:700;
-	                  letter-spacing:.1em;
-	                  text-transform:uppercase;
-	                  color:var(--good);
-	                  margin-bottom:7px">
-	        Elevated Radials / Counterpoise
-	      </div>	
-	      <div style="font-size:13px;color:var(--text);line-height:1.7">
-	        Use these with a raised ground-plane vertical—on a mast, roof, balcony, or portable support.
-	        Start with 3–4 or more equal radials, spaced symmetrically around the antenna base.
-	      </div>	
-	      <div style="font-size:13px;color:var(--text-dim);line-height:1.65;margin-top:7px">
-	        Treat elevated radials as active antenna elements: start slightly long near 1/4λ, keep their
-	        lengths and geometry equal, and tune the complete installed system with an antenna analyzer.
-	        Keep them clear of people, pets, metal, and wiring while transmitting.
+	
+	      <div style="background:rgba(57,255,20,.045);
+	                  border:1px solid rgba(57,255,20,.20);
+	                  border-radius:var(--r);
+	                  padding:13px 15px">
+	        <div style="font-family:'Barlow Condensed',sans-serif;
+	                    font-size:14px;
+	                    font-weight:700;
+	                    letter-spacing:.1em;
+	                    text-transform:uppercase;
+	                    color:var(--good);
+	                    margin-bottom:7px">
+	          Elevated Radials / Counterpoise
+	        </div>
+	
+	        <div style="font-size:13px;color:var(--text);line-height:1.7">
+	          Use these with a raised ground-plane vertical—on a mast, roof, balcony, or portable support.
+	          Start with 3–4 or more equal radials, spaced symmetrically around the antenna base.
+	        </div>
+	
+	        <div style="font-size:13px;color:var(--text-dim);line-height:1.65;margin-top:7px">
+	          Treat elevated radials as active antenna elements: start slightly long near 1/4λ, keep their
+	          lengths and geometry equal, and tune the complete installed system with an antenna analyzer.
+	          Keep them clear of people, pets, metal, and wiring while transmitting.
+	        </div>
 	      </div>
 	    </div>
-	  </div>	
-	  <div style="font-size:13px;color:var(--text-dim);line-height:1.75;padding:10px 14px;margin-top:10px;background:rgba(255,165,0,.05);border:1px solid rgba(255,165,0,.22);border-radius:var(--r)">
-	    <strong style="color:var(--amber)">Important:</strong>
-	    A ground rod may be part of electrical safety and lightning/surge protection, but it does not
-	    replace antenna radials or a counterpoise. Center-fed dipoles, loops, and beams normally do not
-	    use a radial field; they may instead need feedline common-mode control, such as an appropriate
-	    current choke.
+	
+	    <div style="font-size:13px;color:var(--text-dim);line-height:1.75;padding:10px 14px;margin-top:10px;background:rgba(255,165,0,.05);border:1px solid rgba(255,165,0,.22);border-radius:var(--r)">
+	      <strong style="color:var(--amber)">Important:</strong>
+	      A ground rod may be part of electrical safety and lightning/surge protection, but it does not
+	      replace antenna radials or a counterpoise. Center-fed dipoles, loops, and beams normally do not
+	      use a radial field; they may instead need feedline common-mode control, such as an appropriate
+	      current choke.
+	    </div>
 	  </div>
+	
+	  <!-- Formula notes -->
+	  <div style="font-size:12px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:12px">
+	    <strong style="color:var(--heading)">Starting-length formulas:</strong>
+	    Half-wave dipole: 468 ÷ frequency (MHz) feet ·
+	    Quarter-wave radiator: 234 ÷ frequency (MHz) feet ·
+	    5/8-wave radiator: 585 ÷ frequency (MHz) feet.
+	    Final dimensions vary with wire size, insulation, height, nearby objects, ground system, and feed method.
+	  </div>
+	
 	</div>
 	
-  <div id="ant-placeholder" style="color:var(--text-dim);font-size:13px;padding:20px 0">Enter a frequency above to calculate antenna dimensions.</div>
-
+	<div id="ant-placeholder" style="color:var(--text-dim);font-size:13px;padding:20px 0">
+	  Enter a frequency above to calculate antenna dimensions.
+	</div>
+	
   <!-- GROUNDING GUIDE -->
   <div class="section-label" style="margin-top:20px">▸ Station Grounding Guide</div>
   <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Proper grounding protects your equipment, reduces RFI, and is required by electrical code. Two separate ground systems work together in a ham shack.</div>
