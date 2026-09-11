@@ -3474,19 +3474,23 @@ take it with a grain of salt!</div>
 </div>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
-    <div style="flex:1;min-width:160px">
-      <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Frequency (MHz)</div>
-      <input id="ant-freq" class="calc-input" type="number" placeholder="e.g. 14.250" step="0.001" style="width:100%;margin:0" oninput="calcAntenna()">
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-      <button class="calc-btn" onclick="setAntFreq(3.75)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">80m</button>
-      <button class="calc-btn" onclick="setAntFreq(7.200)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">40m</button>
-      <button class="calc-btn" onclick="setAntFreq(14.250)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">20m</button>
-      <button class="calc-btn" onclick="setAntFreq(21.300)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">15m</button>
-      <button class="calc-btn" onclick="setAntFreq(28.500)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">10m</button>
-      <button class="calc-btn" onclick="setAntFreq(50.125)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">6m</button>
-      <button class="calc-btn" onclick="setAntFreq(146.52)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">2m</button>
-    </div>
+     <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
+		  <div style="width:190px;flex:0 1 190px">
+		    <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">
+		      Frequency (MHz)
+		    </div>		
+		    <input id="ant-freq" class="calc-input" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 14.250" style="width:100%;margin:0" oninput="calcAntenna()">
+		  </div>		
+		  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+		    <button class="calc-btn" onclick="setAntFreq(3.75)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">80m</button>
+		    <button class="calc-btn" onclick="setAntFreq(7.200)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">40m</button>
+		    <button class="calc-btn" onclick="setAntFreq(14.250)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">20m</button>
+		    <button class="calc-btn" onclick="setAntFreq(21.300)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">15m</button>
+		    <button class="calc-btn" onclick="setAntFreq(28.500)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">10m</button>
+		    <button class="calc-btn" onclick="setAntFreq(50.125)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">6m</button>
+		    <button class="calc-btn" onclick="setAntFreq(146.520)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">2m</button>
+		  </div>
+		</div>
   </div>
   <div id="ant-results" style="display:none">
     <!-- Dipole -->
@@ -3499,16 +3503,16 @@ take it with a grain of salt!</div>
       <div class="section-label">▸ Verticals &amp; Ground Plane</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-vertical"></div>
     </div>
-    <!-- Loading coil note -->
-    <div id="ant-loading-coil" style="display:none;background:rgba(255,180,0,.07);border:1px solid rgba(255,180,0,.25);border-radius:var(--r);padding:14px 16px;margin-bottom:12px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">⚠ Antenna May Be Too Long for Indoor / Restricted Use</div>
-      <div id="ant-loading-coil-text" style="font-size:13px;color:var(--text);line-height:1.8"></div>
-    </div>
     <!-- Formula notes -->
     <div style="font-size:12px;color:var(--text-dim);line-height:1.8;border-top:1px solid var(--border);padding-top:12px">
-      <strong style="color:var(--heading)">Formulas used:</strong> Dipole: 468/f(MHz) ft · Quarter-wave: 234/f ft · 5/8 wave: 585/f ft · Yagi reflector: 5% longer than dipole, director: 5% shorter · Mag loop: 0.1λ circumference.
+		  <strong style="color:var(--heading)">Starting-length formulas:</strong>
+		  Half-wave dipole: 468 ÷ frequency (MHz) feet ·
+		  Quarter-wave radiator: 234 ÷ frequency (MHz) feet ·
+		  5/8-wave radiator: 585 ÷ frequency (MHz) feet.
+		  Final dimensions vary with wire size, insulation, height, nearby objects, ground system, and feed method.
     </div>
   </div>
+	
   <div id="ant-placeholder" style="color:var(--text-dim);font-size:13px;padding:20px 0">Enter a frequency above to calculate antenna dimensions.</div>
 
   <!-- GROUNDING GUIDE -->
@@ -11127,16 +11131,6 @@ function calcAntenna() {
     antCard('Quarter-wave Vertical', ft(qw), m(qw), '234 / f — needs 4+ radials') +
     antCard('Half-wave Vertical', ft(hw), m(hw), '468 / f — can be end-fed') +
     antCard('5/8-wave Vertical', ft(fw58), m(fw58), '585 / f — more gain than 1/4λ, needs matching');
-
-  // Loading coil check (runs after mag loop section is set)
-  document.getElementById('ant-magloop').innerHTML =
-    antCard('Loop Circumference (0.1λ)', ft(mlCircFt), mlCircM.toFixed(2), 'Max ~10% of wavelength to qualify as "small" mag loop') +
-    antCard('Loop Diameter', ft(mlDiamFt), mlDiamM.toFixed(2), 'Physical diameter — use rigid tubing or heavy coax') +
-    `<div style="background:rgba(255,180,0,.08);border:1px solid rgba(255,180,0,.25);border-radius:var(--r);padding:12px 14px;margin-top:8px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:6px">Tuning Capacitor (est.)</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--amber)">~${cap} pF</div>
-      <div style="font-size:12px;color:var(--text-dim);margin-top:4px;line-height:1.5">Rough estimate only. Use a variable capacitor with at least 2× this range. Air-variable or vacuum caps recommended for QRO. Actual value depends on conductor diameter and loop geometry.</div>
-    </div>`;
 }
 
 // ===========================================
