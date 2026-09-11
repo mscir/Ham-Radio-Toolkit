@@ -3471,7 +3471,7 @@ take it with a grain of salt!</div>
     <div class="panel-title">Antenna <span>Calculator</span></div>
     <div class="panel-desc">Choose a starting point for simple amateur-radio antennas, then calculate approximate wire dimensions.
        Cut elements slightly long, install the antenna in its final location, and trim/tune as needed. Results are shown in feet and meters.
-</div>
+     </div>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:20px">
@@ -3491,16 +3491,25 @@ take it with a grain of salt!</div>
 		    <button class="calc-btn" onclick="setAntFreq(146.520)" style="width:auto;padding:5px 10px;margin:0;font-size:12px">2m</button>
 		  </div>
 		</div>
+	    <div id="ant-input-message"
+		     style="min-height:18px;margin:-12px 0 14px;font-size:12px;color:var(--poor)">
+		</div>
   </div>
   <div id="ant-results" style="display:none">
+    <!-- Wavelength reference -->
+	<div style="margin-bottom:16px">
+	  <div class="section-label">▸ Wavelength Reference</div>
+	  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px"
+	       id="ant-wavelength"></div>
+	</div>
     <!-- Dipole -->
     <div style="margin-bottom:16px">
-      <div class="section-label">▸ Half-Wave Dipole</div>
+      <div class="section-label">▸ Half-Wave Dipole / Inverted-V</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-dipole"></div>
     </div>
     <!-- Verticals -->
     <div style="margin-bottom:16px">
-      <div class="section-label">▸ Verticals &amp; Ground Plane</div>
+      <div class="section-label">▸ Vertical Radiators &amp; Ground Planes</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px" id="ant-vertical"></div>
     </div>
     <!-- Formula notes -->
@@ -11108,31 +11117,76 @@ function antCard(label, ft, m, note) {
 }
 function ft(n) { return n.toFixed(2); }
 function m(n)  { return (n * 0.3048).toFixed(2); }
-
+	
 function calcAntenna() {
-  const f = parseFloat(document.getElementById('ant-freq').value);
-  document.getElementById('ant-placeholder').style.display = f && f > 0 ? 'none' : '';
-  document.getElementById('ant-results').style.display = f && f > 0 ? '' : 'none';
-  if (!f || f <= 0) return;
-  const wl = 984 / f; // full wavelength in feet
-
-  // Dipole
+  const input = document.getElementById('ant-freq');
+  const message = document.getElementById('ant-input-message');
+  const f = input.valueAsNumber;
+  const valid = Number.isFinite(f) && f > 0;
+  document.getElementById('ant-placeholder').style.display = valid ? 'none' : '';
+  document.getElementById('ant-results').style.display = valid ? '' : 'none';
+  if (!valid) {
+    message.textContent = input.value ? 'Enter a frequency greater than 0 MHz.' : '';
+    return;
+  }
+  message.textContent = '';
+  // Reference wavelength in free space
+  const wlFt = 983.57 / f;
+  const wlM = 300 / f;
+  document.getElementById('ant-wavelength').innerHTML =
+    antCard(
+      'Free-Space Wavelength',
+      ft(wlFt),
+      wlM.toFixed(2),
+      'Reference only — practical wire antennas are usually cut shorter and trimmed in place'
+    );
+  // Half-wave dipole or inverted-V
   const dipTotal = 468 / f;
-  const dipLeg   = dipTotal / 2;
+  const dipLeg = dipTotal / 2;
   document.getElementById('ant-dipole').innerHTML =
-    antCard('Total Length (tip to tip)', ft(dipTotal), m(dipTotal), 'Standard formula: 468 / f(MHz)') +
-    antCard('Each Leg (feed to tip)', ft(dipLeg), m(dipLeg), 'Cut two equal legs at this length');
-
-  // Verticals
+    antCard(
+      'Total Length (tip to tip)',
+      ft(dipTotal),
+      m(dipTotal),
+      'Initial cut length: 468 ÷ frequency (MHz)'
+    ) +
+    antCard(
+      'Each Leg (feed to tip)',
+      ft(dipLeg),
+      m(dipLeg),
+      'Cut two equal legs slightly long, then trim evenly after installation'
+    );
+  // Vertical radiator and elevated ground-plane radials
   const qw = 234 / f;
   const hw = 468 / f;
   const fw58 = 585 / f;
   document.getElementById('ant-vertical').innerHTML =
-    antCard('Quarter-wave Vertical', ft(qw), m(qw), '234 / f — needs 4+ radials') +
-    antCard('Half-wave Vertical', ft(hw), m(hw), '468 / f — can be end-fed') +
-    antCard('5/8-wave Vertical', ft(fw58), m(fw58), '585 / f — more gain than 1/4λ, needs matching');
+    antCard(
+      'Quarter-Wave Radiator',
+      ft(qw),
+      m(qw),
+      'Starting radiator length. A ground-mounted vertical needs an earth-coupled radial field.'
+    ) +
+    antCard(
+      'Elevated Radial Starting Length',
+      ft(qw),
+      m(qw),
+      'For a raised ground-plane vertical: start with 3–4+ equal, symmetrical radials near 1/4λ.'
+    ) +
+    antCard(
+      'Half-Wave Vertical Radiator',
+      ft(hw),
+      m(hw),
+      'Starting element length. Requires an appropriate feed/matching system and common-mode control.'
+    ) +
+    antCard(
+      '5/8-Wave Vertical Radiator',
+      ft(fw58),
+      m(fw58),
+      'Starting element length. Requires matching and an effective radial/counterpoise system.'
+    );
 }
-
+	
 // ===========================================
 // RF UNIT CONVERTER
 // ===========================================
