@@ -3662,49 +3662,43 @@ take it with a grain of salt!</div>
 	  Enter a frequency above to calculate antenna dimensions.
 	</div>
 	
-  <!-- GROUNDING GUIDE -->
-  <div class="section-label" style="margin-top:20px">▸ Station Grounding Guide</div>
-  <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Proper grounding protects your equipment, reduces RFI, and is required by electrical code. Two separate ground systems work together in a ham shack.</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-    <div style="background:rgba(0,0,0,.25);border:1px solid rgba(57,255,20,.2);border-radius:var(--r);padding:14px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--good);font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">⚡ Electrical Safety Ground</div>
-      <div style="font-size:12px;color:var(--text);line-height:1.8">The green wire in your AC outlets. Required by electrical code. Protects you from shock if equipment develops a fault. This is <strong>not</strong> the same as RF ground. Your power supply and radio are already connected to this through the wall outlet — nothing extra needed.</div>
+<!-- GROUNDING, BONDING & LIGHTNING SAFETY -->
+<div style="margin-top:20px">
+  <div class="section-label">▸ Grounding, Bonding &amp; Lightning Safety</div>
+  <div style="background:rgba(255,180,0,.055);
+              border:1px solid rgba(255,180,0,.24);
+              border-radius:var(--r);
+              padding:14px 16px;
+              font-size:13px;
+              color:var(--text);
+              line-height:1.75">
+    <div style="font-family:'Barlow Condensed',sans-serif;
+                font-size:14px;
+                font-weight:700;
+                letter-spacing:.1em;
+                text-transform:uppercase;
+                color:var(--amber);
+                margin-bottom:7px">
+      ⚠ Separate—but Related—Station Safety Systems
     </div>
-    <div style="background:rgba(0,0,0,.25);border:1px solid rgba(0,212,255,.2);border-radius:var(--r);padding:14px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">📡 RF Ground</div>
-      <div style="font-size:12px;color:var(--text);line-height:1.8">A separate low-impedance path for RF currents. Reduces RFI into your shack, lowers noise floor on receive, and is required for some antenna systems (verticals, mag loops). This <strong>is</strong> what you need to install yourself.</div>
+    <div style="margin-bottom:10px">
+      <strong style="color:var(--heading)">Electrical safety grounding</strong> protects people
+      during an equipment fault. <strong style="color:var(--heading)">RF return/current control</strong>
+      is part of an antenna system—for example, vertical radials or a counterpoise.
+      <strong style="color:var(--heading)">Lightning and surge protection</strong> concerns feedline
+      entry, correctly rated protectors, bonding, and the building grounding-electrode system.
+      These functions overlap in a complete station installation, but they are not interchangeable.
     </div>
-  </div>
-  <div class="section-label" style="border:none;margin-bottom:8px;padding-bottom:0">How to Install RF Ground — Step by Step</div>
-  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
-    <div style="display:flex;gap:12px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);min-width:24px">1</div>
-      <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text);font-size:15px;margin-bottom:3px">Drive a ground rod outside</div>
-      <div style="font-size:15px;color:var(--text-dim);line-height:1.7">Use an 8-foot copper-clad steel ground rod. Drive it as close to your antenna feedline entry point as possible. One rod is minimum — two rods 8 feet apart bonded together are significantly better.</div></div>
+    <div style="margin-bottom:10px">
+      A ground rod does not replace antenna radials or a counterpoise. Do not create an isolated
+      “radio ground”; permanent grounding and surge-protection work must follow local electrical
+      code, equipment instructions, and the requirements of the existing building grounding system.
     </div>
-    <div style="display:flex;gap:12px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);min-width:24px">2</div>
-      <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text);font-size:15px;margin-bottom:3px">Run a short, direct ground strap</div>
-      <div style="font-size:15px;color:var(--text-dim);line-height:1.7">Use 1–2 inch wide copper braid or strap (not wire — wire has too much inductance for RF). Run from your radio chassis/equipment directly to the ground rod. Keep it as short and straight as possible — every bend adds inductance.</div></div>
+    <div style="color:var(--text-dim)">
+      No grounding system guarantees protection from a direct lightning strike. For permanent
+      installations, consult current code, manufacturer instructions, and a qualified electrician
+      or experienced local amateur-radio installation resource.
     </div>
-    <div style="display:flex;gap:12px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);min-width:24px">3</div>
-      <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text);font-size:15px;margin-bottom:3px">Install a lightning arrestor at the entry point</div>
-      <div style="font-size:15px;color:var(--text-dim);line-height:1.7">Where coax enters the building, install an SO-239 lightning arrestor (MFJ-270 or similar) bonded directly to the ground rod. This diverts surge energy before it reaches your radio.</div></div>
-    </div>
-    <div style="display:flex;gap:12px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);min-width:24px">4</div>
-      <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text);font-size:15px;margin-bottom:3px">Bond all equipment together</div>
-      <div style="font-size:15px;color:var(--text-dim);line-height:1.7">A single copper strap connecting radio, power supply, computer, and tuner together reduces ground loops and RFI. Then connect this bus to your external ground rod.</div></div>
-    </div>
-    <div style="display:flex;gap:12px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px">
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);min-width:24px">5</div>
-      <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text);font-size:15px;margin-bottom:3px">Disconnect outdoors during thunderstorms</div>
-      <div style="font-size:15px;color:var(--text-dim);line-height:1.7">No ground system protects against a direct lightning strike. When a storm approaches, disconnect coax and ground all antennas externally. This is the only reliable protection.</div></div>
-    </div>
-  </div>
-  <div style="font-size:12px;color:var(--text-dim);line-height:1.8;padding:10px 14px;background:rgba(255,165,0,.05);border:1px solid rgba(255,165,0,.2);border-radius:var(--r)">
-    <strong style="color:var(--amber)">Common mistakes:</strong> Using too-thin wire instead of copper strap (wire has inductance that defeats RF grounding at HF). Running ground leads with sharp bends. Connecting to water pipes instead of a driven rod (pipes may not reach earth). Sharing a ground rod with the AC service entrance without bonding them together — NEC requires all ground electrodes within 6 feet be bonded.
   </div>
 </div>
 
