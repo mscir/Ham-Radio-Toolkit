@@ -10636,7 +10636,7 @@ const CW_PROSIGNS = [
   {s:'K (−·−)',d:'Invitation to transmit to any station'},
   {s:'AS (·−···)',d:'Wait / stand by'},
   {s:'SOS (···−−−···)',d:'International distress signal — never send except during a genuine emergency'},
-  {s:'CQ (−·−··−−·)',d:'General call inviting any station to answer'},
+  {s:'CQ (−·−·  −−·−)',d:'General call inviting any station to answer'},
 ];
 
 function initCW() {
@@ -10656,7 +10656,7 @@ function initCW() {
     html += `<div class="cw-card"><div class="cw-char">${e.c}</div><div class="cw-code">${e.m}</div></div>`;
   });
   html += '</div>';
-  html += '<div class="cw-section-hdr">▸ Prosigns &amp; Special Signals</div><div class="cw-prosign-grid">';
+  html += '<div class="cw-section-hdr">▸ Prosigns &amp; Common CW Signals</div><div class="cw-prosign-grid">';
   CW_PROSIGNS.forEach(e => {
     html += `<div class="cw-prosign-card"><div class="cw-prosign-sym">${e.s}</div><div class="cw-prosign-def">${e.d}</div></div>`;
   });
