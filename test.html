@@ -1192,10 +1192,9 @@ body{
   <div class="panel-header">
     <div class="panel-badge">▸ MAIDENHEAD LOCATOR SYSTEM</div>
     <div class="panel-title">Grid Square <span>Calculator</span></div>
-    <div class="panel-desc">Your Maidenhead grid square is a 4–6 character code identifying your location. Required for VHF/UHF contests, satellite work, POTA/SOTA logging, and DXCC distance claims.</div>
+    <div class="panel-desc">A Maidenhead grid locator is a 4- or 6-character code for your operating location. It is commonly exchanged for VHF/UHF and microwave activity, used by weak-signal software and satellite-tracking tools, and useful for logging, portable operation, and distance/bearing calculations.</div>
   </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px">
     <div>
       <div class="section-label" style="border:none;padding-bottom:0;margin-bottom:8px">Convert Coordinates → Grid Square</div>
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -1207,20 +1206,23 @@ body{
           <div style="font-size:12px;color:var(--text-dim);margin-bottom:3px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Longitude (decimal degrees, W=negative)</div>
           <input id="grid-lon" class="calc-input" type="number" step="0.0001" min="-180" max="180" placeholder="e.g. -95.3698" style="width:100%;margin:0" oninput="calcGrid()">
         </div>
-        <div id="grid-result-coords" style="display:none;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
-          <div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px">Your Grid Square</div>
-          <div id="grid-out-4" style="font-size:36px;font-weight:700;color:var(--accent);font-family:'Share Tech Mono',monospace;letter-spacing:.15em"></div>
-          <div id="grid-out-6" style="font-size:14px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;margin-top:4px"></div>
-          <div id="grid-out-desc" style="font-size:12px;color:var(--text-dim);margin-top:8px"></div>
-        </div>
+		<div id="grid-result-coords" style="display:none;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
+		  <div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px">Your Grid Square</div>
+		  <div id="grid-out-4" style="font-size:36px;font-weight:700;color:var(--accent);font-family:'Share Tech Mono',monospace;letter-spacing:.15em"></div>
+		  <div id="grid-out-6" style="font-size:14px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;margin-top:4px"></div>
+		  <div id="grid-out-desc" style="font-size:12px;color:var(--text-dim);margin-top:8px"></div>
+		</div>		
+		<div id="grid-coord-error"
+		     style="display:none;color:var(--poor);font-size:12px">
+		</div>
       </div>
     </div>
     <div>
       <div class="section-label" style="border:none;padding-bottom:0;margin-bottom:8px">Convert Grid Square → Coordinates</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div>
-          <div style="font-size:12px;color:var(--text-dim);margin-bottom:3px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Grid Square (4 or 6 characters)</div>
-          <input id="grid-input" class="calc-input" type="text" placeholder="e.g. EL29 or EL29nv" maxlength="6" style="width:100%;margin:0;text-transform:uppercase" oninput="calcGridReverse()">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:3px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Grid Locator (4 or 6 characters)</div>
+          <input id="grid-input" class="calc-input" type="text" placeholder="e.g. EL29 or EL29nv" maxlength="6" style="width:100%;margin:0;" oninput="calcGridReverse()">
         </div>
         <div id="grid-result-reverse" style="display:none;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:var(--r);padding:14px">
           <div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">Center coordinates</div>
@@ -1249,13 +1251,13 @@ body{
     </div>
     <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--amber);font-size:13px;margin-bottom:6px">Subsquare (6 chars)</div>
-      <div style="font-size:12px;color:var(--text-dim);line-height:1.7">Square + two lowercase letters (aa–xx). Each subsquare is 5′ longitude × 2.5′ latitude. Used for precise VHF/UHF work.</div>
+      <div style="font-size:12px;color:var(--text-dim);line-height:1.7">Square + two letters (aa–xx). Each subsquare is 5′ longitude × 2.5′ latitude. Useful when a more precise locator is requested, such as microwave activity, detailed portable-location reporting, or certain VHF/UHF applications.</div>
       <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--amber);margin-top:6px">EL29<strong>nv</strong></div>
     </div>
   </div>
   <div style="font-size:12px;color:var(--text-dim);line-height:1.8">
-       <strong style="color:var(--text)">When you need your grid square:</strong> POTA/SOTA activation logs, VHF/UHF contest exchanges, satellite doppler correction, VUCC award (contacting stations in 100+ different grid squares), digital mode software (WSJT-X uses it automatically), and QRZ.com profile.
- 	<p><strong style="color:var(--text)">This web site will show you your latitude, longitude and grid square when you find your location on a map.</strong> <a href='https://www.levinecentral.com/ham/grid_square.php' target='_blank'>Amateur Radio Ham Radio Maidenhead Grid Square Locator Map</a>.</p>
+     <strong style="color:var(--text)"><strong style="color:var(--text)">Common uses:</strong> VHF/UHF and microwave contest exchanges, weak-signal digital software such as WSJT-X, satellite tracking/pass prediction, portable-operation planning, station profiles, and awards based on grid contacts such as VUCC. Four-character grids are common; use six characters when greater location precision is requested.
+ 	 <p style="margin:10px 0 0"><strong style="color:var(--text)">Need coordinates from a map?</strong>Use a mapping/GPS source to find your decimal latitude and longitude, then enter them above. You can also use the <a href="https://www.levinecentral.com/ham/grid_square.php" target="_blank" rel="noopener noreferrer">Maidenhead Grid Square Locator Map </a>.</p>
   </div>
 </div><!-- end panel-grid -->
 
@@ -5501,42 +5503,63 @@ document.querySelectorAll('.band-sel-btn:not([onclick="showBandChar()"])').forEa
 // MAIDENHEAD GRID SQUARE CALCULATOR
 // ===========================================
 function calcGrid() {
-  const lat = parseFloat(document.getElementById('grid-lat')?.value);
-  const lon = parseFloat(document.getElementById('grid-lon')?.value);
+  const latInput = document.getElementById('grid-lat');
+  const lonInput = document.getElementById('grid-lon');
   const res = document.getElementById('grid-result-coords');
-  if (!res) return;
-  if (isNaN(lat)||isNaN(lon)||lat<-90||lat>90||lon<-180||lon>180) { res.style.display='none'; return; }
-
-  // Save to cookie
-  const exp = new Date(); exp.setFullYear(exp.getFullYear()+5);
+  const err = document.getElementById('grid-coord-error');
+  if (!latInput || !lonInput || !res || !err) return;
+  const lat = latInput.valueAsNumber;
+  const lon = lonInput.valueAsNumber;
+  const hasAnyInput = latInput.value !== '' || lonInput.value !== '';
+  const valid = Number.isFinite(lat) &&
+                Number.isFinite(lon) &&
+                lat >= -90 && lat <= 90 &&
+                lon >= -180 && lon <= 180;
+  if (!valid) {
+    res.style.display = 'none';
+    if (hasAnyInput) {
+      err.style.display = '';
+      err.textContent = 'Enter latitude from −90 to 90 and longitude from −180 to 180.';
+    } else {
+      err.style.display = 'none';
+      err.textContent = '';
+    }
+    return;
+  }
+  err.style.display = 'none';
+  err.textContent = '';
+  const exp = new Date();
+  exp.setFullYear(exp.getFullYear() + 5);
   document.cookie = `hamLatLon=${lat},${lon};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
-
   const grid4 = latLonToGrid(lat, lon, 4);
   const grid6 = latLonToGrid(lat, lon, 6);
-  res.style.display='';
+  res.style.display = '';
   document.getElementById('grid-out-4').textContent = grid4;
   document.getElementById('grid-out-6').textContent = '6-char: ' + grid6;
   document.getElementById('grid-out-desc').textContent =
-    `${Math.abs(lat).toFixed(4)}°${lat>=0?'N':'S'} ${Math.abs(lon).toFixed(4)}°${lon>=0?'E':'W'}`;
-
-  // Sync grid square field in DXCC panel
+    `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? 'N' : 'S'} ` +
+    `${Math.abs(lon).toFixed(4)}°${lon >= 0 ? 'E' : 'W'}`;
   const gf = document.getElementById('dxcc-mygrid');
-  if (gf && !gf.value) { gf.value = grid4; saveDxccGrid(); }
+  if (gf && !gf.value) {
+    gf.value = grid4;
+    saveDxccGrid();
+  }
 }
 
 function calcGridReverse() {
-  const raw = (document.getElementById('grid-input')?.value||'').toUpperCase().trim();
+  const raw = (document.getElementById('grid-input')?.value || '').trim();
+  const normalized = raw.slice(0, 4).toUpperCase() + raw.slice(4).toLowerCase();
   const res = document.getElementById('grid-result-reverse');
   const err = document.getElementById('grid-error');
   if (!res||!err) return;
   if (raw.length < 4) { res.style.display='none'; err.style.display='none'; return; }
   try {
-    const {lat, lon} = gridToLatLonCenter(raw);
+    const {lat, lon} = gridToLatLonCenter(normalized);
     res.style.display=''; err.style.display='none';
     document.getElementById('rev-lat').textContent = lat.toFixed(4) + '° ' + (lat>=0?'N':'S');
     document.getElementById('rev-lon').textContent = Math.abs(lon).toFixed(4) + '° ' + (lon>=0?'E':'W');
     document.getElementById('rev-desc').textContent =
-      `Grid ${raw} covers approximately ${raw.length>=6?'5′ lon × 2.5′ lat':'2° lon × 1° lat'}`;
+      `Grid ${normalized} covers approximately ${normalized.length >= 6 ? '5′ longitude × 2.5′ latitude' : '2° longitude × 1° latitude'}`
   } catch(e) {
     res.style.display='none';
     err.style.display=''; err.textContent = '⚠ Invalid grid square format. Use 4 chars (EL29) or 6 chars (EL29nv).';
@@ -5544,16 +5567,18 @@ function calcGridReverse() {
 }
 
 function latLonToGrid(lat, lon, len) {
-  const adj_lon = lon + 180;
-  const adj_lat = lat + 90;
+  const safeLat = Math.min(89.999999, Math.max(-90, lat));
+  const safeLon = Math.min(179.999999, Math.max(-180, lon));
+  const adjLon = safeLon + 180;
+  const adjLat = safeLat + 90;
   let grid = '';
-  grid += String.fromCharCode(65 + Math.floor(adj_lon / 20));
-  grid += String.fromCharCode(65 + Math.floor(adj_lat / 10));
-  grid += String(Math.floor((adj_lon % 20) / 2));
-  grid += String(Math.floor(adj_lat % 10));
+  grid += String.fromCharCode(65 + Math.floor(adjLon / 20));
+  grid += String.fromCharCode(65 + Math.floor(adjLat / 10));
+  grid += String(Math.floor((adjLon % 20) / 2));
+  grid += String(Math.floor(adjLat % 10));
   if (len >= 6) {
-    grid += String.fromCharCode(97 + Math.floor((adj_lon % 2) / (2/24)));
-    grid += String.fromCharCode(97 + Math.floor((adj_lat % 1) / (1/24)));
+    grid += String.fromCharCode(97 + Math.floor((adjLon % 2) / (2 / 24)));
+    grid += String.fromCharCode(97 + Math.floor((adjLat % 1) / (1 / 24)));
   }
   return grid;
 }
