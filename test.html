@@ -1238,26 +1238,62 @@ body{
   </div>
 
   <div class="section-label">▸ How Grid Squares Work</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px">
-    <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--accent);font-size:13px;margin-bottom:6px">Field (2 chars)</div>
-      <div style="font-size:12px;color:var(--text-dim);line-height:1.7">Two letters (AA–RR). Each field is 20° longitude × 10° latitude. 324 fields worldwide.</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--accent);margin-top:6px"><strong>EL</strong>29nv</div>
-    </div>
-    <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--good);font-size:13px;margin-bottom:6px">Square (4 chars)</div>
-      <div style="font-size:12px;color:var(--text-dim);line-height:1.7">Field + two digits (00–99). Each square is 2° longitude × 1° latitude. Most logging uses 4 chars.</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--good);margin-top:6px">EL<strong>29</strong>nv</div>
-    </div>
-    <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--amber);font-size:13px;margin-bottom:6px">Subsquare (6 chars)</div>
-      <div style="font-size:12px;color:var(--text-dim);line-height:1.7">Square + two letters (aa–xx). Each subsquare is 5′ longitude × 2.5′ latitude. Useful when a more precise locator is requested, such as microwave activity, detailed portable-location reporting, or certain VHF/UHF applications.</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--amber);margin-top:6px">EL29<strong>nv</strong></div>
-    </div>
-  <div style="font-size:12px;color:var(--text-dim);line-height:1.8">
-     <strong style="color:var(--text)"><strong style="color:var(--text)">Common uses:</strong> VHF/UHF and microwave contest exchanges, weak-signal digital software such as WSJT-X, satellite tracking/pass prediction, portable-operation planning, station profiles, and awards based on grid contacts such as VUCC. Four-character grids are common; use six characters when greater location precision is requested.
- 	 <p style="margin:10px 0 0"><strong style="color:var(--text)">Need coordinates from a map?</strong>Use a mapping/GPS source to find your decimal latitude and longitude, then enter them above. You can also use the <a href="https://www.levinecentral.com/ham/grid_square.php" target="_blank" rel="noopener noreferrer">Maidenhead Grid Square Locator Map </a>.</p>
-  </div>
+	<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px">
+	  <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--accent);font-size:13px;margin-bottom:6px">
+	      Field (2 chars)
+	    </div>
+	    <div style="font-size:12px;color:var(--text-dim);line-height:1.7">
+	      Two letters (AA–RR). Each field is 20° longitude × 10° latitude.
+	      There are 324 fields worldwide.
+	    </div>
+	    <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--accent);margin-top:6px">
+	      <strong>EL</strong>29nv
+	    </div>
+	  </div>
+	  <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--good);font-size:13px;margin-bottom:6px">
+	      Square (4 chars)
+	    </div>
+	    <div style="font-size:12px;color:var(--text-dim);line-height:1.7">
+	      Field + two digits (00–99). Each square is 2° longitude × 1° latitude.
+	      Four characters are commonly used for contest exchanges and station locations.
+	    </div>
+	    <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--good);margin-top:6px">
+	      EL<strong>29</strong>nv
+	    </div>
+	  </div>
+	  <div style="background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+	    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--amber);font-size:13px;margin-bottom:6px">
+	      Subsquare (6 chars)
+	    </div>
+	    <div style="font-size:12px;color:var(--text-dim);line-height:1.7">
+	      Square + two letters (aa–xx). Each subsquare is 5′ longitude × 2.5′ latitude.
+	      Use it when greater location precision is requested, such as microwave activity,
+	      detailed portable-location reporting, or certain VHF/UHF applications.
+	    </div>
+	    <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--amber);margin-top:6px">
+	      EL29<strong>nv</strong>
+	    </div>
+	  </div>
+	</div>
+	<div style="font-size:12px;color:var(--text-dim);line-height:1.8">
+	  <strong style="color:var(--text)">Common uses:</strong>
+	  VHF/UHF and microwave contest exchanges, weak-signal digital software such as WSJT-X,
+	  satellite tracking and pass prediction, portable-operation planning, station profiles,
+	  and awards based on grid contacts such as VUCC. Four-character grids are common; use
+	  six characters when greater location precision is requested.
+	  <p style="margin:10px 0 0">
+	    <strong style="color:var(--text)">Need coordinates from a map?</strong>
+	    Use a mapping or GPS source to find your decimal latitude and longitude, then enter
+	    them above. You can also use the
+	    <a href="https://www.levinecentral.com/ham/grid_square.php"
+	       target="_blank"
+	       rel="noopener noreferrer">
+	      Maidenhead Grid Square Locator Map
+	    </a>.
+	  </p>
+	</div>
 </div><!-- end panel-grid -->
 
 <!-- PANEL: BEACONS -->
