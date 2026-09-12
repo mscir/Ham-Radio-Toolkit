@@ -710,7 +710,18 @@ body{
 .abbr-c{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;display:flex;gap:10px}
 .abbr-k{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--amber);min-width:56px}
 .abbr-v{font-size:14px;color:var(--text);line-height:1.5}
-
+/* added to fix morse to stay on top of explanation and not split into 2 lines */
+.cw-prosign-card{
+  display:block;
+}
+.cw-prosign-sym{
+  white-space:nowrap;
+  margin-bottom:6px;
+}
+.cw-prosign-def{
+  line-height:1.55;
+}
+	
 /* ── COLLAPSIBLE SECTIONS ── */
 /* .collapse-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:14px} */
 .collapse-hdr {
@@ -778,10 +789,35 @@ body{
 .cw-code{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--amber);letter-spacing:.08em}
 .cw-section-hdr{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);padding-bottom:8px;border-bottom:1px solid var(--border);margin:16px 0 10px}
 .cw-section-hdr:first-child{margin-top:0}
+/* old 
 .cw-prosign-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin-bottom:12px}
 .cw-prosign-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;display:flex;gap:10px;align-items:flex-start}
 .cw-prosign-sym{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--good);min-width:60px}
-.cw-prosign-def{font-size:15px;color:var(--text);line-height:1.5}
+.cw-prosign-def{font-size:15px;color:var(--text);line-height:1.5}   */
+.cw-prosign-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:8px;
+}
+.cw-prosign-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:11px 13px;
+  display:block;
+}
+.cw-prosign-sym{
+  font-family:'Share Tech Mono',monospace;
+  font-size:16px;
+  color:var(--accent);
+  white-space:nowrap;
+  margin-bottom:6px;
+}
+.cw-prosign-def{
+  font-size:13px;
+  color:var(--text);
+  line-height:1.55;
+}	
 #priv-full-band-tbody tr.highlight{background:rgba(0,212,255,.12) !important}
 #priv-full-band-tbody tr:hover{background:rgba(0,212,255,.04)}
 .bp-filter-btn{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--panel);color:var(--text-dim);cursor:pointer;transition:all .15s}
@@ -3240,7 +3276,9 @@ infrastructure is down.</div>
     <button class="ref-tab" onclick="showRef('speller',this)">📢 Callsign Speller</button>
   </div>
   <div id="ref-qcodes" class="ref-content active"><div class="qcode-grid" id="qcode-grid"><div class="qcode-card"><div class="qcode-abbr">QRM</div><div class="qcode-def">Man-made <strong>interference</strong> from other stations. "You have QRM" = noise from other transmitters.</div></div><div class="qcode-card"><div class="qcode-abbr">QRN</div><div class="qcode-def"><strong>Static/atmospheric noise</strong> — lightning crashes, geomagnetic noise. "Heavy QRN tonight."</div></div><div class="qcode-card"><div class="qcode-abbr">QRO</div><div class="qcode-def"><strong>Increase transmitter power.</strong> "Please QRO" = turn it up.</div></div><div class="qcode-card"><div class="qcode-abbr">QRP</div><div class="qcode-def"><strong>Decrease transmitter power</strong>, or the low-power (&lt;5W) operating style. "I'm running QRP."</div></div><div class="qcode-card"><div class="qcode-abbr">QRQ</div><div class="qcode-def"><strong>Send faster.</strong> "QRQ PSE" = please speed up your Morse.</div></div><div class="qcode-card"><div class="qcode-abbr">QRS</div><div class="qcode-def"><strong>Send more slowly.</strong> Most common CW request for new operators. Always honored.</div></div><div class="qcode-card"><div class="qcode-abbr">QRT</div><div class="qcode-def"><strong>Stop transmitting / shut down.</strong> "Going QRT" = signing off the air.</div></div><div class="qcode-card"><div class="qcode-abbr">QRZ</div><div class="qcode-def"><strong>Who is calling me?</strong> Used at the end of a CQ or when you're not sure who called.</div></div><div class="qcode-card"><div class="qcode-abbr">QSB</div><div class="qcode-def"><strong>Signal fading</strong> (varying strength). "Heavy QSB on 20m tonight."</div></div><div class="qcode-card"><div class="qcode-abbr">QSL</div><div class="qcode-def"><strong>I confirm / acknowledge</strong>, or the confirmation card sent after a QSO. "QSL?" = did you copy?</div></div><div class="qcode-card"><div class="qcode-abbr">QSO</div><div class="qcode-def">A <strong>contact / conversation</strong> between two or more stations. "I had a great QSO."</div></div><div class="qcode-card"><div class="qcode-abbr">QSY</div><div class="qcode-def"><strong>Change frequency.</strong> "Shall we QSY to 14.250?" = let's move.</div></div><div class="qcode-card"><div class="qcode-abbr">QTH</div><div class="qcode-def"><strong>Location.</strong> "My QTH is Houston, Texas." Essential exchange in every QSO.</div></div><div class="qcode-card"><div class="qcode-abbr">QRX</div><div class="qcode-def"><strong>Wait / stand by.</strong> "QRX 5 minutes" = I'll be back in 5 minutes.</div></div><div class="qcode-card"><div class="qcode-abbr">QTX</div><div class="qcode-def"><strong>Keep your station open</strong> for further communication.</div></div><div class="qcode-card"><div class="qcode-abbr">QRU</div><div class="qcode-def"><strong>I have nothing for you.</strong> No traffic or messages to pass.</div></div><div class="qcode-card"><div class="qcode-abbr">QSP</div><div class="qcode-def"><strong>Relay a message</strong> to another station on my behalf. "Will you QSP to W1ABC?"</div></div><div class="qcode-card"><div class="qcode-abbr">QNI</div><div class="qcode-def"><strong>Net check-in.</strong> "QNI" = I am checking into the net.</div></div><div class="qcode-card"><div class="qcode-abbr">QNX</div><div class="qcode-def"><strong>Dismissed from net.</strong> Net control releases you.</div></div><div class="qcode-card"><div class="qcode-abbr">QRV</div><div class="qcode-def"><strong>Ready to operate.</strong> "Are you QRV?" = are you ready?</div></div><div class="qcode-card"><div class="qcode-abbr">QSK</div><div class="qcode-def"><strong>Break-in CW</strong> — full QSK means the other station can interrupt your transmission between dots and dashes.</div></div><div class="qcode-card"><div class="qcode-abbr">QRK</div><div class="qcode-def"><strong>Readability</strong> of your signal (scale 1–5). Rarely used; RST system more common today.</div></div><div class="qcode-card"><div class="qcode-abbr">QNB</div><div class="qcode-def"><strong>Net control</strong>. Indicates who is running the net.</div></div><div class="qcode-card"><div class="qcode-abbr">QST</div><div class="qcode-def"><strong>General call to all amateurs</strong> — ARRL's magazine is named QST. On-air: "QST QST" = attention all stations.</div></div></div></div>
-  <div id="ref-phonetics" class="ref-content"><div class="phonetic-grid" id="phonetic-grid"><div class="phone-card"><div class="phone-letter">A</div><div><div class="phone-word">Alfa</div><div class="phone-pron">AL-FAH</div></div></div><div class="phone-card"><div class="phone-letter">B</div><div><div class="phone-word">Bravo</div><div class="phone-pron">BRAH-VOH</div></div></div><div class="phone-card"><div class="phone-letter">C</div><div><div class="phone-word">Charlie</div><div class="phone-pron">CHAR-LEE</div></div></div><div class="phone-card"><div class="phone-letter">D</div><div><div class="phone-word">Delta</div><div class="phone-pron">DELL-TAH</div></div></div><div class="phone-card"><div class="phone-letter">E</div><div><div class="phone-word">Echo</div><div class="phone-pron">ECK-OH</div></div></div><div class="phone-card"><div class="phone-letter">F</div><div><div class="phone-word">Foxtrot</div><div class="phone-pron">FOKS-TROT</div></div></div><div class="phone-card"><div class="phone-letter">G</div><div><div class="phone-word">Golf</div><div class="phone-pron">GOLF</div></div></div><div class="phone-card"><div class="phone-letter">H</div><div><div class="phone-word">Hotel</div><div class="phone-pron">HOH-TEL</div></div></div><div class="phone-card"><div class="phone-letter">I</div><div><div class="phone-word">India</div><div class="phone-pron">IN-DEE-AH</div></div></div><div class="phone-card"><div class="phone-letter">J</div><div><div class="phone-word">Juliet</div><div class="phone-pron">JEW-LEE-ETT</div></div></div><div class="phone-card"><div class="phone-letter">K</div><div><div class="phone-word">Kilo</div><div class="phone-pron">KEY-LOH</div></div></div><div class="phone-card"><div class="phone-letter">L</div><div><div class="phone-word">Lima</div><div class="phone-pron">LEE-MAH</div></div></div><div class="phone-card"><div class="phone-letter">M</div><div><div class="phone-word">Mike</div><div class="phone-pron">MIKE</div></div></div><div class="phone-card"><div class="phone-letter">N</div><div><div class="phone-word">November</div><div class="phone-pron">NO-VEM-BER</div></div></div><div class="phone-card"><div class="phone-letter">O</div><div><div class="phone-word">Oscar</div><div class="phone-pron">OSS-CAH</div></div></div><div class="phone-card"><div class="phone-letter">P</div><div><div class="phone-word">Papa</div><div class="phone-pron">PAH-PAH</div></div></div><div class="phone-card"><div class="phone-letter">Q</div><div><div class="phone-word">Quebec</div><div class="phone-pron">KEH-BECK</div></div></div><div class="phone-card"><div class="phone-letter">R</div><div><div class="phone-word">Romeo</div><div class="phone-pron">ROW-ME-OH</div></div></div><div class="phone-card"><div class="phone-letter">S</div><div><div class="phone-word">Sierra</div><div class="phone-pron">SEE-AIR-AH</div></div></div><div class="phone-card"><div class="phone-letter">T</div><div><div class="phone-word">Tango</div><div class="phone-pron">TANG-GO</div></div></div><div class="phone-card"><div class="phone-letter">U</div><div><div class="phone-word">Uniform</div><div class="phone-pron">YOU-NEE-FORM</div></div></div><div class="phone-card"><div class="phone-letter">V</div><div><div class="phone-word">Victor</div><div class="phone-pron">VIK-TAH</div></div></div><div class="phone-card"><div class="phone-letter">W</div><div><div class="phone-word">Whiskey</div><div class="phone-pron">WISS-KEY</div></div></div><div class="phone-card"><div class="phone-letter">X</div><div><div class="phone-word">X-ray</div><div class="phone-pron">ECKS-RAY</div></div></div><div class="phone-card"><div class="phone-letter">Y</div><div><div class="phone-word">Yankee</div><div class="phone-pron">YANG-KEY</div></div></div><div class="phone-card"><div class="phone-letter">Z</div><div><div class="phone-word">Zulu</div><div class="phone-pron">ZOO-LOO</div></div></div></div></div>
+  <div id="ref-phonetics" class="ref-content">
+	  <div class="phonetic-grid" id="phonetic-grid"></div>
+   </div>
   <div id="ref-cw" class="ref-content"><div id="cw-content"></div></div>
   <div id="ref-rst" class="ref-content"><div id="rst-content"><div style="font-size: 12px; color: var(--text); line-height: 1.7; margin-bottom: 14px;">The <strong style="color: var(--heading);">RST system</strong> gives a 3-digit signal report: <strong style="color: var(--accent);">Readability (1–5)</strong>, <strong style="color: var(--amber);">Strength (1–9)</strong>, <strong style="color: var(--good);">Tone (1–9, CW only)</strong>.
  A "59" phone report means perfectly readable, extremely strong. CW 
@@ -10455,6 +10493,18 @@ if (matches.length === 0) {
 
 const QCODES = [
   {
+    code: 'QNB',
+    def: '<strong>Answer a net call.</strong> It does not mean "net control"; its exact question/answer form depends on context.'
+  },
+  {
+    code: 'QNI',
+    def: '<strong>I am checking into the net.</strong> Often sent as an answer to a net-control call.'
+  },
+  {
+    code: 'QNX',
+    def: '<strong>You are excused from the net</strong>, or "I am excused from the net," depending on context.'
+  },
+  {
     code: 'QRM',
     def: '<strong>Interference</strong> from other signals or stations. "I have QRM" means another signal is making reception difficult.'
   },
@@ -10481,6 +10531,10 @@ const QCODES = [
   {
     code: 'QRT',
     def: '<strong>Stop transmitting / close the station.</strong> "Going QRT" commonly means signing off.'
+  },
+  {
+    code: 'QRU',
+    def: '<strong>I have nothing for you.</strong> No traffic or messages to pass.'
   },
   {
     code: 'QRV',
@@ -10511,6 +10565,14 @@ const QCODES = [
     def: '<strong>Contact or conversation</strong> between amateur stations. "I had a great QSO."'
   },
   {
+    code: 'QSP',
+    def: '<strong>Relay a message</strong> to another station. "Will you QSP to W1ABC?" asks whether the station can relay traffic.'
+  },
+  {
+    code: 'QST',
+    def: '<strong>General announcement to all stations.</strong> Use CQ, not QST, when calling for an individual contact.'
+  },
+  {
     code: 'QSY',
     def: '<strong>Change frequency.</strong> "QSY to 14.250" means move to that frequency.'
   },
@@ -10519,32 +10581,8 @@ const QCODES = [
     def: '<strong>Location.</strong> A common, optional exchange; share only the level of location detail you are comfortable disclosing.'
   },
   {
-    code: 'QNI',
-    def: '<strong>I am checking into the net.</strong> Often sent as an answer to a net-control call.'
-  },
-  {
-    code: 'QNX',
-    def: '<strong>You are excused from the net</strong>, or "I am excused from the net," depending on context.'
-  },
-  {
-    code: 'QSP',
-    def: '<strong>Relay a message</strong> to another station. "Will you QSP to W1ABC?" asks whether the station can relay traffic.'
-  },
-  {
-    code: 'QRU',
-    def: '<strong>I have nothing for you.</strong> No traffic or messages to pass.'
-  },
-  {
-    code: 'QNB',
-    def: '<strong>Answer a net call.</strong> It does not mean "net control"; its exact question/answer form depends on context.'
-  },
-  {
-    code: 'QRK',
-    def: '<strong>Readability of a signal</strong> on a 1–5 scale. The R portion of the RST report is more familiar in modern amateur use.'
-  },
-  {
-    code: 'QST',
-    def: '<strong>General announcement to all stations.</strong> Use CQ, not QST, when calling for an individual contact.'
+    code: 'QTX',
+    def: '<strong>Keep your station open</strong> for further communication.'
   }
 ];
 
@@ -10569,41 +10607,41 @@ const RST_ROWS = [
 const ABBRS = [
   {k:'73',v:'Best regards. A traditional closing; say or send “73,” not “73s.”'},
   {k:'88',v:'Traditionally “love and kisses.” Use only when appropriate and welcome.'},
-  {k:'CQ',v:'Calling any station — general call.'},
-  {k:'DE',v:'"From" — precedes your callsign: "W1ABC DE KG5NEW"'},
-  {k:'AR',v:'End of message (CW prosign ·−·−·)'},
-  {k:'SK',v:'End of contact / signing off (CW)'},
-  {k:'K',v:'Invitation to transmit to any station'},
-  {k:'KN',v:'Invitation to transmit to specific station only'},
+  {k:'AGN',v:'“Again” — please repeat.'},
+  {k:'ANT',v:'Antenna.'},
+  {k:'AR',v:'End of message (CW prosign ·−·−·).'},
+  {k:'ARES',v:'Amateur Radio Emergency Service — volunteer emergency communications.'},
+  {k:'ARRL',v:'American Radio Relay League — U.S. national amateur-radio association.'},
+  {k:'BCNU',v:'“Be seeing you.”'},
   {k:'BK',v:'“Break” — commonly hands the conversation back to the other station.'},
-  {k:'PSE',v:'"Please"'},
-  {k:'TU',v:'"Thank you"'},
-  {k:'OM',v:'"Old Man" — friendly term for any male ham'},
-  {k:'YL',v:'"Young Lady" — any female ham operator'},
-  {k:'XYL',v:'Traditional ham shorthand for a spouse/wife; use only if the person chooses that term.'},
-  {k:'HI',v:'CW/text laugh — “hi hi,” similar to “haha.”'},
-  {k:'CUL',v:'"See you later"'},
-  {k:'FB',v:'"Fine business" — great, excellent'},
-  {k:'GUD',v:'"Good"'},
-  {k:'NR',v:'"Number" or "near"'},
-  {k:'RPT',v:'"Repeat"'},
-  {k:'WX',v:'"Weather"'},
-  {k:'RIG',v:'Your radio / transceiver'},
-  {k:'ANT',v:'Antenna'},
-  {k:'PWR',v:'Power'},
-  {k:'AGN',v:'"Again" — please repeat'},
-  {k:'NW',v:'"Now"'},
-  {k:'HW?',v:'"How do you copy?" — check readability'},
-  {k:'GA',v:'"Go ahead" or "Good afternoon"'},
-  {k:'GM/GE',v:'"Good morning / Good evening"'},
-  {k:'ES',v:'"And" (& in Morse)'},
-  {k:'VY',v:'"Very" — VY 73 = very best regards'},
-  {k:'BCNU',v:'"Be seeing you"'},
-  {k:'NVIS',v:'Near-Vertical Incidence Skywave — HF propagation for regional coverage, often roughly 0–300 miles depending on conditions.'},
+  {k:'CQ',v:'Calling any station — general call.'},
+  {k:'CUL',v:'“See you later.”'},
+  {k:'DE',v:'“From” — precedes your callsign: “W1ABC DE KG5NEW.”'},
   {k:'DX',v:'A distant station or long-distance contact; meaning depends on the band and context.'},
-  {k:'ARRL',v:'American Radio Relay League — national amateur radio organization'},
-  {k:'ARES',v:'Amateur Radio Emergency Service — volunteer emergency comms'},
-  {k:'RACES',v:'Radio Amateur Civil Emergency Service — government emergency comms'},
+  {k:'ES',v:'“And” (& in Morse).'},
+  {k:'FB',v:'“Fine business” — great, excellent.'},
+  {k:'GA',v:'“Go ahead” or “Good afternoon,” depending on context.'},
+  {k:'GM/GE',v:'“Good morning / Good evening.”'},
+  {k:'GUD',v:'“Good.”'},
+  {k:'HI',v:'CW/text laugh — “hi hi,” similar to “haha.”'},
+  {k:'HW?',v:'“How do you copy?” — asks about readability.'},
+  {k:'K',v:'Invitation to transmit to any station.'},
+  {k:'KN',v:'Invitation to transmit to a specific station only.'},
+  {k:'NVIS',v:'Near-Vertical Incidence Skywave — HF propagation for regional coverage, often roughly 0–300 miles depending on conditions.'},
+  {k:'NR',v:'“Number” or “near,” depending on context.'},
+  {k:'NW',v:'“Now.”'},
+  {k:'OM',v:'Traditional friendly term for a male ham operator.'},
+  {k:'PSE',v:'“Please.”'},
+  {k:'PWR',v:'Power.'},
+  {k:'RACES',v:'Radio Amateur Civil Emergency Service — a U.S. civil-defense communications service.'},
+  {k:'RIG',v:'Your radio or transceiver.'},
+  {k:'RPT',v:'“Repeat.”'},
+  {k:'SK',v:'End of contact / signing off (CW prosign).'},
+  {k:'TU',v:'“Thank you.”'},
+  {k:'VY',v:'“Very” — for example, “VY 73” means “very best regards.”'},
+  {k:'WX',v:'Weather.'},
+  {k:'XYL',v:'Traditional ham shorthand for a spouse/wife; use only if the person chooses that term.'},
+  {k:'YL',v:'Traditional friendly term for a female ham operator.'}
 ];
 
 const CW_ALPHABET = [
@@ -10673,9 +10711,18 @@ function initQCodes() {
     g.innerHTML += `<div class="qcode-card"><div class="qcode-abbr">${q.code}</div><div class="qcode-def">${q.def}</div></div>`;
   });
   const pg = document.getElementById('phonetic-grid');
-  PHONETICS.forEach(p => {
-    pg.innerHTML += `<div class="phone-card"><div class="phone-letter">${p.l}</div><div><div class="phone-word">${p.w}</div><div class="phone-pron">${p.p}</div></div></div>`;
-  });
+	pg.innerHTML = '';	
+	PHONETICS.forEach(p => {
+	  pg.innerHTML += `
+	    <div class="phone-card">
+	      <div class="phone-letter">${p.l}</div>
+	      <div>
+	        <div class="phone-word">${p.w}</div>
+	        <div class="phone-pron">${p.p}</div>
+	      </div>
+	    </div>
+	  `;
+	});
   const rc = document.getElementById('rst-content');
   rc.innerHTML = `<div style="font-size:12px;color:var(--text);line-height:1.7;margin-bottom:14px">The <strong style="color:var(--heading)">RST system</strong> gives a 3-digit signal report: <strong style="color:var(--accent)">Readability (1–5)</strong>, <strong style="color:var(--amber)">Strength (1–9)</strong>, <strong style="color:var(--good)">Tone (1–9, CW only)</strong>. A "59" phone report means perfectly readable, extremely strong. CW reports are 3 digits (e.g. 599). Phone is 2 digits (e.g. 59). In many contests, exchanges commonly use 59 or 599 as a convention even when conditions vary. Outside that context, a useful report describes what you can actually copy.</div>
   <table class="rst-table"><thead><tr><th>Code</th><th>Meaning</th></tr></thead><tbody>${RST_ROWS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
