@@ -1650,7 +1650,7 @@ body{
     <div class="sw-card" id="solarFluxCard"><div class="sw-label">Solar Flux (F10.7)</div><div id="solarFlux" class="sw-value">—</div><div id="solarFluxTime" class="sw-small"></div></div>
     <div class="sw-card" id="sunspotsCard"><div class="sw-label">Monthly Sunspot Number</div><div id="sunspots" class="sw-value">—</div><div id="sunspotsTime" class="sw-small"></div></div>
     <div class="sw-card" id="kpCard"><div class="sw-label">K Index / Kp</div><div id="kp" class="sw-value">—</div><div id="kpTime" class="sw-small"></div></div>
-    <div class="sw-card" id="aindexCard"><div class="sw-label">A Index</div><div id="aindex" class="sw-value">—</div><div id="aindexTime" class="sw-small"></div></div>
+    <div class="sw-card" id="aindexCard"><div class="sw-label">Predicted Fredericksburg A</div></div><div id="aindex" class="sw-value">—</div><div id="aindexTime" class="sw-small"></div></div>
     <div class="sw-card" id="xrayCard">
       <div class="sw-label">X-ray Flux</div>
       <div id="xrayA" class="sw-value">—</div><div class="sw-small">XRS-A: 0.05–0.4 nm</div>
@@ -1725,16 +1725,31 @@ body{
       </div>
     </div>
     <div class="exp-card c-orange">
-      <div class="exp-title">A Index</div>
-      <div class="exp-abbr">Ap — Planetary Equivalent Amplitude</div>
-      <div class="exp-body">The A-index is a <strong>daily average</strong> of geomagnetic activity — essentially a linear version of the logarithmic K-index, averaged over 24 hours from eight 3-hour K readings. While the K-index tells you what's happening right now, the A-index reflects how <strong>disturbed the day as a whole has been</strong>. High A-index indicates a stormy period that may persist.
-        <table class="exp-range-table"><tbody>
-          <tr><td class="val-good">0–7</td><td>Quiet day. Good conditions likely.</td></tr>
-          <tr><td class="val-fair">8–15</td><td>Unsettled. Some degradation possible.</td></tr>
-          <tr><td class="val-fair">16–29</td><td>Active. Moderate storm impact.</td></tr>
-          <tr><td class="val-poor">≥ 30</td><td>Storm day. Significant HF disruption.</td></tr>
-        </tbody></table>
-      </div>
+	   <div class="exp-title">Predicted Fredericksburg A</div>
+       <div class="exp-abbr">Forecast A-index for Fredericksburg, Virginia</div>
+       <div class="exp-body">
+		  This dashboard displays NOAA SWPC’s <strong>predicted Fredericksburg A-index</strong>,
+		  a forecast-oriented geomagnetic indicator for the Fredericksburg, Virginia
+		  magnetometer station. It is useful for anticipating whether geomagnetic
+		  conditions may become more disturbed, but it is <strong>not the same as the
+		  observed global planetary Ap index</strong>.		
+		  <br><br>		
+		  The station A-index is derived from a station’s three-hour magnetic-field
+		  disturbance readings and summarizes geomagnetic activity on a linear scale.
+		  Higher values generally mean a more disturbed magnetic environment and a
+		  greater chance of degraded HF conditions—especially on polar and
+		  high-latitude paths. Use it alongside the current planetary Kp value, solar
+		  wind, and IMF Bz rather than treating it as a stand-alone propagation
+		  prediction.		
+		  <table class="exp-range-table">
+		    <tbody>
+		      <tr><td class="val-good">0–7</td><td>Quiet to low activity. Little geomagnetic impact expected.</td></tr>
+		      <tr><td class="val-fair">8–15</td><td>Unsettled. Some degradation is possible.</td></tr>
+		      <tr><td class="val-fair">16–29</td><td>Active. Moderate storm effects may affect HF paths.</td></tr>
+		      <tr><td class="val-poor">≥ 30</td><td>Stormy. Significant HF disruption is more likely.</td></tr>
+		    </tbody>
+		  </table>
+		</div>
     </div>
     <div class="exp-card c-red">
       <div class="exp-title">X-Ray Flux</div>
