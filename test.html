@@ -5825,20 +5825,34 @@ function estMUF(f2, kp, bz) { if (f2 === null) return null; let muf = f2 * 2.5; 
 // Locally computed HF band condition estimate (day/night) from SFI + K-index,
 // modeled on typical ionospheric behavior — an estimate, not a measured feed.
 function calcBandConditions(sfi, kp) {
+  if (sfi === null || kp === null) {
+    const unknown = [
+      { name: '80m-40m', cond: 'Unknown' },
+      { name: '30m-20m', cond: 'Unknown' },
+      { name: '17m-15m', cond: 'Unknown' },
+      { name: '12m-10m', cond: 'Unknown' }
+    ];
+    return {
+      day: unknown,
+      night: unknown
+    };
+  }
   const geoPenalty = kp <= 2 ? 0 : kp <= 3 ? 1 : kp <= 4 ? 2 : kp <= 5 ? 3 : 4;
   const adjSFI = sfi - geoPenalty * 8;
-  function grade(good, fair) { return adjSFI >= good ? 'Good' : adjSFI >= fair ? 'Fair' : 'Poor'; }
+  function grade(good, fair) {
+    return adjSFI >= good ? 'Good' : adjSFI >= fair ? 'Fair' : 'Poor';
+  }
   const day = [
     { name: '80m-40m', cond: kp >= 6 ? 'Fair' : 'Good' },
     { name: '30m-20m', cond: grade(90, 70) },
     { name: '17m-15m', cond: grade(120, 95) },
-    { name: '12m-10m', cond: grade(150, 120) },
+    { name: '12m-10m', cond: grade(150, 120) }
   ];
   const night = [
     { name: '80m-40m', cond: kp >= 7 ? 'Fair' : 'Good' },
     { name: '30m-20m', cond: grade(100, 80) },
     { name: '17m-15m', cond: kp >= 4 ? 'Poor' : grade(150, 120) },
-    { name: '12m-10m', cond: (sfi >= 180 && kp <= 2) ? 'Fair' : 'Poor' },
+    { name: '12m-10m', cond: sfi >= 180 && kp <= 2 ? 'Fair' : 'Poor' }
   ];
   return { day, night };
 }
@@ -5917,8 +5931,7 @@ function renderSolarData(vals) {
   swRenderCard('densityCard', 'density', 'densityTime', `${solFmt1(dv)} p/cc`, solPickTime(d0), dv === null ? '' : (dv <= 5 ? 'sw-good' : dv <= 10 ? 'sw-fair' : 'sw-poor'), solArrow(dv, dp));
   swRenderCard('protonCard', 'proton', 'protonTime', solFmtSci(pv, 2), solPickTime(p0), colorForProton(pv), solArrow(pv, pp));
   swRenderCard('electronCard', 'electron', 'electronTime', solFmtInt(ev), solPickTime(e0), colorForElectron(ev), solArrow(ev, ep));
-
-  const { day, night } = calcBandConditions(sfv || 0, kv || 0);
+  const { day, night } = calcBandConditions(sfv, kv);
   const rowHtml = rows => rows.map(r => {
     const rowCls = 'brow' + (r.cond === 'Good' ? ' cond-Good-row' : r.cond === 'Fair' ? ' cond-Fair-row' : r.cond === 'Poor' ? ' cond-Poor-row' : '');
     const cls = 'bcond bcond-' + r.cond;
