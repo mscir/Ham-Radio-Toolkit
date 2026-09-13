@@ -1564,8 +1564,8 @@ body{
     <span id="solar-age-badge" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:rgba(57,255,20,.1);color:var(--good);border:1px solid rgba(57,255,20,.25)">just now</span>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
-  <button class="solar-refresh-btn" id="solar-refresh-btn" onclick="fetchSolar()">
-    <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M12.5 2.5A6 6 0 1 0 13 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 2.5V6H9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     <button class="solar-refresh-btn" id="solar-refresh-btn" onclick="fetchSolar(true)">
+     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M12.5 2.5A6 6 0 1 0 13 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 2.5V6H9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     Refresh Data
   </button>
   </div>
@@ -5662,6 +5662,7 @@ function gridToLatLonCenter(grid) {
   }
   return {lat, lon};
 }
+	
 // ===========================================
 // SOLAR DATA — direct NOAA SWPC JSON feeds
 // (no proxy needed; these endpoints send CORS headers)
@@ -5678,20 +5679,11 @@ const solarUrls = {
   electron:  'https://services.swpc.noaa.gov/json/goes/primary/integral-electrons-7-day.json'
 };
 
-async function fetchSolarJson(url, label = url) {
+async function fetchSolarJson(url, label = url, forceRefresh = false) {
   const REQUEST_TIMEOUT_MS = 12000;
   const RETRY_DELAYS_MS = [1000, 2000];
 
-  async function load(attempt) {
-    const requestUrl = new URL(url);
-
-    /*      Add a unique query value to bypass potentially stale/broken
-      cached feed responses on every initial request and retry.    */
-    requestUrl.searchParams.set(
-      '_ts',
-      `${Date.now()}-${attempt}`
-    );
-
+  for (let attempt = 0; attempt < 3; attempt++) {
     const controller = new AbortController();
 
     const timeoutId = setTimeout(() => {
@@ -5699,8 +5691,18 @@ async function fetchSolarJson(url, label = url) {
     }, REQUEST_TIMEOUT_MS);
 
     try {
+      const requestUrl = new URL(url);
+
+      /*
+        Only cache-bust a user-requested refresh or a retry after failure.
+        Normal page loading may use browser/CDN caching where available.
+      */
+      if (forceRefresh || attempt > 0) {
+        requestUrl.searchParams.set('_ts', `${Date.now()}-${attempt}`);
+      }
+
       const response = await fetch(requestUrl.toString(), {
-        cache: 'no-store',
+        cache: forceRefresh || attempt > 0 ? 'no-store' : 'default',
         signal: controller.signal
       });
 
@@ -5710,8 +5712,6 @@ async function fetchSolarJson(url, label = url) {
 
       const raw = await response.text();
 
-      /*        NOAA live JSON feeds can occasionally include a UTF-8 BOM,
-        NaN, or Infinity, which standard JSON parsing rejects.      */
       const cleaned = raw
         .replace(/^\uFEFF/, '')
         .replace(/-?Infinity\b|\bNaN\b/g, 'null')
@@ -5721,47 +5721,25 @@ async function fetchSolarJson(url, label = url) {
         throw new Error(`${label}: NOAA returned an empty response`);
       }
 
-      try {
-        return JSON.parse(cleaned);
-      } catch (error) {
-        throw new Error(
-          `${label}: received an incomplete or malformed NOAA response`
-        );
-      }
+      return JSON.parse(cleaned);
     } catch (error) {
-      if (controller.signal.aborted) {
-        throw new Error(
-          `${label}: request timed out after ${REQUEST_TIMEOUT_MS / 1000} seconds`
-        );
+      if (attempt === RETRY_DELAYS_MS.length) {
+        if (controller.signal.aborted) {
+          throw new Error(
+            `${label}: request timed out after ${REQUEST_TIMEOUT_MS / 1000} seconds`
+          );
+        }
+
+        throw error;
       }
 
-      throw error;
+      await new Promise((resolve) => {
+        setTimeout(resolve, RETRY_DELAYS_MS[attempt]);
+      });
     } finally {
       clearTimeout(timeoutId);
     }
   }
-
-  let lastError;
-
-  /*
-    First try plus two retries means at most three requests per feed.
-    Each individual request is capped at 12 seconds.
-  */
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      return await load(attempt);
-    } catch (error) {
-      lastError = error;
-
-      if (attempt < RETRY_DELAYS_MS.length) {
-        await new Promise(resolve => {
-          setTimeout(resolve, RETRY_DELAYS_MS[attempt]);
-        });
-      }
-    }
-  }
-
-  throw lastError;
 }
 	
 function solNormalizeRows(data) {
@@ -5951,7 +5929,7 @@ function renderSolarData(vals) {
   updateBandAlerts();
 }
 
-async function fetchSolar() {
+async function fetchSolar(forceRefresh = false) {
   console.time('Solar refresh total');
 
   const btn = sq('solar-refresh-btn');
@@ -5973,15 +5951,15 @@ async function fetchSolar() {
     console.time('Solar NOAA fetches');
 
     const solarRequests = [
-      fetchSolarJson(solarUrls.solarFlux, '10 cm solar flux'),
-      fetchSolarJson(solarUrls.sunspots, 'Sunspot number'),
-      fetchSolarJson(solarUrls.kp, 'Planetary K-index'),
-      fetchSolarJson(solarUrls.aindex, 'Fredericksburg A-index'),
-      fetchSolarJson(solarUrls.xray, 'GOES X-ray flux'),
-      fetchSolarJson(solarUrls.wind, 'Solar-wind plasma data'),
-      fetchSolarJson(solarUrls.mag, 'Solar-wind magnetic-field data'),
-      fetchSolarJson(solarUrls.proton, 'GOES proton flux'),
-      fetchSolarJson(solarUrls.electron, 'GOES electron flux')
+      fetchSolarJson(solarUrls.solarFlux, '10 cm solar flux', forceRefresh),
+      fetchSolarJson(solarUrls.sunspots, 'Sunspot number', forceRefresh),
+      fetchSolarJson(solarUrls.kp, 'Planetary K-index', forceRefresh),
+      fetchSolarJson(solarUrls.aindex, 'Fredericksburg A-index', forceRefresh),
+      fetchSolarJson(solarUrls.xray, 'GOES X-ray flux', forceRefresh),
+      fetchSolarJson(solarUrls.wind, 'Solar-wind plasma data', forceRefresh),
+      fetchSolarJson(solarUrls.mag, 'Solar-wind magnetic-field data', forceRefresh),
+      fetchSolarJson(solarUrls.proton, 'GOES proton flux', forceRefresh),
+      fetchSolarJson(solarUrls.electron, 'GOES electron flux', forceRefresh)
     ];
 
     const [
