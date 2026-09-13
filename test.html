@@ -6175,15 +6175,37 @@ async function fetchSolar(forceRefresh = false) {
     }
 
     if (liveData) {
-      liveData.style.display = '';
-    }
-
-    setSolarStatus('', true);
-
-    if (btn) {
-      btn.classList.remove('spinning');
-      btn.disabled = false;
-    }
+	  liveData.style.display = '';
+	}
+	
+	const unavailableBands = calcBandConditions(null, null);
+	
+	const unavailableRowHtml = (rows) => rows.map((row) => {
+	  return `
+	    <div class="brow">
+	      <span class="brow-name">${row.name}</span>
+	      <span class="bcond bcond-Unknown">${row.cond}</span>
+	    </div>
+	  `;
+	}).join('');
+	
+	const dayBands = document.getElementById('solar-bands-day');
+	const nightBands = document.getElementById('solar-bands-night');
+	
+	if (dayBands) {
+	  dayBands.innerHTML = unavailableRowHtml(unavailableBands.day);
+	}
+	
+	if (nightBands) {
+	  nightBands.innerHTML = unavailableRowHtml(unavailableBands.night);
+	}
+	
+	setSolarStatus('', true);
+	
+	if (btn) {
+	  btn.classList.remove('spinning');
+	  btn.disabled = false;
+	}
 
     console.warn('Solar data refresh failed:', e);
   }
