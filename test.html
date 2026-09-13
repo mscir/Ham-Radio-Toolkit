@@ -329,7 +329,42 @@ body{
 @keyframes spin{to{transform:rotate(360deg)}}
 .solar-err{display:none;background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.25);border-radius:var(--r);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--poor);margin-bottom:12px}
 .solar-err.on{display:block}
+.propagation-resource-link{
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid var(--border);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;
+  letter-spacing:.04em;
+  color:var(--text-dim);
+}
 
+.inline-resource-link{
+  appearance:none;
+  border:0;
+  background:transparent;
+  padding:0;
+  color:var(--accent);
+  font:inherit;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+.inline-resource-link:hover,
+.inline-resource-link:focus-visible{
+  color:var(--accent3);
+}
+
+.inline-resource-link:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:2px;
+}
+	
 /* ===========================================
    PANEL 3 — FREQUENCIES & PRIVILEGES
 =========================================== */
@@ -1617,10 +1652,22 @@ body{
   </div>
 
   <div class="section-label">▸ Best Bands Now</div>
-  <div class="sw-card" style="margin-bottom:16px">
-    <div id="bandRec" class="sw-value">—</div>
-    <div id="bandRecText" class="sw-banner"></div>
-  </div>
+
+	<div class="sw-card" style="margin-bottom:16px">
+	  <div id="bandRec" class="sw-value">—</div>
+	  <div id="bandRecText" class="sw-banner"></div>
+	
+	  <div class="propagation-resource-link">
+	    Need a prediction for a specific destination?
+	    <button
+	      type="button"
+	      class="inline-resource-link"
+	      onclick="openPropagationResources()"
+	    >
+	      Open propagation maps &amp; path-prediction tools
+	    </button>
+	  </div>
+	</div>
 
 
 <div class="section-label" style="margin-top:16px">▸ Band Opening Alerts — Right Now</div>
@@ -4029,6 +4076,29 @@ function showPanel(id, btn) {
   if (id === 'greyline') setTimeout(initGreyLine, 50);
   if (id === 'qsolog') logNow();
 }
+	
+function openPropagationResources() {
+  showPanel('links');
+  const propagationGroup = document.getElementById('propagation');
+  if (!propagationGroup) {
+    console.warn('openPropagationResources: no resource group with id propagation');
+    return;
+  }
+  if (typeof openSection === 'function') {
+    openSection(propagationGroup);
+  } else {
+    propagationGroup.open = true;
+    window.setTimeout(() => {
+      propagationGroup.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+    }, 50);
+  }
+  history.replaceState(null, '', '#propagation');
+}
+	
 function showRef(id, btn) {
   document.querySelectorAll('.ref-content').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.ref-tab').forEach(b => b.classList.remove('active'));
@@ -4194,13 +4264,6 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary AM calling frequency.'
   },
 ]},
-/*
-  '30m': { label:'30m — 10.1–10.15 MHz', rows:[
-    {freq:'10.100–10.130',mode:'CW',tags:['cw'],notes:'CW only. Quiet and productive for DX. Often uncrowded. 200W max.'},
-    {freq:'10.130–10.140',mode:'RTTY / Data',tags:['data'],notes:'Digital modes. WSPR on 10.1387. PSK31 active around 10.142.'},
-    {freq:'10.136',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> FT8 on 30m. Very active. 200W max.'},
-    {freq:'10.140–10.150',mode:'CW / Data',tags:['cw','data'],notes:'Mixed CW and digital near band edge. <strong>No phone permitted on 30m.</strong>'},
-  ]}, */
 '30m': { label:'30m — 10.100–10.150 MHz', rows:[
   {
     freq:'10.100–10.130',
@@ -4369,16 +4432,6 @@ const BAND_ACTIVITY = {
     notes:'Global HF Net activity frequency. Verify the current schedule and frequency before calling.'
   },
 ]},
-/*
-  '15m': { label:'15m — 21.0–21.45 MHz', rows:[
-    {freq:'21.000–21.025',mode:'CW (Extra only)',tags:['cw'],notes:'Extra-exclusive CW. DX-only sub-band on 15m.'},
-    {freq:'21.025–21.200',mode:'CW / Data',tags:['cw','data'],notes:'CW general. FT8 on 21.074.'},
-    {freq:'21.074',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 15m FT8. Excellent on rising solar cycle.'},
-    {freq:'21.200–21.225',mode:'Phone (Extra only)',tags:['phone'],notes:'Extra-exclusive phone sub-band.'},
-    {freq:'21.340',mode:'SSTV',tags:['image'],notes:'15m SSTV calling.'},
-    {freq:'21.225–21.450',mode:'SSB Phone',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Very busy in good solar conditions. Lots of DX and US-to-Europe paths.'},
-    {freq:'21.390',mode:'AM',tags:['phone'],notes:'15m AM calling.'},
-  ]}, */
 '15m': { label:'15m — 21.000–21.450 MHz', rows:[
   {
     freq:'21.000–21.025',
@@ -4453,12 +4506,6 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary AM calling frequency.'
   },
 ]},
-/*
-  '12m': { label:'12m — 24.89–24.99 MHz', rows:[
-    {freq:'24.890–24.930',mode:'CW / Data',tags:['cw','data'],notes:'CW and digital. FT8 on 24.915. Quiet band — few users.'},
-    {freq:'24.915',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 12m FT8. Opens dramatically near solar max.'},
-    {freq:'24.930–24.990',mode:'SSB Phone',tags:['phone'],notes:'Phone only. Very open during high SFI. Less crowded than 10m/15m.'},
-  ]}, */
 '12m': { label:'12m — 24.890–24.990 MHz', rows:[
   {
     freq:'24.890–24.920',
@@ -4502,17 +4549,7 @@ const BAND_ACTIVITY = {
     tags:['phone','image'],
     notes:'Phone and image segment. Common for SSB DX contacts when 12 m is open.'
   },
-]}, /*
-  '10m': { label:'10m — 28.0–29.7 MHz', rows:[
-    {freq:'28.000–28.070',mode:'CW',tags:['cw'],notes:'CW segment. DX beacons 28.190–28.225 MHz.'},
-    {freq:'28.074',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 10m FT8. Explosive activity when band opens.'},
-    {freq:'28.070–28.300',mode:'RTTY / Data',tags:['data'],notes:'Digital modes. PSK31 around 28.120. Busy in high solar cycle.'},
-    {freq:'28.300–28.500',mode:'SSB Phone',tags:['phone'],notes:'Novice/Tech phone segment (200W). Still plenty of QSOs here.'},
-    {freq:'28.385',mode:'SSTV',tags:['image'],notes:'10m SSTV calling.'},
-    {freq:'28.400',mode:'SSB Calling',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> 10m SSB calling frequency.'},
-    {freq:'28.500–29.700',mode:'SSB / AM / FM',tags:['phone'],notes:'<span class="calling-badge">ACTIVE</span> Full phone segment. 29.0–29.2 AM activity. 29.600 FM simplex calling. 29.500–29.700 FM repeater outputs.'},
-    {freq:'29.600',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> 10m FM simplex national calling frequency.'},
-  ]}, */
+]}, 
 '10m': { label:'10m — 28.000–29.700 MHz', rows:[
   {
     freq:'28.000–28.070',
@@ -4617,19 +4654,6 @@ const BAND_ACTIVITY = {
     notes:'ARRL voluntary FM repeater output segment. Check local coordination before use.'
   },
 ]}, 
-/*
-  '6m': { label:'6m — 50–54 MHz', rows:[
-    {freq:'50.000–50.100',mode:'CW Only',tags:['cw'],notes:'CW only — no phone in this segment. Beacons 50.060–50.080.'},
-    {freq:'50.060–50.080',mode:'CW Beacons',tags:['cw'],notes:'Propagation beacons — listen here to check if 6m is open before calling.'},
-    {freq:'50.100',mode:'SSB DX Calling',tags:['phone'],notes:'<span class="calling-badge">DX CALLING</span> International DX SSB calling frequency. When Es or F2 opens, this erupts.'},
-    {freq:'50.125',mode:'SSB Calling (NA)',tags:['phone'],notes:'<span class="calling-badge">NA CALLING</span> North American SSB calling frequency. Most 6m SSB activity starts here.'},
-    {freq:'50.260',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 6m FT8. Extremely active — first sign a band opening is detected.'},
-    {freq:'50.313',mode:'FT4',tags:['data'],notes:'6m FT4 calling frequency.'},
-    {freq:'50.400',mode:'AM Calling',tags:['phone'],notes:'6m AM calling.'},
-    {freq:'52.525',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> Primary 6m FM simplex calling frequency.'},
-    {freq:'52.000–54.000',mode:'FM Repeaters',tags:['phone'],notes:'6m FM repeater outputs and simplex. Local/regional use.'},
-  ]},
-*/
 '6m': { label:'6m — 50–54 MHz', rows:[
   {
     freq:'50.000–50.100',
@@ -4757,18 +4781,7 @@ const BAND_ACTIVITY = {
     tags:['repeater','phone'],
     notes:'Additional regionally coordinated FM repeater input/output and simplex use; verify your local 6 m band plan before transmitting.'
   },
-]}, /*
-  '2m': { label:'2m — 144–148 MHz', rows:[
-    {freq:'144.000–144.100',mode:'CW Only',tags:['cw'],notes:'CW and weak signal. No phone. Meteor scatter and EME activity.'},
-    {freq:'144.100',mode:'EME / MS Calling',tags:['cw'],notes:'Earth-Moon-Earth and Meteor Scatter CW calling.'},
-    {freq:'144.200',mode:'SSB Calling',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> Primary 2m SSB calling frequency. Sporadic-E and tropo DX happens here.'},
-    {freq:'144.390',mode:'APRS',tags:['data'],notes:'<span class="calling-badge">APRS</span> Automatic Packet Reporting System — GPS position beacons, weather, messages.'},
-    {freq:'144.489',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 2m FT8. Active for weak-signal and Es openings.'},
-    {freq:'146.520',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> National 2m FM simplex calling frequency. Most used VHF frequency in the US.'},
-    {freq:'146.400–146.580',mode:'FM Simplex',tags:['phone'],notes:'2m FM simplex channels (15 kHz spacing). Move off 146.520 after contact.'},
-    {freq:'146.600–147.999',mode:'FM Repeaters',tags:['phone'],notes:'2m repeater outputs. ±600 kHz offset. Most active VHF repeater band.'},
-    {freq:'144.900–145.100',mode:'Packet / APRS',tags:['data'],notes:'Packet radio and digital data. APRS on 144.390.'},
-  ]}, */
+]}, 
 '2m': { label:'2m — 144–148 MHz', rows:[
   {
     freq:'144.000–144.050',
@@ -4908,14 +4921,7 @@ const BAND_ACTIVITY = {
     tags:['repeater'],
     notes:'Typical FM repeater-input segment, often paired with 147 MHz outputs using a +600 kHz offset.'
   },
-]}, /*
-  '70cm': { label:'70cm — 420–450 MHz', rows:[
-    {freq:'432.100',mode:'SSB Calling',tags:['phone'],notes:'<span class="calling-badge">CALLING</span> Primary 70cm SSB/CW weak-signal calling.'},
-    {freq:'432.070',mode:'FT8',tags:['data'],notes:'<span class="calling-badge">FT8 CALLING</span> 70cm FT8 weak signal.'},
-    {freq:'446.000',mode:'FM Simplex',tags:['phone'],notes:'<span class="calling-badge">FM CALLING</span> National 70cm FM simplex calling frequency.'},
-    {freq:'440–450',mode:'FM Repeaters',tags:['phone'],notes:'Dense repeater activity. ±5 MHz offset. Most urban areas have many repeaters here.'},
-    {freq:'420–450',mode:'All modes',tags:['all'],notes:'Full 70cm band. ATV, digital, linking systems, satellites, repeaters.'},
-  ]}, */
+]}, 
 '70cm': { label:'70cm — 420–450 MHz', rows:[
   {
     freq:'420.000–426.000',
