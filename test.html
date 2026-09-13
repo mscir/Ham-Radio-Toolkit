@@ -741,6 +741,13 @@ body{
   background: rgba(0, 212, 255, 0.05);
 }	
 .collapse-hdr:hover .collapse-arrow{color:var(--accent);opacity: 1}
+	.collapse-hdr:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+.collapse-hdr[aria-expanded="true"] .collapse-arrow{
+  transform:rotate(180deg);
+}
 .collapse-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);  color: var(--accent)}
 .collapse-arrow{
 	font-size: 14px;     			/* font-size:12px; */
@@ -750,10 +757,16 @@ body{
 	margin-left: 8px;
  	opacity: 0.85;
 }
-.collapse-arrow.open{transform:rotate(180deg)}
+/* .collapse-arrow.open{transform:rotate(180deg)} */
 .collapse-body{overflow:hidden;transition:max-height .3s ease,opacity .2s ease;opacity:1}
 .collapse-body.closed{max-height:0!important;opacity:0}
+.learning-body{
+  padding-top:16px;
+}
 
+.learning-body[hidden]{
+  display:none !important;
+}
 /* ── EXPLAINER CARDS (Solar Understanding section) ── */
 .exp-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;margin-bottom:0}
 .exp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
@@ -1685,9 +1698,19 @@ body{
 </div><!-- end #solar-live-data -->
 	
   <div class="divider"></div>
-  <div class="section-label">▸ Understanding the Data — What Does It All Mean?</div>
-  <div class="section-label" style="margin-top:4px">▸ NOAA Raw Data — Explained</div>
-  <div class="explainer-grid">
+
+	<div class="collapse-hdr">
+	  <span class="collapse-title">▸ Understanding the Data — What Does It All Mean?</span>
+	  <span class="collapse-arrow" aria-hidden="true">▾</span>
+	</div>
+	
+	<div class="collapse-body learning-body">
+	  <div class="section-label" style="margin-top:0">
+	    ▸ NOAA Raw Data — Explained
+	  </div>
+	
+	  <div class="explainer-grid">
+		  
     <div class="exp-card c-blue">
       <div class="exp-title">Solar Flux (F10.7)</div>
       <div class="exp-abbr">SFI — 10.7 cm Solar Radio Flux</div>
@@ -1891,8 +1914,9 @@ body{
       <strong>VHF Aurora:</strong> During geomagnetic storms, auroral ionization at polar latitudes can scatter 6m and 2m signals over long paths. Signals take on a characteristic "buzz" or "hiss." Requires a K-index ≥ 3–4 and operation toward the auroral zone.<br><br>
       <strong>Tropospheric Ducting:</strong> Temperature inversions in the lower atmosphere can create "ducts" that guide VHF signals well beyond the horizon — sometimes 1,000+ km. Most common during high-pressure systems in late summer and fall.
     </div>
-  </div>
-</div>
+ </div><!-- end VHF Special Propagation card -->
+</div><!-- end final educational content group -->
+</div><!-- end .learning-body -->
 
 <!-- PANEL 3: FREQUENCY PRIVILEGES -->
 <div class="panel" id="panel-privileges">
@@ -10952,24 +10976,27 @@ function toggleTheme() {
 // COLLAPSIBLE SECTIONS
 // ===========================================
 function initCollapsibles() {
-  document.querySelectorAll('.collapse-hdr').forEach(hdr => {
+  document.querySelectorAll('.collapse-hdr').forEach((hdr) => {
     const body = hdr.nextElementSibling;
-    if (!body || !body.classList.contains('collapse-body')) return;
-    const arrow = hdr.querySelector('.collapse-arrow');
-    //body.style.maxHeight = body.scrollHeight + 'px';
-    //arrow.classList.add('open');
-	 body.style.maxHeight = '0';
-	body.classList.add('closed');
-    hdr.addEventListener('click', () => {
-      const isOpen = arrow.classList.contains('open');
-      if (isOpen) {
-        body.style.maxHeight = '0';
-        body.classList.add('closed');
-        arrow.classList.remove('open');
-      } else {
-        body.classList.remove('closed');
-        body.style.maxHeight = body.scrollHeight + 'px';
-        arrow.classList.add('open');
+    if (!body || !body.classList.contains('collapse-body')) {
+      return;
+    }
+    hdr.setAttribute('role', 'button');
+    hdr.setAttribute('tabindex', '0');
+    hdr.setAttribute('aria-expanded', 'false');
+    body.style.maxHeight = '0';
+    body.classList.add('closed');
+    const toggleCollapse = () => {
+      const isOpen = hdr.getAttribute('aria-expanded') === 'true';
+      hdr.setAttribute('aria-expanded', String(!isOpen));
+      body.classList.toggle('closed', isOpen);
+      body.style.maxHeight = isOpen ? '0' : `${body.scrollHeight}px`;
+    };
+    hdr.addEventListener('click', toggleCollapse);
+    hdr.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleCollapse();
       }
     });
   });
