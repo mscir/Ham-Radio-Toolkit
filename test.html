@@ -5,7 +5,6 @@
 <meta name="supported-color-schemes" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Ham Dashboard</title>
-<link href="New%20Ham%20Dashboard%20%E2%80%94%20KG5NEW_files/css2.css" rel="stylesheet">
 <style>
 :root {
   --bg:#080e15;--panel:#0d1a26;--panel2:#122436;--border:#2a4560;--border2:#3a5b7d;
@@ -1647,7 +1646,7 @@ body{
 <div class="collapse-body">
   <div class="sw-grid">
     <div class="sw-card" id="solarFluxCard"><div class="sw-label">Solar Flux (F10.7)</div><div id="solarFlux" class="sw-value">—</div><div id="solarFluxTime" class="sw-small"></div></div>
-    <div class="sw-card" id="sunspotsCard"><div class="sw-label">Sunspots</div><div id="sunspots" class="sw-value">—</div><div id="sunspotsTime" class="sw-small"></div></div>
+    <div class="sw-card" id="sunspotsCard"><div class="sw-label">Monthly Sunspot Number</div><div id="sunspots" class="sw-value">—</div><div id="sunspotsTime" class="sw-small"></div></div>
     <div class="sw-card" id="kpCard"><div class="sw-label">K Index / Kp</div><div id="kp" class="sw-value">—</div><div id="kpTime" class="sw-small"></div></div>
     <div class="sw-card" id="aindexCard"><div class="sw-label">A Index</div><div id="aindex" class="sw-value">—</div><div id="aindexTime" class="sw-small"></div></div>
     <div class="sw-card" id="xrayCard">
@@ -5872,7 +5871,7 @@ function renderSolarData(vals) {
 
   swRenderCard('solarSummaryCard', 'solarSummary', 'solarSummaryText',
     solarClass === 'sw-good' ? 'Open' : solarClass === 'sw-fair' ? 'Mixed' : 'Weak',
-    `Solar flux ${solFmtInt(sfv)}; sunspots ${solFmt1(ssv)}; estimated F2 ${solFmt1(f2)} MHz.`, solarClass, '■');
+    `Solar flux ${solFmtInt(sfv)}; monthly SSN ${solFmt1(ssv)}; estimated F2 ${solFmt1(f2)} MHz.`, solarClass, '■');
   swRenderCard('geoSummaryCard', 'geoSummary', 'geoSummaryText',
     geoClass === 'sw-good' ? 'Quiet' : geoClass === 'sw-fair' ? 'Unsettled' : 'Active',
     `Kp ${solFmt2(kv)}; Bz ${solFmt1(mv)} nT; wind ${solFmt1(wv)} km/s.`, geoClass, '■');
@@ -11242,7 +11241,8 @@ let cwDrillMode = 'both';
 let cwDrillCurrent = null;
 let cwDrillRevealed = false;
 let cwDrillCount = 0;
-
+let cwAudioUnlocked = false;
+		  
 const CW_MAP_FULL = {
   'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---',
   'K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-',
@@ -11252,13 +11252,18 @@ const CW_MAP_FULL = {
   'AR':'.-.-.',  'SK':'...-.-', 'BT':'-...-', 'KN':'-.--.', 'AS':'.-...', 'CQ':'-.-. --.-'
 };
 
-function getCwAudioCtx() {
-  if (!cwAudioCtx) cwAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+async function getCwAudioCtx() {
+  if (!cwAudioCtx) {
+    cwAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (cwAudioCtx.state !== 'running') {
+    await cwAudioCtx.resume();
+  }
   return cwAudioCtx;
 }
 
 async function playCwString(morse, wpm) {
-  const ctx = getCwAudioCtx();
+  const ctx = await getCwAudioCtx();
   const dotDur = 1.2 / wpm; // seconds per dot
   const freq = 650;
   cwStopFlag = false;
@@ -11305,6 +11310,7 @@ function playCwChar(char) {
   const wpm = parseInt(document.getElementById('cw-wpm').value) || 13;
   const morse = CW_MAP_FULL[char.toUpperCase()];
   if (!morse) return;
+  cwAudioUnlocked = true;
   if (cwPlaying) stopCW();
   setTimeout(() => playCwString(morse, wpm), cwPlaying ? 200 : 0);
 }
@@ -11358,21 +11364,22 @@ function drillNext() {
   if(codeEl) codeEl.textContent = ' ';
   cwDrillCount++;
   document.getElementById('drill-count').textContent = cwDrillCount - 1;
-  // Auto-play the sound
-  const wpm = parseInt(document.getElementById('cw-wpm').value) || 13;
-  if (cwDrillCurrent) {
-    if (cwPlaying) stopCW();
-    setTimeout(() => playCwString(CW_MAP_FULL[cwDrillCurrent], wpm), cwPlaying ? 300 : 100);
-  }
+	  
+  // Audio starts only after the visitor presses Play.
 }
 
-function drillPlay() {
+async function drillPlay() {
   if (!cwDrillCurrent) return;
+  cwAudioUnlocked = true;
   const wpm = parseInt(document.getElementById('cw-wpm').value) || 13;
-  if (cwPlaying) stopCW();
-  setTimeout(() => playCwString(CW_MAP_FULL[cwDrillCurrent], wpm), cwPlaying ? 300 : 0);
+  if (cwPlaying) {
+    stopCW();
+  }
+  setTimeout(() => {
+    playCwString(CW_MAP_FULL[cwDrillCurrent], wpm);
+  }, cwPlaying ? 300 : 0);
 }
-
+	  
 function drillReveal() {
   if (!cwDrillCurrent) return;
   document.getElementById('cw-drill-char').textContent = cwDrillCurrent;
