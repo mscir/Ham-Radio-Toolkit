@@ -6177,27 +6177,33 @@ async function fetchSolar(forceRefresh = false) {
     if (liveData) {
 	  liveData.style.display = '';
 	}
+/*
+  Only replace the band lists with Unknown when this page has never
+  received a successful NOAA reading. If older readings are visible,
+  keep their matching Good/Fair/Poor band assessment on screen.
+*/
+if (!solarLoaded) {
+  const unavailableBands = calcBandConditions(null, null);
+
+  const unavailableRowHtml = (rows) => rows.map((row) => {
+    return `
+      <div class="brow">
+        <span class="brow-name">${row.name}</span>
+        <span class="bcond bcond-Unknown">${row.cond}</span>
+      </div>
+    `;
+	  }).join('');
 	
-	const unavailableBands = calcBandConditions(null, null);
+	  const dayBands = document.getElementById('solar-bands-day');
+	  const nightBands = document.getElementById('solar-bands-night');
 	
-	const unavailableRowHtml = (rows) => rows.map((row) => {
-	  return `
-	    <div class="brow">
-	      <span class="brow-name">${row.name}</span>
-	      <span class="bcond bcond-Unknown">${row.cond}</span>
-	    </div>
-	  `;
-	}).join('');
+	  if (dayBands) {
+	    dayBands.innerHTML = unavailableRowHtml(unavailableBands.day);
+	  }
 	
-	const dayBands = document.getElementById('solar-bands-day');
-	const nightBands = document.getElementById('solar-bands-night');
-	
-	if (dayBands) {
-	  dayBands.innerHTML = unavailableRowHtml(unavailableBands.day);
-	}
-	
-	if (nightBands) {
-	  nightBands.innerHTML = unavailableRowHtml(unavailableBands.night);
+	  if (nightBands) {
+	    nightBands.innerHTML = unavailableRowHtml(unavailableBands.night);
+	  }
 	}
 	
 	setSolarStatus('', true);
