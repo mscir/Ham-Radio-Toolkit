@@ -329,6 +329,7 @@ body{
 @keyframes spin{to{transform:rotate(360deg)}}
 .solar-err{display:none;background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.25);border-radius:var(--r);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--poor);margin-bottom:12px}
 .solar-err.on{display:block}
+
 .propagation-resource-link{
   margin-top:10px;
   padding-top:9px;
@@ -338,31 +339,26 @@ body{
   letter-spacing:.04em;
   color:var(--text-dim);
 }
-
 .inline-resource-link{
-  appearance:none;
-  border:0;
-  background:transparent;
-  padding:0;
   color:var(--accent);
   font:inherit;
-  font-weight:700;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  cursor:pointer;
+  font-weight:400;
+  letter-spacing:0;
+  text-transform:none;
   text-decoration:underline;
-  text-underline-offset:3px;
+  text-underline-offset:2px;
 }
-
 .inline-resource-link:hover,
 .inline-resource-link:focus-visible{
   color:var(--accent3);
 }
-
 .inline-resource-link:focus-visible{
   outline:2px solid var(--accent);
   outline-offset:3px;
   border-radius:2px;
+}
+.inline-resource-link{
+  cursor:pointer;
 }
 	
 /* ===========================================
@@ -1656,19 +1652,13 @@ body{
 	<div class="sw-card" style="margin-bottom:16px">
 	  <div id="bandRec" class="sw-value">—</div>
 	  <div id="bandRecText" class="sw-banner"></div>
-	
-	  <div class="propagation-resource-link">
-	    Need a prediction for a specific destination?
-	    <button
-	      type="button"
-	      class="inline-resource-link"
-	      onclick="openPropagationResources()"
-	    >
-	      Open propagation maps &amp; path-prediction tools
-	    </button>
-	  </div>
+	<div class="propagation-resource-link">
+	  Need a prediction for a specific destination?
+	  <a class="inline-resource-link" href="links.html#propagation">
+	    See propagation maps and prediction tools.
+	  </a>
 	</div>
-
+	</div>
 
 <div class="section-label" style="margin-top:16px">▸ Band Opening Alerts — Right Now</div>
   <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Based on live SFI and K-index. Green = likely open for DX, Yellow = marginal, Red = poor conditions.</div>
@@ -4075,28 +4065,6 @@ function showPanel(id, btn) {
   if (id === 'solar' && !solarLoaded) fetchSolar();
   if (id === 'greyline') setTimeout(initGreyLine, 50);
   if (id === 'qsolog') logNow();
-}
-	
-function openPropagationResources() {
-  showPanel('links');
-  const propagationGroup = document.getElementById('propagation');
-  if (!propagationGroup) {
-    console.warn('openPropagationResources: no resource group with id propagation');
-    return;
-  }
-  if (typeof openSection === 'function') {
-    openSection(propagationGroup);
-  } else {
-    propagationGroup.open = true;
-    window.setTimeout(() => {
-      propagationGroup.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest'
-      });
-    }, 50);
-  }
-  history.replaceState(null, '', '#propagation');
 }
 	
 function showRef(id, btn) {
