@@ -12519,11 +12519,11 @@ function drawGreyLine() {
       const idx = (py * W + px) * 4;
 
 	if (cosZ > 0.04) {
-	  // Day: opaque muted blue test — should be visibly different.
-	  overlayData.data[idx] = 45;
-	  overlayData.data[idx + 1] = 78;
-	  overlayData.data[idx + 2] = 105;
-	  overlayData.data[idx + 3] = 255;
+	  // Day: low-contrast blue-grey wash.
+	  overlayData.data[idx] = 40;
+	  overlayData.data[idx + 1] = 72;
+	  overlayData.data[idx + 2] = 96;
+	  overlayData.data[idx + 3] = 145;
 	} else if (cosZ > -0.04) {
         // Grey line: stronger cool-blue terminator band.
         overlayData.data[idx] = 45;
