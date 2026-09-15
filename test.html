@@ -12489,19 +12489,59 @@ function drawGreyLine() {
   ctx.clearRect(0, 0, W, H);
   const { dec, lon: solarLon } = sunPosition(now);
 
-   // ── SVG BASE MAP + DAY/NIGHT/GREYLINE OVERLAY ─────────────────────────────
+  // ── SVG BASE MAP + COMPOSITED DAY/NIGHT/GREYLINE OVERLAY ──────────────────
   if (greylineMapLoaded && greylineMapImage) {
     ctx.drawImage(greylineMapImage, 0, 0, W, H);
-
-    // Temporary proof that the SVG is being drawn into this Canvas.
-    ctx.globalAlpha = 0.35;
-    ctx.fillStyle = '#0b1f38';
-    ctx.fillRect(0, 0, W, H);
-    ctx.globalAlpha = 1;
   } else {
     ctx.fillStyle = '#1a3d5c';
     ctx.fillRect(0, 0, W, H);
   }
+
+  // Use a separate Canvas so translucent pixels are composited over the SVG
+  // rather than replacing it.
+  const overlayCanvas = document.createElement('canvas');
+  overlayCanvas.width = W;
+  overlayCanvas.height = H;
+  const overlayCtx = overlayCanvas.getContext('2d');
+  const overlayData = overlayCtx.createImageData(W, H);
+
+  for (let px = 0; px < W; px++) {
+    const lng = (px / W) * 360 - 180;
+    const ha = (lng - solarLon) * Math.PI / 180;
+
+    for (let py = 0; py < H; py++) {
+      const lat = ((H - py) / H) * 180 - 90;
+      const latR = lat * Math.PI / 180;
+      const cosZ =
+        Math.sin(latR) * Math.sin(dec) +
+        Math.cos(latR) * Math.cos(dec) * Math.cos(ha);
+
+      const idx = (py * W + px) * 4;
+
+      if (cosZ > 0.04) {
+        // Day: subtle cool daylight tint.
+        overlayData.data[idx] = 110;
+        overlayData.data[idx + 1] = 175;
+        overlayData.data[idx + 2] = 215;
+        overlayData.data[idx + 3] = 46;
+      } else if (cosZ > -0.04) {
+        // Grey line: stronger cool-blue terminator band.
+        overlayData.data[idx] = 45;
+        overlayData.data[idx + 1] = 125;
+        overlayData.data[idx + 2] = 185;
+        overlayData.data[idx + 3] = 150;
+      } else {
+        // Night: deep navy shade that retains coastlines and geography.
+        overlayData.data[idx] = 3;
+        overlayData.data[idx + 1] = 15;
+        overlayData.data[idx + 2] = 35;
+        overlayData.data[idx + 3] = 190;
+      }
+    }
+  }
+
+  overlayCtx.putImageData(overlayData, 0, 0);
+  ctx.drawImage(overlayCanvas, 0, 0);
 
   // ── Helper: lon/lat → canvas x/y ──
   function cx(lon) { return ((lon + 180) / 360) * W; }
