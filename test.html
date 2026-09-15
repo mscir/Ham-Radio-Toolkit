@@ -12518,25 +12518,27 @@ function drawGreyLine() {
 
       const idx = (py * W + px) * 4;
 
-	if (cosZ > 0.04) {
-	  // Day: low-contrast blue-grey wash.
-	  overlayData.data[idx] = 40;
-	  overlayData.data[idx + 1] = 72;
-	  overlayData.data[idx + 2] = 96;
-	  overlayData.data[idx + 3] = 145;
-	} else if (cosZ > -0.04) {
-        // Grey line: stronger cool-blue terminator band.
-        overlayData.data[idx] = 45;
-        overlayData.data[idx + 1] = 125;
-        overlayData.data[idx + 2] = 185;
-        overlayData.data[idx + 3] = 150;
-      } else {
-        // Night: deep navy shade that retains coastlines and geography.
-        overlayData.data[idx] = 3;
-        overlayData.data[idx + 1] = 15;
-        overlayData.data[idx + 2] = 35;
-        overlayData.data[idx + 3] = 190;
-      }
+	  if (cosZ > 0.04) {
+		  // Day: muted steel-blue, keeps map features visible.
+		  overlayData.data[idx] = 40;
+		  overlayData.data[idx + 1] = 72;
+		  overlayData.data[idx + 2] = 96;
+		  overlayData.data[idx + 3] = 145;
+		
+		} else if (cosZ > -0.04) {
+		  // Grey line: brighter, more saturated blue to stand out.
+		  overlayData.data[idx] = 45;
+		  overlayData.data[idx + 1] = 135;
+		  overlayData.data[idx + 2] = 205;
+		  overlayData.data[idx + 3] = 175;
+		
+		} else {
+		  // Night: near-black navy, with enough transparency for coastlines.
+		  overlayData.data[idx] = 1;
+		  overlayData.data[idx + 1] = 10;
+		  overlayData.data[idx + 2] = 28;
+		  overlayData.data[idx + 3] = 210;
+		}
     }
   }
 
@@ -12654,7 +12656,7 @@ function drawGreyLine() {
   }
 	
   // ── GRID LINES ──
-  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
   ctx.lineWidth = 0.5;
   [-60,-30,0,30,60].forEach(lat => {
     ctx.beginPath(); ctx.moveTo(0, cy(lat)); ctx.lineTo(W, cy(lat)); ctx.stroke();
