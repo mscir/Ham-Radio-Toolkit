@@ -12417,16 +12417,25 @@ function logExportADIF() {
 function initGreyLine() {
   const canvas = document.getElementById('greyline-canvas');
   if (!canvas) return;
-  const W = 900, H = 450;
-  canvas.width = W; canvas.height = H;
-  canvas.style.height = (canvas.offsetWidth * H / W) + 'px';
-  drawGreyLine();
-  setInterval(drawGreyLine, 60000);
-  window.addEventListener('resize', () => {
+  const W = 900;
+  const H = 450;
+  canvas.width = W;
+  canvas.height = H;
+  function sizeGreylineCanvas() {
     canvas.style.height = (canvas.offsetWidth * H / W) + 'px';
-  });
+  }
+  sizeGreylineCanvas();
+  loadGreylineMap();
+  drawGreyLine();
+  if (greylineRefreshTimer === null) {
+    greylineRefreshTimer = setInterval(drawGreyLine, 60000);
+  }
+  if (!greylineResizeBound) {
+    window.addEventListener('resize', sizeGreylineCanvas);
+    greylineResizeBound = true;
+  }
 }
-
+	
 function sunPosition(date) {
   // Solar declination and hour angle
   const JD = date / 86400000 + 2440587.5;
@@ -12445,6 +12454,29 @@ function sunPosition(date) {
   // Sub-solar longitude
   const solarLon = -(utcHours - 12 + eot/60) * 15;
   return { dec, lon: solarLon };
+}
+
+// ── GREY LINE BASE MAP ──────────────────────────────────────────────────────
+const GREYLINE_MAP_SRC = 'assets/world-map-equirectangular.svg';
+
+let greylineMapImage = null;
+let greylineMapLoaded = false;
+let greylineMapFailed = false;
+let greylineRefreshTimer = null;
+let greylineResizeBound = false;
+
+function loadGreylineMap() {
+  if (greylineMapLoaded || greylineMapFailed || greylineMapImage) return;
+  greylineMapImage = new Image();
+  greylineMapImage.onload = function () {
+    greylineMapLoaded = true;
+    drawGreyLine();
+  };
+  greylineMapImage.onerror = function () {
+    greylineMapFailed = true;
+    console.warn('Grey Line base map could not be loaded:', GREYLINE_MAP_SRC);
+  };
+  greylineMapImage.src = GREYLINE_MAP_SRC;
 }
 
 function drawGreyLine() {
