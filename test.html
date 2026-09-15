@@ -12489,25 +12489,51 @@ function drawGreyLine() {
   ctx.clearRect(0, 0, W, H);
   const { dec, lon: solarLon } = sunPosition(now);
 
-  // ── Day/Night/Greyline pixel fill ──
+  // ── SVG BASE MAP + DAY/NIGHT/GREYLINE OVERLAY ─────────────────────────────
+  if (greylineMapLoaded && greylineMapImage) {
+    ctx.drawImage(greylineMapImage, 0, 0, W, H);
+  } else {
+    ctx.fillStyle = '#1a3d5c';
+    ctx.fillRect(0, 0, W, H);
+  }
+
   const imgData = ctx.createImageData(W, H);
+
   for (let px = 0; px < W; px++) {
     const lng = (px / W) * 360 - 180;
-    const ha  = (lng - solarLon) * Math.PI / 180;
+    const ha = (lng - solarLon) * Math.PI / 180;
+
     for (let py = 0; py < H; py++) {
-      const lat  = ((H - py) / H) * 180 - 90;
+      const lat = ((H - py) / H) * 180 - 90;
       const latR = lat * Math.PI / 180;
-      const cosZ = Math.sin(latR)*Math.sin(dec) + Math.cos(latR)*Math.cos(dec)*Math.cos(ha);
-      const idx  = (py * W + px) * 4;
+      const cosZ =
+        Math.sin(latR) * Math.sin(dec) +
+        Math.cos(latR) * Math.cos(dec) * Math.cos(ha);
+
+      const idx = (py * W + px) * 4;
+
       if (cosZ > 0.04) {
-        imgData.data[idx]=100; imgData.data[idx+1]=155; imgData.data[idx+2]=200; imgData.data[idx+3]=255;
+        // Day: light blue tint, intentionally transparent.
+        imgData.data[idx] = 128;
+        imgData.data[idx + 1] = 185;
+        imgData.data[idx + 2] = 220;
+        imgData.data[idx + 3] = 62;
       } else if (cosZ > -0.04) {
-        imgData.data[idx]=60;  imgData.data[idx+1]=110; imgData.data[idx+2]=160; imgData.data[idx+3]=255;
+        // Grey line: stronger cool-blue tint, intentionally transparent.
+        imgData.data[idx] = 58;
+        imgData.data[idx + 1] = 130;
+        imgData.data[idx + 2] = 185;
+        imgData.data[idx + 3] = 145;
       } else {
-        imgData.data[idx]=8;   imgData.data[idx+1]=22;  imgData.data[idx+2]=45;  imgData.data[idx+3]=255;
+        // Night: deep navy shade, transparent enough to retain geography.
+        imgData.data[idx] = 4;
+        imgData.data[idx + 1] = 14;
+        imgData.data[idx + 2] = 34;
+        imgData.data[idx + 3] = 180;
       }
     }
   }
+
   ctx.putImageData(imgData, 0, 0);
 
   // ── Helper: lon/lat → canvas x/y ──
