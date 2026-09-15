@@ -12519,11 +12519,11 @@ function drawGreyLine() {
       const idx = (py * W + px) * 4;
 
 	if (cosZ > 0.04) {
-	  // Day: muted blue tint that preserves SVG detail.
-	  overlayData.data[idx] = 70;
-	  overlayData.data[idx + 1] = 125;
-	  overlayData.data[idx + 2] = 160;
-	  overlayData.data[idx + 3] = 18; /* 26; */
+	  // Day: dark slate-blue filter over the light SVG base map.
+	  overlayData.data[idx] = 15;
+	  overlayData.data[idx + 1] = 42;
+	  overlayData.data[idx + 2] = 64;
+	  overlayData.data[idx + 3] = 55;
 	} else if (cosZ > -0.04) {
         // Grey line: stronger cool-blue terminator band.
         overlayData.data[idx] = 45;
