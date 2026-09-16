@@ -12520,10 +12520,10 @@ function drawGreyLine() {
 
 	  if (cosZ > 0.04) {
 		  // Day: muted steel-blue, keeps map features visible.
-		  overlayData.data[idx] = 40;
-		  overlayData.data[idx + 1] = 72;
-		  overlayData.data[idx + 2] = 96;
-		  overlayData.data[idx + 3] = 145;
+		  overlayData.data[idx]     =  8; /* 40; */
+		  overlayData.data[idx + 1] = 38; /* 72; */
+		  overlayData.data[idx + 2] = 78; /* 96; */
+		  overlayData.data[idx + 3] = 105; /* 145; */
 		
 		} else if (cosZ > -0.04) {
 		  // Grey line: brighter, more saturated blue to stand out.
