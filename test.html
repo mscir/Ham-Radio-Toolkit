@@ -12525,16 +12525,14 @@ function drawGreyLine() {
 		  overlayData.data[idx]     = 52;
 		  overlayData.data[idx + 1] = 104;
 		  overlayData.data[idx + 2] = 148;
-		  overlayData.data[idx + 3] = 62;
-		
-		} else if (cosZ > -0.04) {
-		  // Grey line: narrow, visible blue-grey transition band.
-		  overlayData.data[idx]     = 112;
-		  overlayData.data[idx + 1] = 170;
-		  overlayData.data[idx + 2] = 198;
-		  overlayData.data[idx + 3] = 150;
-		
-		} else {
+		  overlayData.data[idx + 3] = 62;		
+	 } else if (cosZ > -0.04) {
+	     // Grey line: cool silver-blue, distinct from the green land fill.
+	     overlayData.data[idx]     = 142;
+	     overlayData.data[idx + 1] = 188;
+ 	     overlayData.data[idx + 2] = 210;
+	     overlayData.data[idx + 3] = 155;		
+	} else {
 		  // Night: subtle dark-navy shading over the already-dark base map.
 		  // Borders and coastline detail remain readable.
 		  overlayData.data[idx]     = 0;
