@@ -4042,9 +4042,9 @@ take it with a grain of salt!</div>
     <div id="greyline-time" style="position:absolute;top:8px;right:10px;font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.5);padding:3px 8px;border-radius:2px"></div>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:12px;color:var(--text-dim);margin-bottom:12px">
-    <span><span style="display:inline-block;width:12px;height:12px;background:#1a3d5c;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Night</span>
-    <span><span style="display:inline-block;width:12px;height:12px;background:#4a8ab5;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Grey line (±1°)</span>
-    <span><span style="display:inline-block;width:12px;height:12px;background:#b8cede;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Day</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#06152B;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Night</span>
+	<span><span style="display:inline-block;width:12px;height:12px;background:#70AAC6;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Grey line (±1°)</span>
+	<span><span style="display:inline-block;width:12px;height:12px;background:#346894;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Day</span>
     <span><span style="display:inline-block;width:12px;height:12px;background:#ff3c3c;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Your location (approx)</span>
   </div>
   <div style="font-size:12px;color:var(--text-dim);line-height:1.8">
@@ -12457,7 +12457,8 @@ function sunPosition(date) {
 }
 
 // ── GREY LINE BASE MAP ──────────────────────────────────────────────────────
-const GREYLINE_MAP_SRC = 'assets/world-map-equirectangular.svg';
+// const GREYLINE_MAP_SRC = 'assets/world-map-equirectangular.svg';
+const GREYLINE_MAP_SRC = 'assets/world-map-dark-ocean-base.svg';
 
 let greylineMapImage = null;
 let greylineMapLoaded = false;
@@ -12519,25 +12520,27 @@ function drawGreyLine() {
       const idx = (py * W + px) * 4;
 
 	  if (cosZ > 0.04) {
-		  // Day: muted steel-blue, keeps map features visible.
-		  overlayData.data[idx]     =  8; /* 40; */
-		  overlayData.data[idx + 1] = 38; /* 72; */
-		  overlayData.data[idx + 2] = 78; /* 96; */
-		  overlayData.data[idx + 3] = 145 /* 125; 105; 145; */
+		  // Day: a light, translucent cool-blue wash.
+		  // Keeps the green land and borders visible.
+		  overlayData.data[idx]     = 52;
+		  overlayData.data[idx + 1] = 104;
+		  overlayData.data[idx + 2] = 148;
+		  overlayData.data[idx + 3] = 62;
 		
 		} else if (cosZ > -0.04) {
-		  // Grey line: brighter, more saturated blue to stand out.
-		  overlayData.data[idx] = 45;
-		  overlayData.data[idx + 1] = 135;
-		  overlayData.data[idx + 2] = 205;
-		  overlayData.data[idx + 3] = 175;
+		  // Grey line: narrow, visible blue-grey transition band.
+		  overlayData.data[idx]     = 112;
+		  overlayData.data[idx + 1] = 170;
+		  overlayData.data[idx + 2] = 198;
+		  overlayData.data[idx + 3] = 150;
 		
 		} else {
-		  // Night: near-black navy, with enough transparency for coastlines.
-		  overlayData.data[idx] = 1;
-		  overlayData.data[idx + 1] = 10;
-		  overlayData.data[idx + 2] = 28;
-		  overlayData.data[idx + 3] = 210;
+		  // Night: subtle dark-navy shading over the already-dark base map.
+		  // Borders and coastline detail remain readable.
+		  overlayData.data[idx]     = 0;
+		  overlayData.data[idx + 1] = 7;
+		  overlayData.data[idx + 2] = 19;
+		  overlayData.data[idx + 3] = 105;
 		}
     }
   }
