@@ -1,10 +1,14 @@
 Task List: 
 
-1. verify all pages, what's left: Grid Square Calculator, Q Code/Phonetics
-2. on links page put 'jump to topic' topics in alphabetical order
-3. add MUF section to solar conditions and propagation section
-4. hide explanatory sections in solar propagation page in collapsible/expandable div.
-5. use better quality map for grey line section
-6. check links page for thoroughness, verify that all links work.
-7. at this point this will be beta version 1.0.0
-8. Submit to Quin and Tom for their suggestions
+1. add contesting to links page
+2. add 'start here' to links page
+3. check links page for thoroughness, verify that all links work.
+
+this will be beta version 0.9
+
+Submit to Quin and Tom for their suggestions, when done with their revisions: beta 1.0
+
+4. remove unused svg from /assets
+5. update readme.md
+6. update license.txt
+7. add zip file for downloads
