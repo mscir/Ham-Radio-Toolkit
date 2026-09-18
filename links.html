@@ -2712,57 +2712,83 @@ setTheme(getPreferredTheme());
 	        .replace(/\s+/g, " ")
 	        .trim();
 	    }
-
-    function filterResources() {
-      const query = normalizeText(searchInput.value);
-      let matchCount = 0;
-
-      groups.forEach((group) => {
-        const cards = [...group.querySelectorAll(".resource-card")];
-        let groupMatches = 0;
-        cards.forEach((card) => {
-          const searchableText = normalizeText(
-            [
-              card.dataset.search || "",
-              card.textContent || "",
-              group.querySelector(".topic-name")?.textContent || ""
-            ].join(" ")
-          );
-          const isMatch = !query || searchableText.includes(query);
-          card.classList.toggle("is-hidden", !isMatch);
-          if (isMatch) {
-            groupMatches += 1;
-            matchCount += 1;
-          }
-        });
-        const topicName = normalizeText(
-          group.querySelector(".topic-name")?.textContent || ""
-        );
-        const topicMatches = query && topicName.includes(query);
-        if (topicMatches && groupMatches === 0) {
-          group.classList.remove("is-hidden");
-          cards.forEach((card) => {
-            card.classList.remove("is-hidden");
-          });
-          groupMatches = cards.length;
-          matchCount += cards.length;
-        } else {
-          group.classList.toggle("is-hidden", Boolean(query && groupMatches === 0));
-        }
-        if (query && groupMatches > 0) {
-          group.open = true;
-        }
-      });
-      noResults.classList.toggle("visible", Boolean(query && matchCount === 0));
-      if (!query) {
-        searchStatus.textContent = "Browse a topic or search all links.";
-      } else if (matchCount === 1) {
-        searchStatus.textContent = "1 matching resource found.";
-      } else {
-        searchStatus.textContent = `${matchCount} matching resources found.`;
-      }
-    }
-	  
+	function filterResources() {
+	  const query = normalizeText(searchInput.value);
+	  let matchCount = 0;
+	
+	  if (!query) {
+	    groups.forEach((group) => {
+	      const cards = [...group.querySelectorAll(".resource-card")];
+	
+	      group.classList.remove("is-hidden");
+	      group.open = false;
+	
+	      cards.forEach((card) => {
+	        card.classList.remove("is-hidden");
+	      });
+	    });
+	
+	    noResults.classList.remove("visible");
+	    searchStatus.textContent = "Browse a topic or search all links.";
+	    return;
+	  }
+	
+	  groups.forEach((group) => {
+	    const cards = [...group.querySelectorAll(".resource-card")];
+	    let groupMatches = 0;
+	
+	    cards.forEach((card) => {
+	      const searchableText = normalizeText(
+	        [
+	          card.dataset.search || "",
+	          card.textContent || "",
+	          group.querySelector(".topic-name")?.textContent || ""
+	        ].join(" ")
+	      );
+	
+	      const isMatch = searchableText.includes(query);
+	
+	      card.classList.toggle("is-hidden", !isMatch);
+	
+	      if (isMatch) {
+	        groupMatches += 1;
+	        matchCount += 1;
+	      }
+	    });
+	
+	    const topicName = normalizeText(
+	      group.querySelector(".topic-name")?.textContent || ""
+	    );
+	
+	    const topicMatches = topicName.includes(query);
+	
+	    if (topicMatches && groupMatches === 0) {
+	      group.classList.remove("is-hidden");
+	
+	      cards.forEach((card) => {
+	        card.classList.remove("is-hidden");
+	      });
+	
+	      groupMatches = cards.length;
+	      matchCount += cards.length;
+	    } else {
+	      group.classList.toggle("is-hidden", groupMatches === 0);
+	    }
+	
+	    if (groupMatches > 0) {
+	      group.open = true;
+	    }
+	  });
+	
+	  noResults.classList.toggle("visible", matchCount === 0);
+	
+	  if (matchCount === 1) {
+	    searchStatus.textContent = "1 matching resource found.";
+	  } else {
+	    searchStatus.textContent = `${matchCount} matching resources found.`;
+	  }
+	}
+     
     searchInput.addEventListener("input", filterResources);
     clearButton.addEventListener("click", () => {
       searchInput.value = "";
@@ -2775,7 +2801,6 @@ setTheme(getPreferredTheme());
         filterResources();
       }
     });
-
 	window.addEventListener("pageshow", () => {
       if (window.location.hash) return;
       groups.forEach((group) => {
