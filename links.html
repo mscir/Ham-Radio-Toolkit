@@ -2404,7 +2404,20 @@ html[data-theme="light"] mark.search-match {
     const clearButton = document.getElementById("search-clear");
     const searchStatus = document.getElementById("search-status");
     const noResults = document.getElementById("no-results");
-
+    const startHere = document.querySelector(".start-here");
+    const startHereStorageKey = "ham-radio-start-here-open";
+    if (startHere) {
+      const savedStartHereState = localStorage.getItem(startHereStorageKey);
+      if (savedStartHereState === "closed") {
+        startHere.open = false;
+      }
+      startHere.addEventListener("toggle", () => {
+        localStorage.setItem(
+          startHereStorageKey,
+          startHere.open ? "open" : "closed"
+        );
+      });
+    }
 /* start replacement code here */
 
 const groups = [...document.querySelectorAll(".resource-group")];
