@@ -11483,10 +11483,6 @@ function initCwPractice() {
   if(prosDiv)  { prosDiv.innerHTML=''; prosigns.forEach(c => prosDiv.appendChild(makeBtn(c))); }
   cwDrillCurrent = null;
   const message = document.getElementById('drill-mode-message');
-  if (message) {
-    message.textContent = 'Choose a practice mode above to begin.';
-    message.style.display = '';
-  }
 }
 
 function setCwDrillMode(mode) {
