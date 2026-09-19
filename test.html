@@ -1281,11 +1281,11 @@ body{
       <div style="display:flex;flex-direction:column;gap:8px">
         <div>
           <div style="font-size:12px;color:var(--text-dim);margin-bottom:3px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Latitude (decimal degrees, N=positive)</div>
-          <input id="grid-lat" class="calc-input" type="number" step="0.0001" min="-90" max="90" placeholder="e.g. 29.7604" style="width:100%;margin:0" oninput="calcGrid()">
+          <input id="grid-lat" class="calc-input" type="number" step="any" min="-90" max="90" placeholder="e.g. 29.7604" style="width:100%;margin:0" oninput="calcGrid()">
         </div>
         <div>
           <div style="font-size:12px;color:var(--text-dim);margin-bottom:3px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Longitude (decimal degrees, W=negative)</div>
-          <input id="grid-lon" class="calc-input" type="number" step="0.0001" min="-180" max="180" placeholder="e.g. -95.3698" style="width:100%;margin:0" oninput="calcGrid()">
+          <input id="grid-lon" class="calc-input" type="number" step="any" min="-180" max="180" placeholder="e.g. -95.3698" style="width:100%;margin:0" oninput="calcGrid()">
         </div>
 		<div id="grid-result-coords" style="display:none;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center">
 		  <div style="font-size:11px;color:var(--text-dim);font-family:'Barlow Condensed',sans-serif;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px">Your Grid Square</div>
@@ -5340,7 +5340,7 @@ function repSaveLocation() {
   const lat = document.getElementById('rep-lat')?.value;
   const lon = document.getElementById('rep-lon')?.value;
   if (lat && lon) {
-    storageSet('hamLatLon', `${lat},${lon}`);
+    storageSet('hamLatLon', `${lat.toFixed(6)},${lon.toFixed(6)}`);
   }
 }
 
@@ -5645,7 +5645,7 @@ function calcGrid() {
   }
   err.style.display = 'none';
   err.textContent = '';
-  storageSet('hamLatLon', `${lat},${lon}`);
+  storageSet('hamLatLon', `${lat.toFixed(6)},${lon.toFixed(6)}`);
   const grid4 = latLonToGrid(lat, lon, 4);
   const grid6 = latLonToGrid(lat, lon, 6);
   res.style.display = '';
