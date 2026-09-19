@@ -3621,9 +3621,15 @@ take it with a grain of salt!</div>
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
       <button class="calc-btn" onclick="setCwDrillMode('letters')" id="drill-letters" style="width:auto;padding:7px 16px;margin:0">Letters</button>
       <button class="calc-btn" onclick="setCwDrillMode('numbers')" id="drill-numbers" style="width:auto;padding:7px 16px;margin:0">Numbers</button>
-      <button class="calc-btn" onclick="setCwDrillMode('both')" id="drill-both" style="width:auto;padding:7px 16px;margin:0;background:rgba(0,212,255,.15);color:var(--accent);border-color:rgba(0,212,255,.4)">Letters + Numbers</button>
+      <button class="calc-btn" onclick="setCwDrillMode('both')" id="drill-both" style="width:auto;padding:7px 16px;margin:0">Letters + Numbers</button>
       <button class="calc-btn" onclick="setCwDrillMode('words')" id="drill-words" style="width:auto;padding:7px 16px;margin:0">Words</button>
     </div>
+    <div
+      id="drill-mode-message"
+      role="status"
+      aria-live="polite"
+      style="display:none;margin:-6px 0 14px;font-size:13px;color:var(--amber)"
+    ></div>
     <div id="cw-drill-char" style="font-family:'Share Tech Mono',monospace;font-size:72px;color:var(--accent);line-height:1;margin-bottom:8px;min-height:80px">?</div>
     <div id="cw-drill-code" style="font-family:'Share Tech Mono',monospace;font-size:22px;color:var(--amber);margin-bottom:16px;min-height:30px;letter-spacing:.1em"> </div>
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
@@ -11376,7 +11382,7 @@ function aprsLookup() {
 let cwAudioCtx = null;
 let cwPlaying = false;
 let cwStopFlag = false;
-let cwDrillMode = 'both';
+let cwDrillMode = 'null';
 let cwDrillCurrent = null;
 let cwDrillRevealed = false;
 let cwDrillCount = 0;
@@ -11390,6 +11396,7 @@ const CW_MAP_FULL = {
   '6':'-....','7':'--...','8':'---..','9':'----.',
   'AR':'.-.-.',  'SK':'...-.-', 'BT':'-...-', 'KN':'-.--.', 'AS':'.-...', 'CQ':'-.-. --.-'
 };
+const CW_DRILL_WORDS = ['CQ','TEST','DE','K','SK','AR','QSO','QTH','RST','NAME','RIG','ANT','WX',  '73'];
 
 async function getCwAudioCtx() {
   if (!cwAudioCtx) {
@@ -11468,54 +11475,86 @@ function initCwPractice() {
     btn.onclick = () => playCwChar(char);
     return btn;
   }
-
   const alphaDiv = document.getElementById('cw-practice-alpha');
   const numsDiv  = document.getElementById('cw-practice-nums');
   const prosDiv  = document.getElementById('cw-practice-prosigns');
   if(alphaDiv) { alphaDiv.innerHTML=''; alpha.forEach(c => alphaDiv.appendChild(makeBtn(c))); }
   if(numsDiv)  { numsDiv.innerHTML=''; nums.forEach(c => numsDiv.appendChild(makeBtn(c))); }
   if(prosDiv)  { prosDiv.innerHTML=''; prosigns.forEach(c => prosDiv.appendChild(makeBtn(c))); }
-
-  drillNext();
+  cwDrillCurrent = null;
+  const message = document.getElementById('drill-mode-message');
+  if (message) {
+    message.textContent = 'Choose a practice mode above to begin.';
+    message.style.display = '';
+  }
 }
 
 function setCwDrillMode(mode) {
   cwDrillMode = mode;
-  ['letters','numbers','both'].forEach(m => {
-    const b = document.getElementById('drill-'+m);
-    if(!b) return;
-    b.style.background = m===mode ? 'rgba(0,212,255,.15)' : '';
-    b.style.color       = m===mode ? 'var(--accent)'       : '';
-    b.style.borderColor = m===mode ? 'rgba(0,212,255,.4)'  : '';
+  ['letters', 'numbers', 'both', 'words'].forEach(m => {
+    const button = document.getElementById('drill-' + m);
+    if (!button) return;
+    const selected = m === mode;
+    button.style.background = selected ? 'rgba(0,212,255,.15)' : '';
+    button.style.color = selected ? 'var(--accent)' : '';
+    button.style.borderColor = selected ? 'rgba(0,212,255,.4)' : '';
   });
+  const message = document.getElementById('drill-mode-message');
+  if (message) {
+    message.textContent = '';
+    message.style.display = 'none';
+  }
   drillNext();
 }
 
 function drillNext() {
-  const pool = cwDrillMode === 'letters' ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-             : cwDrillMode === 'numbers' ? '0123456789'.split('')
-             : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+  if (!cwDrillMode) {
+    cwDrillCurrent = null;
+    return;
+  }
+  const pool =
+    cwDrillMode === 'letters'
+      ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+      : cwDrillMode === 'numbers'
+        ? '0123456789'.split('')
+        : cwDrillMode === 'both'
+          ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('')
+          : CW_DRILL_WORDS;
   cwDrillCurrent = pool[Math.floor(Math.random() * pool.length)];
   cwDrillRevealed = false;
   const charEl = document.getElementById('cw-drill-char');
   const codeEl = document.getElementById('cw-drill-code');
-  if(charEl) charEl.textContent = '?';
-  if(codeEl) codeEl.textContent = ' ';
+  if (charEl) charEl.textContent = '?';
+  if (codeEl) codeEl.textContent = ' ';
   cwDrillCount++;
-  document.getElementById('drill-count').textContent = cwDrillCount - 1;
-	  
-  // Audio starts only after the visitor presses Play.
+  const countEl = document.getElementById('drill-count');
+  if (countEl) {
+    countEl.textContent = cwDrillCount - 1;
+  }
 }
-
+	
 async function drillPlay() {
-  if (!cwDrillCurrent) return;
+  if (!cwDrillMode || !cwDrillCurrent) {
+    const message = document.getElementById('drill-mode-message');
+    if (message) {
+      message.textContent = 'Choose a practice mode above to begin.';
+      message.style.display = '';
+    }
+    return;
+  }
   cwAudioUnlocked = true;
   const wpm = parseInt(document.getElementById('cw-wpm').value) || 13;
   if (cwPlaying) {
     stopCW();
   }
   setTimeout(() => {
-    playCwString(CW_MAP_FULL[cwDrillCurrent], wpm);
+    const morse = CW_MAP_FULL[cwDrillCurrent] ||
+      cwDrillCurrent
+        .split('')
+        .map(char => CW_MAP_FULL[char])
+        .filter(Boolean)
+        .join(' ');
+    playCwString(morse, wpm);
   }, cwPlaying ? 300 : 0);
 }
 	  
