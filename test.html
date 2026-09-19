@@ -12357,20 +12357,6 @@ window.drillReveal = function() {
   cwDrillRevealed = true;
 };
 
-// Override setCwDrillMode to handle words
-const _origSetMode = window.setCwDrillMode;
-window.setCwDrillMode = function(mode) {
-  cwDrillMode = mode;
-  ['letters','numbers','both','words'].forEach(m => {
-    const b = document.getElementById('drill-'+m);
-    if (!b) return;
-    b.style.background  = m===mode ? 'rgba(0,212,255,.15)' : '';
-    b.style.color       = m===mode ? 'var(--accent)' : '';
-    b.style.borderColor = m===mode ? 'rgba(0,212,255,.4)' : '';
-  });
-  drillNext();
-};
-
 // Override drillNext to handle words mode + weak-char weighting
 const _origDrillNext = window.drillNext;
 window.drillNext = function() {
