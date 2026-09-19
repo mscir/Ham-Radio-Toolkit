@@ -3624,12 +3624,13 @@ take it with a grain of salt!</div>
       <button class="calc-btn" onclick="setCwDrillMode('both')" id="drill-both" style="width:auto;padding:7px 16px;margin:0">Letters + Numbers</button>
       <button class="calc-btn" onclick="setCwDrillMode('words')" id="drill-words" style="width:auto;padding:7px 16px;margin:0">Words</button>
     </div>
-    <div
-      id="drill-mode-message"
-      role="status"
-      aria-live="polite"
-      style="display:none;margin:-6px 0 14px;font-size:13px;color:var(--amber)"
-    ></div>
+	<div
+	  id="drill-mode-message"
+	  role="status"
+	  aria-live="polite"
+	  hidden
+	  style="margin:-6px 0 14px;font-size:13px;color:var(--amber)"
+	></div>
     <div id="cw-drill-char" style="font-family:'Share Tech Mono',monospace;font-size:72px;color:var(--accent);line-height:1;margin-bottom:8px;min-height:80px">?</div>
     <div id="cw-drill-code" style="font-family:'Share Tech Mono',monospace;font-size:22px;color:var(--amber);margin-bottom:16px;min-height:30px;letter-spacing:.1em"> </div>
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
@@ -11482,7 +11483,6 @@ function initCwPractice() {
   if(numsDiv)  { numsDiv.innerHTML=''; nums.forEach(c => numsDiv.appendChild(makeBtn(c))); }
   if(prosDiv)  { prosDiv.innerHTML=''; prosigns.forEach(c => prosDiv.appendChild(makeBtn(c))); }
   cwDrillCurrent = null;
-  const message = document.getElementById('drill-mode-message');
 }
 
 function setCwDrillMode(mode) {
@@ -11497,7 +11497,8 @@ function setCwDrillMode(mode) {
   });
   const message = document.getElementById('drill-mode-message');
   if (message) {
-    message.textContent = '';
+    message.replaceChildren();
+    message.hidden = true;
     message.style.display = 'none';
   }
   drillNext();
@@ -11534,6 +11535,7 @@ async function drillPlay() {
     const message = document.getElementById('drill-mode-message');
     if (message) {
       message.textContent = 'Choose a practice mode above to begin.';
+      message.hidden = false;
       message.style.display = '';
     }
     return;
