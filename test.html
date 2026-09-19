@@ -5655,8 +5655,11 @@ function calcGrid() {
     `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? 'N' : 'S'} ` +
     `${Math.abs(lon).toFixed(4)}°${lon >= 0 ? 'E' : 'W'}`;
   const gf = document.getElementById('dxcc-mygrid');
-  if (gf && !gf.value) {
-    gf.value = grid4;
+  if (gf) {
+    const current = gf.value.trim().toUpperCase();
+    if (!/^[A-R]{2}\d{2}[A-X]{2}$/.test(current)) {
+      gf.value = grid4;
+    }
     saveDxccGrid();
   }
 }
@@ -5666,18 +5669,36 @@ function calcGridReverse() {
   const normalized = raw.slice(0, 4).toUpperCase() + raw.slice(4).toLowerCase();
   const res = document.getElementById('grid-result-reverse');
   const err = document.getElementById('grid-error');
-  if (!res||!err) return;
-  if (raw.length < 4) { res.style.display='none'; err.style.display='none'; return; }
+  if (!res || !err) return;
+  if (raw.length < 4) {
+    res.style.display = 'none';
+    err.style.display = 'none';
+    return;
+  }
   try {
-    const {lat, lon} = gridToLatLonCenter(normalized);
-    res.style.display=''; err.style.display='none';
-    document.getElementById('rev-lat').textContent = lat.toFixed(4) + '° ' + (lat>=0?'N':'S');
-    document.getElementById('rev-lon').textContent = Math.abs(lon).toFixed(4) + '° ' + (lon>=0?'E':'W');
+    const { lat, lon } = gridToLatLonCenter(normalized);
+    res.style.display = '';
+    err.style.display = 'none';
+    document.getElementById('rev-lat').textContent = lat.toFixed(4) + '° ' + (lat >= 0 ? 'N' : 'S');
+    document.getElementById('rev-lon').textContent = Math.abs(lon).toFixed(4) + '° ' + (lon >= 0 ? 'E' : 'W');
     document.getElementById('rev-desc').textContent =
-      `Grid ${normalized} covers approximately ${normalized.length >= 6 ? '5′ longitude × 2.5′ latitude' : '2° longitude × 1° latitude'}`
-  } catch(e) {
-    res.style.display='none';
-    err.style.display=''; err.textContent = '⚠ Invalid grid square format. Use 4 chars (EL29) or 6 chars (EL29nv).';
+      `Grid ${normalized} covers approximately ${
+        normalized.length >= 6
+          ? '5′ longitude × 2.5′ latitude'
+          : '2° longitude × 1° latitude'
+      }`;
+    const latInput = document.getElementById('grid-lat');
+    const lonInput = document.getElementById('grid-lon');
+    if (latInput && lonInput) {
+      latInput.value = lat.toFixed(6);
+      lonInput.value = lon.toFixed(6);
+      calcGrid();
+    }
+  } catch (e) {
+    res.style.display = 'none';
+    err.style.display = '';
+    err.textContent =
+      '⚠ Invalid grid square format. Use 4 chars (EL29) or 6 chars (EL29nv).';
   }
 }
 
