@@ -1136,7 +1136,7 @@ body{
         ↺ Reset</button>
     </div>
     <div style="font-size:11px;color:var(--text-dim);margin-top:10px;text-align:center">
-      Selections saved as a cookie · last 5 years
+      Selections saved in this browser
     </div>
   </div>
   <div class="sb-nav" id="sb-nav-inner">
@@ -3032,7 +3032,7 @@ infrastructure is down.</div>
     <div class="panel-desc">Enter a callsign or prefix to find the likely DXCC entity, continent, CQ zone, ITU zone, and great-circle bearing from your saved grid square. The embedded prefix database works offline; portable, special-event, and unusual callsigns may need confirmation from a current online callsign database.</div>
   </div>
 
-  <!-- Grid square input (saved to cookie) -->
+  <!-- Grid square input (saved automatically in this browser) -->
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px">
     <div style="flex:1;min-width:140px">
       <div class="section-label" style="border:none;margin-bottom:4px;padding-bottom:0">Your Grid Square <span style="color:var(--text-dim);font-weight:400">(saved automatically)</span></div>
@@ -4085,15 +4085,39 @@ take it with a grain of salt!</div>
 // ===========================================
 function showPanel(id, btn) {
   const target = document.getElementById('panel-' + id);
-  if (!target) { console.warn('showPanel: no panel with id panel-' + id); return; }
+  if (!target) {
+    console.warn('showPanel: no panel with id panel-' + id);
+    return;
+  }
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   target.classList.add('active');
-  if (btn) btn.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+  }
   document.querySelector('.sidebar')?.classList.remove('open');
-  if (id === 'solar' && !solarLoaded) fetchSolar();
-  if (id === 'greyline') setTimeout(initGreyLine, 50);
-  if (id === 'qsolog') logNow();
+  if (id === 'solar' && !solarLoaded) {
+    fetchSolar();
+  }
+  if (id === 'greyline') {
+    setTimeout(initGreyLine, 50);
+  }
+  if (id === 'qsolog') {
+    logNow();
+  }
+  requestAnimationFrame(() => {
+    const heading =
+      target.querySelector('h1, h2, h3, .panel-title, .section-label') ||
+      target;
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto'
+      : 'smooth';
+    heading.scrollIntoView({
+      behavior,
+      block: 'start',
+      inline: 'nearest'
+    });
+  });
 }
 	
 function showRef(id, btn) {
@@ -9692,7 +9716,7 @@ function initPrivileges() {
 // ===========================================
 // LICENSE CLASS SYSTEM
 // ===========================================
-// Persisted via cookie; defaults to 'extra'
+// Persisted in local storage; defaults to 'extra'
 let currentLicenseClass = 'extra';
 
 function getLicenseCookie() {
