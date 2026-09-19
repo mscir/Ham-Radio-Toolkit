@@ -2228,6 +2228,30 @@ body{
 </div>
 
 <script>
+function storageGet(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    return null;
+  }
+}
+function storageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+function storageRemove(key) {
+  try {
+    localStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+	
 function togglePrivFullTable() {
   const wrapper = document.getElementById('priv-full-wrapper');
   const header = document.getElementById('priv-full-header');
@@ -5316,23 +5340,35 @@ function repSaveLocation() {
   const lat = document.getElementById('rep-lat')?.value;
   const lon = document.getElementById('rep-lon')?.value;
   if (lat && lon) {
-    const exp = new Date(); exp.setFullYear(exp.getFullYear()+5);
-    document.cookie = `hamLatLon=${lat},${lon};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+    storageSet('hamLatLon', `${lat},${lon}`);
   }
 }
 
 // Restore saved location into repeater search fields
 function repRestoreLocation() {
-  const ll = document.cookie.match(/(?:^|;\s*)hamLatLon=([^,;]+),([^;]+)/);
+  const saved = storageGet('hamLatLon');
   const latEl = document.getElementById('rep-lat');
   const lonEl = document.getElementById('rep-lon');
   const note = document.getElementById('rep-location-note');
-  if (ll && latEl && lonEl) {
-    latEl.value = parseFloat(ll[1]).toFixed(4);
-    lonEl.value = parseFloat(ll[2]).toFixed(4);
-    if (note) note.textContent = `📍 Using saved location: ${parseFloat(ll[1]).toFixed(4)}°, ${parseFloat(ll[2]).toFixed(4)}° — update above to change.`;
-  } else {
-    if (note) note.innerHTML = `📍 Enter your latitude and longitude above, or set them in the <strong>Grid Square Calc</strong> panel and they will appear here automatically.`;
+
+  if (saved && latEl && lonEl) {
+    const [latRaw, lonRaw] = saved.split(',');
+    const lat = Number.parseFloat(latRaw);
+    const lon = Number.parseFloat(lonRaw);
+
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      latEl.value = lat.toFixed(4);
+      lonEl.value = lon.toFixed(4);
+      if (note) {
+        note.textContent =
+          `📍 Using saved location: ${lat.toFixed(4)}°, ${lon.toFixed(4)}° — update above to change.`;
+      }
+      return;
+    }
+  }
+  if (note) {
+    note.innerHTML =
+      `📍 Enter your latitude and longitude above, or set them in the <strong>Grid Square Calc</strong> panel and they will appear here automatically.`;
   }
 }
 
@@ -5609,9 +5645,7 @@ function calcGrid() {
   }
   err.style.display = 'none';
   err.textContent = '';
-  const exp = new Date();
-  exp.setFullYear(exp.getFullYear() + 5);
-  document.cookie = `hamLatLon=${lat},${lon};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+  storageSet('hamLatLon', `${lat},${lon}`);
   const grid4 = latLonToGrid(lat, lon, 4);
   const grid6 = latLonToGrid(lat, lon, 6);
   res.style.display = '';
@@ -9641,13 +9675,11 @@ function initPrivileges() {
 let currentLicenseClass = 'extra';
 
 function getLicenseCookie() {
-  const m = document.cookie.match(/(?:^|;\s*)hamLicenseClass=([^;]+)/);
-  return m ? m[1] : null;
+  return storageGet('hamLicenseClass');
 }
+
 function setLicenseCookie(cls) {
-  const exp = new Date();
-  exp.setFullYear(exp.getFullYear() + 5);
-  document.cookie = `hamLicenseClass=${cls};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+  storageSet('hamLicenseClass', cls);
 }
 
 function setLicenseClass(cls) {
@@ -12094,25 +12126,31 @@ function calcBearing(lat1,lon1,lat2,lon2){
   const sp=Math.round((Math.atan2(y,x)*180/Math.PI+360)%360);
   return{sp,lp:Math.round((sp+180)%360),dist};
 }
-function saveDxccGrid(){
-  const v=(document.getElementById('dxcc-mygrid').value||'').toUpperCase();
-  document.getElementById('dxcc-mygrid').value=v;
-  const exp=new Date();exp.setFullYear(exp.getFullYear()+5);
-  document.cookie=`hamDxccGrid=${v};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+function saveDxccGrid() {
+  const el = document.getElementById('dxcc-mygrid');
+  if (!el) return;
+  const value = (el.value || '').toUpperCase();
+  el.value = value;
+  storageSet('hamDxccGrid', value);
   lookupDxcc();
 }
-function restoreDxccGrid(){
-  const m=document.cookie.match(/(?:^|;\s*)hamDxccGrid=([^;]+)/);
-  if(m){const el=document.getElementById('dxcc-mygrid');if(el)el.value=m[1];}
-  // Also restore lat/lon
-  const ll=document.cookie.match(/(?:^|;\s*)hamLatLon=([^,;]+),([^;]+)/);
-  if(ll){
-    const latEl=document.getElementById('grid-lat');
-    const lonEl=document.getElementById('grid-lon');
-    if(latEl)latEl.value=ll[1];
-    if(lonEl)lonEl.value=ll[2];
-    calcGrid();
+function restoreDxccGrid() {
+  const savedGrid = storageGet('hamDxccGrid');
+  const gridEl = document.getElementById('dxcc-mygrid');
+  if (savedGrid && gridEl) {
+    gridEl.value = savedGrid.toUpperCase();
   }
+  const savedLocation = storageGet('hamLatLon');
+  if (!savedLocation) return;
+  const [latRaw, lonRaw] = savedLocation.split(',');
+  const lat = Number.parseFloat(latRaw);
+  const lon = Number.parseFloat(lonRaw);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+  const latEl = document.getElementById('grid-lat');
+  const lonEl = document.getElementById('grid-lon');
+  if (latEl) latEl.value = lat;
+  if (lonEl) lonEl.value = lon;
+  calcGrid();
 }
 const NATO_WORDS = {
   A:'Alfa',B:'Bravo',C:'Charlie',D:'Delta',E:'Echo',F:'Foxtrot',
@@ -12153,24 +12191,27 @@ function spellCallsign() {
 function saveCwStatsCookie() {
   const data = {
     correct: drillCorrectCount,
-    wrong:   drillWrongCount,
-    weak:    drillWeakMap
+    wrong: drillWrongCount,
+    weak: drillWeakMap
   };
-  const exp = new Date();
-  exp.setFullYear(exp.getFullYear() + 2);
-  document.cookie = `cwDrillStats=${encodeURIComponent(JSON.stringify(data))};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+  storageSet('cwDrillStats', JSON.stringify(data));
 }
 
 function loadCwStatsCookie() {
-  const m = document.cookie.match(/(?:^|;\s*)cwDrillStats=([^;]+)/);
-  if (!m) return;
+  const saved = storageGet('cwDrillStats');
+  if (!saved) return;
   try {
-    const d = JSON.parse(decodeURIComponent(m[1]));
-    drillCorrectCount = d.correct || 0;
-    drillWrongCount   = d.wrong   || 0;
-    drillWeakMap      = d.weak    || {};
+    const data = JSON.parse(saved);
+    drillCorrectCount = Number.isFinite(data.correct) ? data.correct : 0;
+    drillWrongCount = Number.isFinite(data.wrong) ? data.wrong : 0;
+    drillWeakMap =
+      data.weak && typeof data.weak === 'object' && !Array.isArray(data.weak)
+        ? data.weak
+        : {};
     updateDrillScore();
-  } catch(e) {}
+  } catch (error) {
+    console.warn('Could not restore CW drill statistics.', error);
+  }
 }
 
 function drillScore(correct) {
@@ -12217,7 +12258,7 @@ function resetDrillScore() {
   if (!confirm('Reset all CW drill statistics? This cannot be undone.')) return;
   drillCorrectCount = 0; drillWrongCount = 0; drillWeakMap = {};
   // Clear cookie
-  document.cookie = 'cwDrillStats=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+  storageRemove('cwDrillStats');
   const sb = document.getElementById('cw-stats-saved');
   if (sb) sb.style.display = 'none';
   updateDrillScore();
@@ -12766,15 +12807,19 @@ const MENU_DEFAULT_HIDDEN = [];
 
 // Load hidden items from cookie
 function loadMenuHidden() {
-  const m = document.cookie.match(/(?:^|;\s*)hamMenuHidden=([^;]+)/);
-  if (!m) return [];
-  try { return JSON.parse(decodeURIComponent(m[1])); } catch(e) { return []; }
+  const saved = storageGet('hamMenuHidden');
+  if (!saved) return [];
+  try {
+    const hidden = JSON.parse(saved);
+    return Array.isArray(hidden) ? hidden : [];
+  } catch (error) {
+    return [];
+  }
 }
 
 // Save hidden items to cookie
 function saveMenuHidden(hidden) {
-  const exp = new Date(); exp.setFullYear(exp.getFullYear()+5);
-  document.cookie = `hamMenuHidden=${encodeURIComponent(JSON.stringify(hidden))};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+  storageSet('hamMenuHidden', JSON.stringify(hidden));
 }
 
 // Rebuild the sidebar nav from MENU_PANELS filtered by hidden list
