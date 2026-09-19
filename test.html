@@ -4105,17 +4105,16 @@ function showPanel(id, btn) {
   if (id === 'qsolog') {
     logNow();
   }
-  requestAnimationFrame(() => {
-    const heading =
-      target.querySelector('h1, h2, h3, .panel-title, .section-label') ||
-      target;
-    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ? 'auto'
-      : 'smooth';
-    heading.scrollIntoView({
-      behavior,
-      block: 'start',
-      inline: 'nearest'
+    requestAnimationFrame(() => {
+    const header = document.querySelector('.topbar, header, .header');
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    const panelTop = target.getBoundingClientRect().top + window.scrollY;
+
+    window.scrollTo({
+      top: Math.max(0, panelTop - headerHeight - 16),
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth'
     });
   });
 }
