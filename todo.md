@@ -16,7 +16,8 @@ Submit to Quin and Tom for their suggestions, when done with their revisions: be
 
 LINKS TESTING - MANUAL
 
-test.html link total - 26 - all working
+W3C Link Checker & Mannual Testing
+ - test.html All Links Working
 
 APRS - 2
 Browse Live APRS Activity
