@@ -102,16 +102,16 @@ The project is dedicated to the public domain under CC0 1.0; you may use, modify
 
 ---
 
-## 🐛 Reporting Issues & Contributing
+## 🐛 Reporting Issues
 
-Feedback, bug reports, and suggestions are highly encouraged to help keep this toolkit accurate and helpful for the ham community! 
+Feedback, bug reports, and correction requests are welcome, especially for broken links, calculation errors, outdated regulatory information, or inaccurate reference material.
 
-If you spot a calculation error, a broken tool feed, a typo, or have a feature idea:
+If you spot a problem:
 1. Navigate to the **[Issues](https://github.com/mscir/Ham-Radio-Toolkit/issues)** tab.
 2. Click the green **New Issue** button.
-3. Provide a brief description of the issue or your suggestion, and submit it.
+3. Describe the issue, include steps to reproduce it when relevant, and cite an authoritative source for regulatory or reference-data corrections.
 
-*GitHub can notify you of updates or responses to issues you create, subject to your GitHub notification settings.*
+The project is currently maintained as an independent project. You are welcome to fork it and make your own changes under CC0 1.0; pull requests and feature proposals may not receive a response or be incorporated.
 
 ---
 
