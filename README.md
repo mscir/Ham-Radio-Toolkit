@@ -81,6 +81,27 @@ The dashboard features a **Customizable Menu Layout**. Operators can tailor the 
 
 ---
 
+## 💾 Run or Download
+
+The live version is available at
+[mscir.github.io/Ham-Radio-Toolkit](https://mscir.github.io/Ham-Radio-Toolkit/).
+
+To use your own local copy:
+
+1. Download the repository using GitHub’s **Code** → **Download ZIP** option, then extract the ZIP file.
+2. Open `index.html` in a modern web browser.
+3. Some live data features require an internet connection and may work best when the files are served from a simple local web server rather than opened directly from a `file://` address.
+
+To make changes or create your own version, fork the repository or clone it with Git:
+
+```bash
+git clone [https://github.com/mscir/Ham-Radio-Toolkit.git](https://github.com/mscir/Ham-Radio-Toolkit.git)
+```
+
+The project is dedicated to the public domain under CC0 1.0; you may use, modify, and redistribute it without requesting permission.
+
+---
+
 ## 🐛 Reporting Issues & Contributing
 
 Feedback, bug reports, and suggestions are highly encouraged to help keep this toolkit accurate and helpful for the ham community! 
