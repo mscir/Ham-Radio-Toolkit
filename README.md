@@ -61,7 +61,7 @@ The dashboard features a **Customizable Menu Layout**. Operators can tailor the 
 *   **💬 Common Q-Codes Lookup:** A comprehensive reference table of marine and amateur radio shorthand codes (e.g., QRM, QRN, QRP, QTH, QRZ) complete with precise operational meanings.
 *   **📶 Radio Signal Codes (RST System):** A built-in guide outlining the standard 3-digit signal reporting framework for Readability (1–5), Strength (1–9), and Tone (1–9). Includes an interactive text-to-phonetic spelling translator tool.
 *   **📋 License Profile & Privilege Checker:** Select Technician, General, or Amateur Extra to personalize the dashboard's operating profile. Includes an interactive frequency checker and class-specific U.S. privilege reference.
-*   **🌍 DXCC Prefix & CQ Zone Lookup:** Identify entity countries, great circle bearings, distance, and CQ/ITU zones directly via grid locator criteria.
+*   **🌍 DXCC Prefix Lookup:** Identify likely DXCC entities, continents, CQ and ITU zones, great-circle bearings, and distance from your saved grid square.
 
 ### 4. Technical Calculators
 *   **Maidenhead Grid Square Calculator:** Rapid conversions between standard Decimal Coordinates and 4-to-6 character grid locators.
