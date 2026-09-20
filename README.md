@@ -148,6 +148,13 @@ Bjørn Sandvik. The original asset is available through Wikimedia Commons under 
 
 ---
 
+## 📄 License
+
+This project is dedicated to the public domain under the
+[CC0 1.0 Universal Public Domain Dedication](LICENSE).
+
+---
+
 ## 📝 Compliance Disclaimer
 
 *Frequency Privileges information is reviewed against current FCC Part 97 requirements and cross-referenced with ARRL U.S. amateur-band allocation material. The FCC’s current eCFR text controls. This toolkit is an educational operating aid, not legal advice or an official FCC publication. Operators remain responsible for verifying current frequency, emission, bandwidth, power, location, sharing, station-control, and other applicable requirements before transmitting.*
