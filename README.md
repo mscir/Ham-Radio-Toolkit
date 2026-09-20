@@ -12,14 +12,22 @@ When you first open the toolkit, choose your current U.S. amateur-radio license 
 
 1. Open **Frequency Privileges** from the bottom of the left menu.
 2. Select **Technician**, **General**, or **Amateur Extra**.
-3. Your selection is saved automatically in your browser for up to five years.
+3. Your selection is saved locally in your browser and reused on later visits.
 4. Open **Grid Square Calc** using the menu.
-5. Enter your latitude and longitude, grid square, or if you don't know them, use the link to the page that will allow you to find your location on a map, and display your location data.
-6. Enter your location data into the Grid Square Calculator page and it will be stored for up to five years. 
+5. Enter your latitude and longitude or grid square. If you do not know them, use the linked map page to find and display your location information.
+6. Save the resulting location data in the Grid Square Calculator for use in compatible toolkit features.
 
-The toolkit uses your selected license class to personalize the Frequency Privileges reference, frequency checker, operating profile, and other license-aware guidance. Also your location will be used if you use the DXCC Prefix Lookup page or the Repeater Finder page. 
+The toolkit uses your selected license class to personalize the Frequency Privileges reference, Frequency Checker, operating profile, and other license-aware guidance. It can also use your saved location data in the DXCC Prefix Lookup and Repeater Finder tools.
 
 **Important:** The toolkit is designed for U.S. amateur radio operators and uses FCC Part 97 / ARRL reference material. Always verify your current privileges, regional restrictions, band allocations, and local operating rules before transmitting.
+
+---
+
+### Your saved data
+
+The toolkit stores selected settings and locally created information in your browser on the device you are using, including your license class, station location or grid, menu layout, QSO log, CW practice statistics, theme preference, and APRS lookup value.
+
+Saved data is specific to the browser and site address you use. Clearing this site’s browser data, using a different browser or device, or using private/incognito browsing can remove or isolate those saved settings and log entries. Export QSO data regularly if you want a separate backup.
 
 ---
 
@@ -28,7 +36,7 @@ The toolkit uses your selected license class to personalize the Frequency Privil
 The dashboard features a **Customizable Menu Layout**. Operators can tailor the interface to their operating style:
 *   Click the **Gear Icon (⚙️)** in the top menu bar to open the customization drawer.
 *   Toggle individual widgets or entire sections (**Live Data**, **Operating**, **Reference**, **Tools & Calculators**) to show or hide them.
-*   Your layout choices save automatically in your browser's cookies and persist for up to 5 years, keeping your workspace uncluttered.
+*   Your layout choices save automatically in your browser's local storage, keeping your workspace uncluttered.
 *   Your selected **U.S. license class** is also remembered and shown in the sidebar as your current operating profile. Click the profile card at any time to return to the Frequency Privileges panel and change it.
 
 ---
@@ -49,7 +57,7 @@ The dashboard features a **Customizable Menu Layout**. Operators can tailor the 
 *   **Digital Mode Selector:** Guidance path recommendations for digital operations like Winlink, JS8Call, or FT8 based on your goals.
 
 ### 3. On-Air Language, Reference, & CW Practice
-*   **🔊 Interactive CW Practice Module:** Learn Morse code by ear and sight. Features full audio playback for individual characters, dynamic words, a live speed slider (WPM), and an interactive **Drill Mode** with statistics tracking to test your proficiency.
+*   **🔊 Interactive CW Practice Module:** Learn Morse code by ear and sight with audio playback, adjustable speed in words per minute (WPM), character and word practice, and Drill Mode options for letters, numbers, letters plus numbers, and words. Drill Mode tracks statistics locally to help measure progress.
 *   **💬 Common Q-Codes Lookup:** A comprehensive reference table of marine and amateur radio shorthand codes (e.g., QRM, QRN, QRP, QTH, QRZ) complete with precise operational meanings.
 *   **📶 Radio Signal Codes (RST System):** A built-in guide outlining the standard 3-digit signal reporting framework for Readability (1–5), Strength (1–9), and Tone (1–9). Includes an interactive text-to-phonetic spelling translator tool.
 *   **📋 License Profile & Privilege Checker:** Select Technician, General, or Amateur Extra to personalize the dashboard's operating profile. Includes an interactive frequency checker and class-specific U.S. privilege reference.
@@ -66,10 +74,10 @@ The dashboard features a **Customizable Menu Layout**. Operators can tailor the 
 
 ## ⚡ Technical Highlights
 
-*   **100% Static & Fast:** Built entirely with native HTML, CSS, and modern JavaScript. Requires zero backend database overhead or installation extensions.
-*   **CORS Clean Data Pipelines:** Leverages secure, real-time JSON web queries straight to authoritative server feeds without routing proxies.
-*   **Client-Side Persistence:** Remembers your selected license class, menu layout, logged contacts, and coordinate defaults using browser cookies and local storage. No account or server database is required.
-*   **Responsive Framework:** Layout smoothly shifts between horizontal desktop multi-panels and stacked mobile views for tablet or portable on-the-go operation.
+*   **100% Static & Fast:** Built with native HTML, CSS, and modern JavaScript. No backend database, server-side application, or installation is required.
+*   **Direct Data Requests:** Uses browser-based requests to retrieve available live data from referenced sources without a toolkit server-side proxy.
+*   **Client-Side Persistence:** Saves your license class, menu layout, station location or grid, QSO log, CW practice statistics, theme preference, and APRS lookup value in browser local storage. No account, toolkit server database, or automatic cloud backup is required.
+*   **Responsive Framework:** The layout smoothly shifts between horizontal desktop multi-panel views and stacked mobile views for tablet or portable, on-the-go operation.
 
 ---
 
@@ -82,7 +90,7 @@ If you spot a calculation error, a broken tool feed, a typo, or have a feature i
 2. Click the green **New Issue** button.
 3. Provide a brief description of the issue or your suggestion, and submit it.
 
-*You will automatically be notified via email whenever there are updates or responses regarding your submission.*
+*GitHub can notify you of updates or responses to issues you create, subject to your GitHub notification settings.*
 
 ---
 
@@ -123,7 +131,7 @@ Before transmitting, operators should verify the current FCC text, applicable re
 
 ### Accuracy and maintenance commitment
 
-The project aims to maintain a high-confidence, operator-useful representation of the FCC rules through source-based review, field-by-field cross-checking, and regression testing of the displayed tables and checker results. The full Frequency Privileges audit is documented as an ongoing maintenance process: reported discrepancies, FCC rule changes, and credible source updates should be reviewed and corrected promptly.
+The project aims to maintain an operator-useful representation of the FCC rules through source-based review, field-by-field cross-checking, and testing of displayed tables and Frequency Checker results. Reported discrepancies, FCC rule changes, and credible source updates should be reviewed and corrected promptly.
 
 Users who identify a possible discrepancy are encouraged to open a GitHub Issue with the frequency, selected license class, operating mode, displayed result, and the relevant FCC or ARRL source citation.
 
@@ -131,4 +139,4 @@ Users who identify a possible discrepancy are encouraged to open a GitHub Issue 
 
 ## 📝 Compliance Disclaimer
 
-*Frequency Privileges data is reviewed against current FCC Part 97 requirements and cross-referenced with ARRL U.S. amateur-band allocation material. The FCC’s current eCFR text controls. Operators remain responsible for verifying current frequency, emission, bandwidth, power, location, sharing, and other applicable requirements before transmitting.*
+*Frequency Privileges information is reviewed against current FCC Part 97 requirements and cross-referenced with ARRL U.S. amateur-band allocation material. The FCC’s current eCFR text controls. This toolkit is an educational operating aid, not legal advice or an official FCC publication. Operators remain responsible for verifying current frequency, emission, bandwidth, power, location, sharing, station-control, and other applicable requirements before transmitting.*
